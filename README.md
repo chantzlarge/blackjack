@@ -25,6 +25,10 @@
 
 > Usage should include sections related to running and testing the application.
 
+- `build` builds the web application using Webpack
+- `start` starts the api and web server using ts-node
+- `test` tests the application using jest
+
 ## Contributing
 
 > Contributing should include sections related to contributor guidelines, 
