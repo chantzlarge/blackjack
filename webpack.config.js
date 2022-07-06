@@ -32,7 +32,7 @@ module.exports = function (_env, argv) {
       rules: [
         {
           test: /\.(js|jsx|ts|tsx)$/,
-          include: path.resolve(__dirname, './web/'),
+          include: path.resolve(__dirname, '.'),
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',

@@ -51,6 +51,7 @@
 - [NodeJS](https://nodejs.org/en/)
 - [UIkit](https://getuikit.com/)
 - [Redis](https://redis.io/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
 - [StandardJS](https://standardjs.com/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [ws](https://github.com/websockets/ws)

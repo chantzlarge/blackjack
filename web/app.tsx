@@ -1,10 +1,10 @@
-import React, { ReactDOM } from 'react'
+import React, { Component } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Card from './components/card'
 import CreateOrJoinTable from './components/create-or-join-table'
 import Table from './components/table'
 
-export default class App extends React.Component {
+export default class App extends Component {
   render () {
     return (
       <BrowserRouter>
