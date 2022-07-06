@@ -1,1 +1,9 @@
-export default class PlayerService {}
+export default class PlayerService {
+    CreatePlayer() {
+        // TODO
+    }
+    
+    GetPlayer() {
+        // TODO
+    }
+}

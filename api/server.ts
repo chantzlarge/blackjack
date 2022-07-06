@@ -1,7 +1,17 @@
 import express from 'express'
-
 const app = express()
 const expressWs = require('express-ws')(app)
+
+// services
+import TableService from '../internal/table/table.service'
+
+const tableService = new TableService()
+
+app.get('/table', function(req, res) {
+  const t = tableService.CreateTable()
+  
+  res.json(t)
+})
 
 // @ts-expect-error
 app.ws('/', function (ws, req) {
