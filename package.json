@@ -1,12 +1,17 @@
 {
   "name": "@chantzlarge/blackjack",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "repository": "git@github.com:chantzlarge/blackjack.git",
   "author": {
     "email": "contact@chantzlarge.com",
     "name": "Chantz Large",
     "url": "https://chantzlarge.com"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "start": "ts-node api/server.ts & ts-node web/server.ts && fg",
+    "test": "jest"
   },
   "license": "MIT",
   "dependencies": {
@@ -60,6 +65,7 @@
     "sass": "^1.53.0",
     "sass-loader": "^13.0.2",
     "standard": "^17.0.0",
+    "style-loader": "^3.3.1",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.2",
     "ts-standard": "^11.0.0",

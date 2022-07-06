@@ -1,1 +1,7 @@
-export default class TableService {}
+import Table from './table'
+
+export default class TableService {
+    CreateTable(): Table {
+        return new Table
+    }
+}
