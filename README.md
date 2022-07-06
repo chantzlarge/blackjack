@@ -42,6 +42,7 @@
 
 - [Docker](https://www.docker.com/)
 - [express](https://expressjs.com/)
+- [JEST](https://jestjs.io/)
 - [ReactJS](https://reactjs.org/)
 - [NodeJS](https://nodejs.org/en/)
 - [UIkit](https://getuikit.com/)
