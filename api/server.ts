@@ -16,5 +16,5 @@ const server = app.listen(3001, function () {
   // @ts-expect-error
   const port = server.address()!.port
 
-  console.log('my app is listening at http://%s:%s', host, port)
+  console.log('api server is listening at http://%s:%s', host, port)
 })
