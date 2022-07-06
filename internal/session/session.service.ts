@@ -1,6 +1,8 @@
+import Session from "./session";
+
 export default class SessionService {
-  CreateSession () {
-    // TBD
+  CreateSession (): Session {
+    return new Session()
   }
 
   RevokeSession () {
