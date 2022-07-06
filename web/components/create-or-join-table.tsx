@@ -12,7 +12,7 @@ ws.onmessage = (ev) => {
 }
 
 export default class CreateOrJoinTable extends React.Component {
-  render() {
+  render () {
     return (
       <div className='uk-container'>
         <div className='uk-section'>
@@ -22,11 +22,11 @@ export default class CreateOrJoinTable extends React.Component {
               <div>
                 <a className='uk-button uk-button-primary'>CREATE TABLE</a>
               </div>
-              <hr className="uk-divider-small" />
+              <hr className='uk-divider-small' />
               <div>
-                <form action="" className='uk-form'>
+                <form action='' className='uk-form'>
                   <div className='uk-margin'>
-                    <input className='uk-input uk-width-small' type="text" name="" placeholder='CODE' id="" />
+                    <input className='uk-input uk-width-small' type='text' name='' placeholder='CODE' id='' />
                   </div>
                   <div className='uk-margin'>
                     <a className='uk-button uk-button-default'>JOIN TABLE</a>

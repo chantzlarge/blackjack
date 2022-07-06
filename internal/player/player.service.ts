@@ -1,9 +1,11 @@
+import Player from './player'
+
 export default class PlayerService {
-    CreatePlayer() {
-        // TODO
-    }
-    
-    GetPlayer() {
-        // TODO
-    }
+  CreatePlayer (): Player {
+    return new Player()
+  }
+
+  GetPlayer () {
+    // TODO
+  }
 }

@@ -1,9 +1,9 @@
 export default class SessionService {
-    CreateSession() {
-        // TBD
-    }
+  CreateSession () {
+    // TBD
+  }
 
-    RevokeSession() {
-        // TBD
-    }
+  RevokeSession () {
+    // TBD
+  }
 }

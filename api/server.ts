@@ -1,15 +1,23 @@
 import express from 'express'
+
+// services
+import PlayerService from '../internal/player/player.service'
+import TableService from '../internal/table/table.service'
 const app = express()
 const expressWs = require('express-ws')(app)
 
-// services
-import TableService from '../internal/table/table.service'
-
+const playerService = new PlayerService()
 const tableService = new TableService()
 
-app.get('/table', function(req, res) {
+app.get('/player', function (req, res) {
+  const p = playerService.CreatePlayer()
+
+  res.json(p)
+})
+
+app.get('/table', function (req, res) {
   const t = tableService.CreateTable()
-  
+
   res.json(t)
 })
 
