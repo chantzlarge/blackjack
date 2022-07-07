@@ -6,6 +6,7 @@ const TerserWebpackPlugin = require('terser-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const { ProvidePlugin } = require('webpack')
 
 module.exports = function (_env, argv) {
   const isProduction = argv.mode === 'production'
@@ -32,7 +33,7 @@ module.exports = function (_env, argv) {
       rules: [
         {
           test: /\.(js|jsx|ts|tsx)$/,
-          include: path.resolve(__dirname, './web/'),
+          include: path.resolve(__dirname, '.'),
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
@@ -136,12 +137,14 @@ module.exports = function (_env, argv) {
           configFile: path.resolve(__dirname, './tsconfig.json')
         }
       }),
+      new ProvidePlugin({
+        Buffer: ['buffer', 'Buffer']
+      }),
       new WorkboxPlugin.GenerateSW({
         swDest: 'service-worker.js',
         clientsClaim: true,
         skipWaiting: true
       })
-
     ].filter(Boolean),
     optimization: {
       minimize: isProduction,

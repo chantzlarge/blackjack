@@ -25,6 +25,10 @@
 
 > Usage should include sections related to running and testing the application.
 
+- `build` builds the web application using Webpack
+- `start` starts the api and web server using ts-node
+- `test` tests the application using jest
+
 ## Contributing
 
 > Contributing should include sections related to contributor guidelines, 
@@ -42,10 +46,12 @@
 
 - [Docker](https://www.docker.com/)
 - [express](https://expressjs.com/)
+- [JEST](https://jestjs.io/)
 - [ReactJS](https://reactjs.org/)
 - [NodeJS](https://nodejs.org/en/)
 - [UIkit](https://getuikit.com/)
 - [Redis](https://redis.io/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
 - [StandardJS](https://standardjs.com/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [ws](https://github.com/websockets/ws)
