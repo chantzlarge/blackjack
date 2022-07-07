@@ -3,43 +3,39 @@ import cors from 'cors'
 import PlayerService from '../internal/player/player.service'
 import SessionService from '../internal/session/session.service'
 import TableService from '../internal/table/table.service'
+
 const app = express()
 const expressWs = require('express-ws')(app)
 
+// services
 const playerService = new PlayerService()
 const sessionService = new SessionService()
 const tableService = new TableService()
 
 app.use(cors())
 
-app.get('/player', function (req, res) {
-  const p = playerService.CreatePlayer()
+app.get('/player/current', function (req, res) {
+  const player = playerService.CreatePlayer()
 
-  res.json(p)
-})
-
-app.get('/player', function (req, res) {
-  const p = playerService.CreatePlayer()
-
-  res.json(p)
+  res.json(player)
 })
 
 app.get('/api/session', function (req, res) {
-  const s = sessionService.CreateSession()
+  const session = sessionService.CreateSession()
 
-  res.json(s)
+  res.json(session)
 })
 
 app.post('/api/table/create', function (req, res) {
-  const t = tableService.CreateTable()
+  const table = tableService.CreateTable()
 
-  res.json(t)
+  res.json(table)
 })
 
 app.post('/api/table/join', function (req, res) {
-  const t = tableService.CreateTable()
+  const table = tableService.CreateTable()
 
-  res.json(t)
+  res.json(table)
 })
 
 // @ts-expect-error

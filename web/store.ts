@@ -1,9 +1,11 @@
 import { sessionReducer, sessionService } from 'redux-react-session'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { playerSlice } from './player.slice'
 import { tableSlice } from './table.slice'
 
 const reducers = {
   session: sessionReducer,
+  player: playerSlice.reducer,
   table: tableSlice.reducer
 }
 
