@@ -1,6 +1,5 @@
 import express from 'express'
-
-// services
+import cors from 'cors'
 import PlayerService from '../internal/player/player.service'
 import SessionService from '../internal/session/session.service'
 import TableService from '../internal/table/table.service'
@@ -11,19 +10,33 @@ const playerService = new PlayerService()
 const sessionService = new SessionService()
 const tableService = new TableService()
 
+app.use(cors())
+
 app.get('/player', function (req, res) {
   const p = playerService.CreatePlayer()
 
   res.json(p)
 })
 
-app.get('/session', function (req, res) {
+app.get('/player', function (req, res) {
+  const p = playerService.CreatePlayer()
+
+  res.json(p)
+})
+
+app.get('/api/session', function (req, res) {
   const s = sessionService.CreateSession()
 
   res.json(s)
 })
 
-app.get('/table', function (req, res) {
+app.post('/api/table/create', function (req, res) {
+  const t = tableService.CreateTable()
+
+  res.json(t)
+})
+
+app.post('/api/table/join', function (req, res) {
   const t = tableService.CreateTable()
 
   res.json(t)

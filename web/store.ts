@@ -10,7 +10,7 @@ const reducers = {
 const reducer = combineReducers(reducers)
 
 export const store = configureStore({
-  reducer: reducer
+  reducer: reducer,
 })
 
 sessionService.initSessionService(store)

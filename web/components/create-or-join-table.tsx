@@ -1,11 +1,9 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { createTable, joinTable } from '../table.slice'
+import { useDispatch } from 'react-redux'
 import CreateTableForm from './create-table-form'
 import JoinTableForm from './join-table-form'
-export default function CreateOrJoinTable() {
-  const dispatch = useDispatch()
 
+export default function CreateOrJoinTable() {
   return (
     <div className='uk-container'>
       <div className='uk-section'>

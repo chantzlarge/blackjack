@@ -10,10 +10,7 @@ export default function JoinTableForm() {
     const dispatch = useDispatch()
 
     const handleChange = (event: { target: { name: any; value: any } }) => {
-        const name = event.target.name
-        const value = event.target.value
-
-        setInputs(values => ({ ...values, [name]: value }))
+        setInputs(values => ({ ...values, [event.target.name]: event.target.value }))
     }
 
     const handleSubmit = (event: { preventDefault: () => void }) => {
