@@ -1,30 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { createTable } from '../table.slice';
 
-export default class CreateTableForm extends React.Component<{}, { value: string }> {
-    constructor(props: {}) {
-        super(props)
-        this.state = { value: '' }
+export default function CreateTableForm() {
+    const [inputs, setInputs] = useState({})
+    const dispatch = useDispatch()
 
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+    const handleChange = (event: { target: { name: any; value: any } }) => {
+        const name = event.target.name
+        const value = event.target.value
+
+        setInputs(values => ({ ...values, [name]: value }))
     }
 
-    handleChange(event: { target: { value: any } }) {
-        this.setState({ value: event.target.value })
-    }
-
-    handleSubmit(event: { preventDefault: () => void }) {
-        alert('value: ' + this.state.value)
+    const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault()
+        dispatch(createTable(''))
     }
 
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <div className='uk-margin'>
-                    <button className='uk-button uk-button-primary'>CREATE TABLE</button>
-                </div>
-            </form>
-        )
-    }
+    return (
+        <form onSubmit={handleSubmit}>
+            <div className='uk-margin'>
+                <button className='uk-button uk-button-primary'>CREATE TABLE</button>
+            </div>
+        </form>
+    )
 }

@@ -13,15 +13,11 @@ export const tableSlice = createSlice({
   name: 'tables',
   initialState: [],
   reducers: {
-    createTable (state, action) {
-      const m = 'message'
-      console.log(m)
-      ws.send(m)
+    createTable(state, action) {
+      ws.send('')
     },
-    joinTable (state, action) {
-      const m = 'message'
-      console.log(m)
-      ws.send(m)
+    joinTable(state, action) {
+      ws.send(action.payload)
     }
   }
 })

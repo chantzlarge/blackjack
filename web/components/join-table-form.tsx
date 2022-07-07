@@ -1,33 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { joinTable } from '../table.slice';
 
-export default class JoinTableForm extends React.Component<{}, { value: string }> {
-    constructor(props: {}) {
-        super(props)
-        this.state = { value: '' }
+export default function JoinTableForm() {
+    const [inputs, setInputs] = useState({
+        code: ''
+    })
 
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+    const dispatch = useDispatch()
+
+    const handleChange = (event: { target: { name: any; value: any } }) => {
+        const name = event.target.name
+        const value = event.target.value
+
+        setInputs(values => ({ ...values, [name]: value }))
     }
 
-    handleChange(event: { target: { value: any } }) {
-        this.setState({ value: event.target.value })
-    }
-
-    handleSubmit(event: { preventDefault: () => void }) {
-        alert('value: ' + this.state.value)
+    const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault()
+        dispatch(joinTable(inputs.code))
     }
 
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <div className='uk-margin'>
-                    <input className='uk-input uk-width-small' type='text' name='' placeholder='CODE' id='' value={this.state.value} onChange={this.handleChange} />
-                </div>
-                <div className='uk-margin'>
-                    <button className='uk-button uk-button-default'>JOIN TABLE</button>
-                </div>
-            </form>
-        )
-    }
+    return (
+        <form onSubmit={handleSubmit}>
+            <div className='uk-margin'>
+                <input className='uk-input uk-width-small' type='text' name='code' placeholder='CODE' id='' value={inputs.code} onChange={handleChange} />
+            </div>
+            <div className='uk-margin'>
+                <button className='uk-button uk-button-default'>JOIN TABLE</button>
+            </div>
+        </form>
+    )
 }
