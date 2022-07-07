@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class JoinTableForm extends React.Component<{}, { value: string }> {
+export default class CreateTableForm extends React.Component<{}, { value: string }> {
     constructor(props: {}) {
         super(props)
         this.state = { value: '' }
@@ -22,10 +22,7 @@ export default class JoinTableForm extends React.Component<{}, { value: string }
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className='uk-margin'>
-                    <input className='uk-input uk-width-small' type='text' name='' placeholder='CODE' id='' value={this.state.value} onChange={this.handleChange} />
-                </div>
-                <div className='uk-margin'>
-                    <button className='uk-button uk-button-default'>JOIN TABLE</button>
+                    <button className='uk-button uk-button-primary'>CREATE TABLE</button>
                 </div>
             </form>
         )

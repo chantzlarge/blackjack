@@ -1,8 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createTable, joinTable } from '../table.slice'
+import CreateTableForm from './create-table-form'
 import JoinTableForm from './join-table-form'
-export default function CreateOrJoinTable () {
+export default function CreateOrJoinTable() {
   const dispatch = useDispatch()
 
   return (
@@ -12,7 +13,7 @@ export default function CreateOrJoinTable () {
           <h1 className='uk-heading'>BLACKJACK</h1>
           <div className='uk-section'>
             <div>
-              <button onClick={() => dispatch(createTable('message'))} className='uk-button uk-button-primary'>CREATE TABLE</button>
+              <CreateTableForm />
             </div>
             <hr className='uk-divider-small' />
             <div>
