@@ -21,7 +21,7 @@ export const playerSlice = createSlice({
   name: 'players',
   initialState: [],
   reducers: {
-    joinPlayer(state, action) {
+    joinPlayer (state, action) {
       ws.send(action.payload)
     }
   },

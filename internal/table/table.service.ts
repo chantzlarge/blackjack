@@ -1,13 +1,22 @@
 import Table from './table'
+import TableRepository from './table.repository'
 
 export default class TableService {
-  constructor () {}
+  tableRepository: TableRepository
 
-  CreateTable (): Table {
+  constructor(tableRepository: TableRepository) {
+    this.tableRepository = tableRepository
+  }
+
+  CloseTable() {
+    // TBD
+  }
+
+  CreateTable(): Table {
     return new Table()
   }
 
-  CloseTable () {
+  DeleteTable() {
     // TBD
   }
 }

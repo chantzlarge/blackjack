@@ -1,3 +1,4 @@
+import Card from '../card/card'
 import { v4 as uuidv4 } from 'uuid'
 
 const adjectives = [
@@ -32,10 +33,14 @@ const animals = [
 
 export default class Player {
   Id: string
+  TableId!: string
   Name!: string
+  Hand: Card[] = []
 
-  constructor () {
+  constructor (tableId: string) {
     this.Id = uuidv4()
+    this.TableId = tableId
+
     this.Name = `${adjectives[~~Math.floor(Math.random() * adjectives.length)]} ${animals[~~Math.floor(Math.random() * adjectives.length)]}`
   }
 }

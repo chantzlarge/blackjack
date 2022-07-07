@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default class Card extends React.Component {
-  render () {
-    return (
-      <div className='uk-card uk-card-default uk-card-body'>
-        <h3 className='uk-card-title'>Hello</h3>
-        <h3 className='uk-card-title'>♠️</h3>
-      </div>
-    )
-  }
+import { default as C } from '../../internal/card/card'
+
+export default function Card(props: { card: { Kind: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Suit: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined } }) {
+  return (
+    <div className='uk-card uk-card-default uk-card-body'>
+      <h3 className='uk-card-title'>{props.card.Kind}</h3>
+      <h3 className='uk-card-title'>{props.card.Suit}</h3>
+    </div>
+  )
 }

@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { response } from 'express'
+import Table from '../internal/table/table'
+
 const ws = new WebSocket('ws://localhost:3001')
 
 ws.onopen = (ev) => {
@@ -10,16 +12,26 @@ ws.onmessage = (ev) => {
   console.log(ev)
 }
 
-export const createTable = createAsyncThunk('tables/createTable', async () => {
-  const response = await fetch('http://localhost:3001/api/table/create', { method: 'POST'})
+export const createTable = createAsyncThunk('tables/createTable', async (sessionKey: string) => {
+  const response = await fetch('http://localhost:3001/api/table/create', {
+    body: JSON.stringify({
+      sessionKey: sessionKey
+    }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'POST'
+  })
+
   const data = await response.json()
-  
+
   return data
 })
 
 export const tableSlice = createSlice({
   name: 'tables',
-  initialState: [],
+  initialState: null as Table | null,
   reducers: {
     joinTable(state, action) {
       ws.send(action.payload)
@@ -27,7 +39,7 @@ export const tableSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(createTable.fulfilled, (state, action) => {
-      console.log(action.payload)
+      return state = action.payload
     })
   }
 })
