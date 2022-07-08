@@ -81,3 +81,5 @@
 
 - [How to play: Blackjack | Bicycle](https://bicyclecards.com/how-to-play/blackjack/)
 - [Unicode 14.0.0](https://www.unicode.org/versions/Unicode14.0.0/)
+- [WebRTC API](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API)
+- [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
