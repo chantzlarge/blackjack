@@ -70,7 +70,7 @@ app.ws('/socket', function (ws, req) {
 
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html'))) 
 
-const server = app.listen(3000, function () {
+const server = app.listen(3000, '0.0.0.0', function () {
   // @ts-expect-error
   const host = server.address()!.address
   // @ts-expect-error

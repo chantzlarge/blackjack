@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { response } from 'express'
-const ws = new WebSocket('ws://localhost:3000/socket')
+const ws = new WebSocket('ws://192.168.1.2:3000/socket')
 
 ws.onopen = (ev) => {
   console.log(ev)
@@ -11,7 +11,7 @@ ws.onmessage = (ev) => {
 }
 
 export const currentPlayer = createAsyncThunk('players/currentPlayer', async () => {
-  const response = await fetch('http://localhost:3000/api/player/current', { method: 'GET' })
+  const response = await fetch('http://192.168.1.2:3000/api/player/current', { method: 'GET' })
   const data = await response.json()
 
   return data

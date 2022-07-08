@@ -4,7 +4,7 @@ import Session from '../internal/session/session'
 export const createSession = createAsyncThunk('sessions/createSession', async () => {
   console.log('creating session...')
 
-  const response = await fetch('http://localhost:3000/api/session/create', { method: 'POST' })
+  const response = await fetch('http://192.168.1.2:3000/api/session/create', { method: 'POST' })
   const data = await response.json()
 
   return data
@@ -13,7 +13,7 @@ export const createSession = createAsyncThunk('sessions/createSession', async ()
 export const getSession = createAsyncThunk('sessions/getSession', async (sessionId: string) => {
   console.log(`getting session... ${sessionId}`)
 
-  const response = await fetch('http://localhost:3000/api/session/current', { method: 'GET' })
+  const response = await fetch('http://192.168.1.2:3000/api/session/current', { method: 'GET' })
   const data = await response.json()
 
   return data

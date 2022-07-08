@@ -1,12 +1,140 @@
 import React from 'react'
+import {
+  default as C,
+  // kinds
+  KIND_ACE,
+  KIND_KING,
+  KIND_QUEEN,
+  KIND_JACK,
+  KIND_TEN,
+  KIND_NINE,
+  KIND_EIGHT,
+  KIND_SEVEN,
+  KIND_SIX,
+  KIND_FIVE,
+  KIND_FOUR,
+  KIND_THREE,
+  KIND_TWO,
+  // suits
+  SUIT_CLUBS,
+  SUIT_DIAMOND,
+  SUIT_HEART,
+  SUIT_SPADE,
+} from '../../internal/card/card'
 
-import { default as C } from '../../internal/card/card'
+function renderSwitch(card: C): string {
+  switch (`${card.Kind}${card.Suit}`) {
+    case `${KIND_ACE}${SUIT_DIAMOND}`:
+      return '🂡'
+    case `${KIND_KING}${SUIT_DIAMOND}`:
+      return '🃎'
+    case `${KIND_QUEEN}${SUIT_DIAMOND}`:
+      return '🃍'
+    case `${KIND_JACK}${SUIT_DIAMOND}`:
+      return '🃋'
+    case `${KIND_TEN}${SUIT_DIAMOND}`:
+      return '🃊'
+    case `${KIND_NINE}${SUIT_DIAMOND}`:
+      return '🃉'
+    case `${KIND_EIGHT}${SUIT_DIAMOND}`:
+      return '🃈'
+    case `${KIND_SEVEN}${SUIT_DIAMOND}`:
+      return '🃇'
+    case `${KIND_SIX}${SUIT_DIAMOND}`:
+      return '🃆'
+    case `${KIND_FIVE}${SUIT_DIAMOND}`:
+      return '🃅'
+    case `${KIND_FOUR}${SUIT_DIAMOND}`:
+      return '🃄'
+    case `${KIND_THREE}${SUIT_DIAMOND}`:
+      return '🃃'
+    case `${KIND_TWO}${SUIT_DIAMOND}`:
+      return '🃂'
+    case `${KIND_ACE}${SUIT_CLUBS}`:
+      return '🃑'
+    case `${KIND_KING}${SUIT_CLUBS}`:
+      return '🃞'
+    case `${KIND_QUEEN}${SUIT_CLUBS}`:
+      return '🃝'
+    case `${KIND_JACK}${SUIT_CLUBS}`:
+      return '🃛'
+    case `${KIND_TEN}${SUIT_CLUBS}`:
+      return '🃚'
+    case `${KIND_NINE}${SUIT_CLUBS}`:
+      return '🃙'
+    case `${KIND_EIGHT}${SUIT_CLUBS}`:
+      return '🃘'
+    case `${KIND_SEVEN}${SUIT_CLUBS}`:
+      return '🃗'
+    case `${KIND_SIX}${SUIT_CLUBS}`:
+      return '🃖'
+    case `${KIND_FIVE}${SUIT_CLUBS}`:
+      return '🃕'
+    case `${KIND_FOUR}${SUIT_CLUBS}`:
+      return '🃔'
+    case `${KIND_THREE}${SUIT_CLUBS}`:
+      return '🃓'
+    case `${KIND_TWO}${SUIT_CLUBS}`:
+      return '🃒'
+    case `${KIND_ACE}${SUIT_HEART}`:
+      return '🂱'
+    case `${KIND_KING}${SUIT_HEART}`:
+      return '🂾'
+    case `${KIND_QUEEN}${SUIT_HEART}`:
+      return '🂽'
+    case `${KIND_JACK}${SUIT_HEART}`:
+      return '🂻'
+    case `${KIND_TEN}${SUIT_HEART}`:
+      return '🂺'
+    case `${KIND_NINE}${SUIT_HEART}`:
+      return '🂹'
+    case `${KIND_EIGHT}${SUIT_HEART}`:
+      return '🂸'
+    case `${KIND_SEVEN}${SUIT_HEART}`:
+      return '🂷'
+    case `${KIND_SIX}${SUIT_HEART}`:
+      return '🂶'
+    case `${KIND_FIVE}${SUIT_HEART}`:
+      return '🂵'
+    case `${KIND_FOUR}${SUIT_HEART}`:
+      return '🂴'
+    case `${KIND_THREE}${SUIT_HEART}`:
+      return '🂳'
+    case `${KIND_TWO}${SUIT_HEART}`:
+      return '🂲'
+    case `${KIND_ACE}${SUIT_SPADE}`:
+      return '🂡'
+    case `${KIND_KING}${SUIT_SPADE}`:
+      return '🂮'
+    case `${KIND_QUEEN}${SUIT_SPADE}`:
+      return '🂭'
+    case `${KIND_JACK}${SUIT_SPADE}`:
+      return '🂫'
+    case `${KIND_TEN}${SUIT_SPADE}`:
+      return '🂪'
+    case `${KIND_NINE}${SUIT_SPADE}`:
+      return '🂩'
+    case `${KIND_EIGHT}${SUIT_SPADE}`:
+      return '🂨'
+    case `${KIND_SEVEN}${SUIT_SPADE}`:
+      return '🂧'
+    case `${KIND_SIX}${SUIT_SPADE}`:
+      return '🂦'
+    case `${KIND_FIVE}${SUIT_SPADE}`:
+      return '🂥'
+    case `${KIND_FOUR}${SUIT_SPADE}`:
+      return '🂤'
+    case `${KIND_THREE}${SUIT_SPADE}`:
+      return '🂣'
+    case `${KIND_TWO}${SUIT_SPADE}`:
+      return '🂢'
+    default:
+      return '🂠'
+  }
+}
 
-export default function Card(props: { card: { Kind: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Suit: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined } }) {
+export default function Card(props: { card: C }) {
   return (
-    <div className='uk-card uk-card-default uk-card-body uk-height-medium'>
-      <h3 className='uk-card-title uk-heading-xlarge'>{props.card.Kind}</h3>
-      <h3 className='uk-card-title'>{props.card.Suit}</h3>
-    </div>
+    <h1 className='uk-heading-2xlarge uk-text-center'>{renderSwitch(props.card)}</h1>
   )
 }

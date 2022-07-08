@@ -80,3 +80,4 @@
 > contributors or users.
 
 - [How to play: Blackjack | Bicycle](https://bicyclecards.com/how-to-play/blackjack/)
+- [Unicode 14.0.0](https://www.unicode.org/versions/Unicode14.0.0/)
