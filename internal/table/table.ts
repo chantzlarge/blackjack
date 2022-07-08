@@ -52,7 +52,6 @@ export default class Table {
       new Card(SUIT_CLUBS, KIND_FOUR),
       new Card(SUIT_CLUBS, KIND_THREE),
       new Card(SUIT_CLUBS, KIND_TWO),
-
       new Card(SUIT_DIAMOND, KIND_ACE),
       new Card(SUIT_DIAMOND, KIND_KING),
       new Card(SUIT_DIAMOND, KIND_QUEEN),
@@ -66,7 +65,6 @@ export default class Table {
       new Card(SUIT_DIAMOND, KIND_FOUR),
       new Card(SUIT_DIAMOND, KIND_THREE),
       new Card(SUIT_DIAMOND, KIND_TWO),
-
       new Card(SUIT_HEART, KIND_ACE),
       new Card(SUIT_HEART, KIND_KING),
       new Card(SUIT_HEART, KIND_QUEEN),
@@ -80,7 +78,6 @@ export default class Table {
       new Card(SUIT_HEART, KIND_FOUR),
       new Card(SUIT_HEART, KIND_THREE),
       new Card(SUIT_HEART, KIND_TWO),
-      
       new Card(SUIT_SPADE, KIND_ACE),
       new Card(SUIT_SPADE, KIND_KING),
       new Card(SUIT_SPADE, KIND_QUEEN),
@@ -94,7 +91,6 @@ export default class Table {
       new Card(SUIT_SPADE, KIND_FOUR),
       new Card(SUIT_SPADE, KIND_THREE),
       new Card(SUIT_SPADE, KIND_TWO),
-
       new Card(SUIT_CLUBS, KIND_ACE),
       new Card(SUIT_CLUBS, KIND_KING),
       new Card(SUIT_CLUBS, KIND_QUEEN),
@@ -357,6 +353,7 @@ export default class Table {
       new Card(SUIT_SPADE, KIND_TWO),
     ]
 
+    // knuth shuffle
     let ci = this.Deck.length, ri // current index, random index
 
     while (ci != 0) {

@@ -1,11 +1,12 @@
 import express from 'express'
 import cors from 'cors'
-import PlayerService from '../internal/player/player.service'
-import TableService from '../internal/table/table.service'
-import SessionRepository from '../internal/session/session.repository'
-import SessionService from '../internal/session/session.service'
-import PlayerRepository from '../internal/player/player.repository'
-import TableRepository from '../internal/table/table.repository'
+import path from 'path'
+import PlayerService from './internal/player/player.service'
+import TableService from './internal/table/table.service'
+import SessionRepository from './internal/session/session.repository'
+import SessionService from './internal/session/session.service'
+import PlayerRepository from './internal/player/player.repository'
+import TableRepository from './internal/table/table.repository'
 
 const app = express()
 const expressWs = require('express-ws')(app)
@@ -24,17 +25,22 @@ const tableService = new TableService(tableRepository)
 app.use(express.json())
 app.use(cors())
 
+app.use('/', express.static(path.join(__dirname, './web/dist')))
+
 // routes
 app.get('/api/player/current', function (req, res) {
   const sessionId = req.body.session.Id
-  const sessionKey = req.body.session.Key
+  // const sessionSecret = req.body.session.Secret
 
-  const player = playerService.CreatePlayer('')
+  const player = playerService.CurrentPlayer(sessionId)
 
   res.json(player)
 })
 
 app.get('/api/session/current', function (req, res) {
+  // const sessionId = req.body.session.Id
+  // const sessionSecret = req.body.session.Secret
+
   const session = sessionService.GetSession()
 
   res.json(session)
@@ -47,8 +53,8 @@ app.post('/api/session/create', function (req, res) {
 })
 
 app.post('/api/table/create', function (req, res) {
-  // const sessionId = req.body.session.Id
-  // const sessionKey = req.body.session.Key
+  // const sessionId = req.body.Id
+  // const sessionSecret = req.body.Secret
 
   const table = tableService.CreateTable()
   const player = playerService.CreatePlayer(table.Id)
@@ -63,17 +69,19 @@ app.post('/api/table/join', function (req, res) {
 })
 
 // @ts-expect-error
-app.ws('/', function (ws, req) {
+app.ws('/socket', function (ws, req) {
   ws.on('message', function (msg: any) {
     console.log(msg)
   })
 })
 
-const server = app.listen(3001, function () {
+app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html'))) 
+
+const server = app.listen(3000, function () {
   // @ts-expect-error
   const host = server.address()!.address
   // @ts-expect-error
   const port = server.address()!.port
 
-  console.log('api server is listening at http://%s:%s', host, port)
+  console.log('server is listening at http://%s:%s', host, port)
 })

@@ -8,15 +8,19 @@ export default class PlayerService {
     this.playerRepository = playerRepository
   }
 
-  CreatePlayer (tableId: string): Player {
+  CreatePlayer(tableId: string): Player {
     return new Player(tableId)
   }
 
-  GetPlayer (id: string): Player {
+  CurrentPlayer(sessionId: string): Player | undefined {
+    return this.playerRepository.GetPlayerBySessionId(sessionId)
+  }
+
+  GetPlayer(id: string): Player {
     return new Player('')
   }
 
-  DeletePlayer () {
+  DeletePlayer() {
     // TODO
   }
 }

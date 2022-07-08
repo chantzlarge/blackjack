@@ -10,17 +10,14 @@ export default function Table() {
   })
 
   return (
-    <>
-      {/* dealer side */}
-      <div className='uk-section'>
-        <div className='uk-container'>
-          <div className='uk-grid uk-child-width-1-2' data-uk-grid>
+    <div className='uk-section'>
+      <div className='uk-container'>
+        <div className='uk-grid uk-child-width-1-2' data-uk-grid>
 
-            {table?.Deck.map(card => <Card key={card.Id} card={card} />)}
+          {table?.Deck.map(card => <Card key={card.Id} card={card} />)}
 
-          </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

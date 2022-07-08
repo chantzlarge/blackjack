@@ -20,7 +20,7 @@ export default function CreateTableForm() {
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault()
-    dispatch(createTable(session!.Secret))
+    dispatch(createTable(session!))
     
     navigate('/table')
   }

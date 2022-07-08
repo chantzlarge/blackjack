@@ -33,6 +33,7 @@ const animals = [
 
 export default class Player {
   Id: string
+  SessionId!: string
   TableId!: string
   Name!: string
   Hand: Card[] = []

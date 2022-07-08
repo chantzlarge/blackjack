@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "start": "ts-node api/server.ts & ts-node web/server.ts && fg",
+    "start": "ts-node index.ts",
     "test": "jest"
   },
   "license": "MIT",
