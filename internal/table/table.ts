@@ -30,8 +30,10 @@ export default class Table {
   }
 
   ServePlayer(playerId: string, hand: 0 | 1 = 0) {
-    let player = this.GetPlayer(playerId)
+    const player = this.GetPlayer(playerId)
+    
     player!.Hands[hand].Deal(this.Shoe.DrawCard()!)
+    
     this.UpdatePlayer(player!)
   }
 
