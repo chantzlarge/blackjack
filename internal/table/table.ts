@@ -38,6 +38,7 @@ export default class Table {
   }
 
   ShuffleDeck() {
+    // NOTE: initializing deck with 6 decks
     this.Deck = [
       new Card(SUIT_CLUBS, KIND_ACE),
       new Card(SUIT_CLUBS, KIND_KING),
@@ -353,13 +354,14 @@ export default class Table {
       new Card(SUIT_SPADE, KIND_TWO),
     ]
 
-    // knuth shuffle
+    // NOTE: knuth shuffle
     let ci = this.Deck.length, ri // current index, random index
 
     while (ci != 0) {
       ri = Math.floor(Math.random() * ci)
       ci--
 
+      // NOTE: swap values using array destructuring
       [this.Deck[ci], this.Deck[ri]] = [this.Deck[ri], this.Deck[ci]]
     }
   }
