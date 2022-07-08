@@ -14,7 +14,7 @@ export default function Table() {
       <div className='uk-container'>
         <div className='uk-grid uk-child-width-1-2' data-uk-grid>
 
-          {table?.Shoe.map(card => <Card key={card.Id} card={card} />)}
+          {table?.Shoe.Cards.map(card => <Card key={card.Id} card={card} />)}
 
         </div>
       </div>

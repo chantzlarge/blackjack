@@ -1,5 +1,6 @@
 import Card from '../card/card'
 import { v4 as uuidv4 } from 'uuid'
+import Hand from 'card/hand'
 
 const adjectives = [
   'agreeable',
@@ -35,7 +36,7 @@ export default class Player {
   Id: string
   Balance: number = 500
   Name!: string
-  Hands: Card[][] = [[], []]
+  Hands: Hand[] = []
   HasInsurance: boolean = false
   CurrentBet: number = 0
   PreviousBets: number[] = []
@@ -54,7 +55,7 @@ export default class Player {
   }
 
   DealCard(card: Card, hand: 0 | 1 = 0) {
-    this.Hands[hand].push(card)
+    this.Hands[hand].Deal(card)
   }
 
   PlaceBet(amount: number) {
@@ -72,6 +73,6 @@ export default class Player {
 
   SplitHand() {
     // NOTE: split hands using array destructuring
-    [this.Hands[0][0], this.Hands[1][0]] = [this.Hands[0][0], this.Hands[0][1]]
+    [this.Hands[0].Cards[0], this.Hands[1].Cards[0]] = [this.Hands[0].Cards[0], this.Hands[0].Cards[1]]
   }
 }

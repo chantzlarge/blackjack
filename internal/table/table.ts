@@ -1,38 +1,21 @@
 import { v4 as uuidv4 } from 'uuid'
-import Card, {
-  SUIT_CLUBS,
-  SUIT_DIAMOND,
-  SUIT_HEART,
-  SUIT_SPADE,
-  KIND_TWO,
-  KIND_THREE,
-  KIND_FOUR,
-  KIND_FIVE,
-  KIND_SIX,
-  KIND_SEVEN,
-  KIND_EIGHT,
-  KIND_NINE,
-  KIND_TEN,
-  KIND_JACK,
-  KIND_QUEEN,
-  KIND_KING,
-  KIND_ACE,
-  Deck,
-} from '../card/card'
 import Player from '../player/player'
+import Dealer from './dealer'
+import Shoe from './shoe'
 
 export default class Table {
   Id!: string
-  Shoe: Card[] = []
-  DealerHand: Card[] = []
-  Players: Player[] = []
+  CurrentPlayer!: number
+  Shoe: Shoe = new Shoe()
+  Dealer: Dealer = new Dealer()
   MaxBet: number = 5
   MinBet: number = 50
+  Players: Player[] = []
 
   constructor() {
     this.Id = uuidv4()
 
-    this.Shuffle()
+    this.Shoe.ShuffleAndLoad()
   }
 
   AddPlayer(player: Player) {
@@ -40,19 +23,15 @@ export default class Table {
     i === -1 ? this.Players.push(player) : this.Players[i] = player
   }
 
-  CardsRemaining(): number {
-    return this.Shoe.length
-  }
-
   ServeDealer() {
-    const card = this.Shoe.pop()
+    const card = this.Shoe.DrawCard()
 
-    this.DealerHand.push(card!)
+    this.Dealer.Hand.Deal(card!)
   }
 
   ServePlayer(playerId: string, hand: 0 | 1 = 0) {
     let player = this.GetPlayer(playerId)
-    player!.Hands[hand].push(this.Shoe.pop()!)
+    player!.Hands[hand].Deal(this.Shoe.DrawCard()!)
     this.UpdatePlayer(player!)
   }
 
@@ -72,28 +51,6 @@ export default class Table {
 
       return p
     })
-  }
-
-  Shuffle() {
-    // NOTE: initializing shoe with 6 decks
-    this.Shoe = [
-      ...Deck,
-      ...Deck,
-      ...Deck,
-      ...Deck,
-      ...Deck,
-      ...Deck,
-    ]
-
-    // NOTE: knuth shuffle
-    let ci = this.Shoe.length, ri // current index, random index
-    while (ci != 0) {
-      ri = Math.floor(Math.random() * ci)
-      ci--
-
-      // NOTE: swap values using array destructuring
-      [this.Shoe[ci], this.Shoe[ri]] = [this.Shoe[ri], this.Shoe[ci]]
-    }
   }
 
   UpdatePlayer(player: Player) {
