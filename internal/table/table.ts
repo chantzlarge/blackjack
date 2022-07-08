@@ -17,12 +17,14 @@ import Card, {
   KIND_QUEEN,
   KIND_KING,
   KIND_ACE,
+  Deck,
 } from '../card/card'
 import Player from '../player/player'
 
 export default class Table {
   Id!: string
-  Cards: Card[] = []
+  Shoe: Card[] = []
+  DealerHand: Card[] = []
   Players: Player[] = []
   MaxBet: number = 5
   MinBet: number = 50
@@ -30,12 +32,68 @@ export default class Table {
   constructor() {
     this.Id = uuidv4()
 
-    this.ShuffleDeck()
+    this.Shuffle()
   }
 
   AddPlayer(player: Player) {
     const i = this.Players.findIndex(p => p.Id === player.Id)
     i === -1 ? this.Players.push(player) : this.Players[i] = player
+  }
+
+  CardsRemaining(): number {
+    return this.Shoe.length
+  }
+
+  ServeDealer() {
+    const card = this.Shoe.pop()
+
+    this.DealerHand.push(card!)
+  }
+
+  ServePlayer(playerId: string, hand: 0 | 1 = 0) {
+    let player = this.GetPlayer(playerId)
+    player!.Hands[hand].push(this.Shoe.pop()!)
+    this.UpdatePlayer(player!)
+  }
+
+  GetPlayer(id?: string, sessionId?: string): Player | undefined {
+    return this.Players.find(p => p.Id === id || p.SessionId === sessionId)
+  }
+
+  RemovePlayer(player: Player) {
+    this.Players = this.Players.filter(p => p.Id === player.Id || p.SessionId === player.SessionId)
+  }
+
+  Settle() {
+    this.Players = this.Players.map(p => {
+      if (true) {
+        p.Balance += p.CurrentBet
+      }
+
+      return p
+    })
+  }
+
+  Shuffle() {
+    // NOTE: initializing shoe with 6 decks
+    this.Shoe = [
+      ...Deck,
+      ...Deck,
+      ...Deck,
+      ...Deck,
+      ...Deck,
+      ...Deck,
+    ]
+
+    // NOTE: knuth shuffle
+    let ci = this.Shoe.length, ri // current index, random index
+    while (ci != 0) {
+      ri = Math.floor(Math.random() * ci)
+      ci--
+
+      // NOTE: swap values using array destructuring
+      [this.Shoe[ci], this.Shoe[ri]] = [this.Shoe[ri], this.Shoe[ci]]
+    }
   }
 
   UpdatePlayer(player: Player) {
@@ -44,351 +102,6 @@ export default class Table {
       throw new Error("")
     } else {
       this.Players[i] = player
-    }
-  }
-
-  CardsRemaining(): number {
-    return this.Cards.length
-  }
-
-  DrawCard(): Card | undefined {
-    return this.Cards.pop()
-  }
-
-  GetPlayer(player: Player): Player | undefined {
-    return this.Players.find(p => p.Id === player.Id || p.SessionId === player.SessionId)
-  }
-
-  RemovePlayer() {
-    // TBD
-  }
-
-  ShuffleDeck() {
-    // NOTE: initializing deck with 6 decks
-    this.Cards = [
-      new Card(SUIT_CLUBS, KIND_ACE),
-      new Card(SUIT_CLUBS, KIND_KING),
-      new Card(SUIT_CLUBS, KIND_QUEEN),
-      new Card(SUIT_CLUBS, KIND_JACK),
-      new Card(SUIT_CLUBS, KIND_TEN),
-      new Card(SUIT_CLUBS, KIND_NINE),
-      new Card(SUIT_CLUBS, KIND_EIGHT),
-      new Card(SUIT_CLUBS, KIND_SEVEN),
-      new Card(SUIT_CLUBS, KIND_SIX),
-      new Card(SUIT_CLUBS, KIND_FIVE),
-      new Card(SUIT_CLUBS, KIND_FOUR),
-      new Card(SUIT_CLUBS, KIND_THREE),
-      new Card(SUIT_CLUBS, KIND_TWO),
-      new Card(SUIT_DIAMOND, KIND_ACE),
-      new Card(SUIT_DIAMOND, KIND_KING),
-      new Card(SUIT_DIAMOND, KIND_QUEEN),
-      new Card(SUIT_DIAMOND, KIND_JACK),
-      new Card(SUIT_DIAMOND, KIND_TEN),
-      new Card(SUIT_DIAMOND, KIND_NINE),
-      new Card(SUIT_DIAMOND, KIND_EIGHT),
-      new Card(SUIT_DIAMOND, KIND_SEVEN),
-      new Card(SUIT_DIAMOND, KIND_SIX),
-      new Card(SUIT_DIAMOND, KIND_FIVE),
-      new Card(SUIT_DIAMOND, KIND_FOUR),
-      new Card(SUIT_DIAMOND, KIND_THREE),
-      new Card(SUIT_DIAMOND, KIND_TWO),
-      new Card(SUIT_HEART, KIND_ACE),
-      new Card(SUIT_HEART, KIND_KING),
-      new Card(SUIT_HEART, KIND_QUEEN),
-      new Card(SUIT_HEART, KIND_JACK),
-      new Card(SUIT_HEART, KIND_TEN),
-      new Card(SUIT_HEART, KIND_NINE),
-      new Card(SUIT_HEART, KIND_EIGHT),
-      new Card(SUIT_HEART, KIND_SEVEN),
-      new Card(SUIT_HEART, KIND_SIX),
-      new Card(SUIT_HEART, KIND_FIVE),
-      new Card(SUIT_HEART, KIND_FOUR),
-      new Card(SUIT_HEART, KIND_THREE),
-      new Card(SUIT_HEART, KIND_TWO),
-      new Card(SUIT_SPADE, KIND_ACE),
-      new Card(SUIT_SPADE, KIND_KING),
-      new Card(SUIT_SPADE, KIND_QUEEN),
-      new Card(SUIT_SPADE, KIND_JACK),
-      new Card(SUIT_SPADE, KIND_TEN),
-      new Card(SUIT_SPADE, KIND_NINE),
-      new Card(SUIT_SPADE, KIND_EIGHT),
-      new Card(SUIT_SPADE, KIND_SEVEN),
-      new Card(SUIT_SPADE, KIND_SIX),
-      new Card(SUIT_SPADE, KIND_FIVE),
-      new Card(SUIT_SPADE, KIND_FOUR),
-      new Card(SUIT_SPADE, KIND_THREE),
-      new Card(SUIT_SPADE, KIND_TWO),
-      new Card(SUIT_CLUBS, KIND_ACE),
-      new Card(SUIT_CLUBS, KIND_KING),
-      new Card(SUIT_CLUBS, KIND_QUEEN),
-      new Card(SUIT_CLUBS, KIND_JACK),
-      new Card(SUIT_CLUBS, KIND_TEN),
-      new Card(SUIT_CLUBS, KIND_NINE),
-      new Card(SUIT_CLUBS, KIND_EIGHT),
-      new Card(SUIT_CLUBS, KIND_SEVEN),
-      new Card(SUIT_CLUBS, KIND_SIX),
-      new Card(SUIT_CLUBS, KIND_FIVE),
-      new Card(SUIT_CLUBS, KIND_FOUR),
-      new Card(SUIT_CLUBS, KIND_THREE),
-      new Card(SUIT_CLUBS, KIND_TWO),
-      new Card(SUIT_DIAMOND, KIND_ACE),
-      new Card(SUIT_DIAMOND, KIND_KING),
-      new Card(SUIT_DIAMOND, KIND_QUEEN),
-      new Card(SUIT_DIAMOND, KIND_JACK),
-      new Card(SUIT_DIAMOND, KIND_TEN),
-      new Card(SUIT_DIAMOND, KIND_NINE),
-      new Card(SUIT_DIAMOND, KIND_EIGHT),
-      new Card(SUIT_DIAMOND, KIND_SEVEN),
-      new Card(SUIT_DIAMOND, KIND_SIX),
-      new Card(SUIT_DIAMOND, KIND_FIVE),
-      new Card(SUIT_DIAMOND, KIND_FOUR),
-      new Card(SUIT_DIAMOND, KIND_THREE),
-      new Card(SUIT_DIAMOND, KIND_TWO),
-      new Card(SUIT_HEART, KIND_ACE),
-      new Card(SUIT_HEART, KIND_KING),
-      new Card(SUIT_HEART, KIND_QUEEN),
-      new Card(SUIT_HEART, KIND_JACK),
-      new Card(SUIT_HEART, KIND_TEN),
-      new Card(SUIT_HEART, KIND_NINE),
-      new Card(SUIT_HEART, KIND_EIGHT),
-      new Card(SUIT_HEART, KIND_SEVEN),
-      new Card(SUIT_HEART, KIND_SIX),
-      new Card(SUIT_HEART, KIND_FIVE),
-      new Card(SUIT_HEART, KIND_FOUR),
-      new Card(SUIT_HEART, KIND_THREE),
-      new Card(SUIT_HEART, KIND_TWO),
-      new Card(SUIT_SPADE, KIND_ACE),
-      new Card(SUIT_SPADE, KIND_KING),
-      new Card(SUIT_SPADE, KIND_QUEEN),
-      new Card(SUIT_SPADE, KIND_JACK),
-      new Card(SUIT_SPADE, KIND_TEN),
-      new Card(SUIT_SPADE, KIND_NINE),
-      new Card(SUIT_SPADE, KIND_EIGHT),
-      new Card(SUIT_SPADE, KIND_SEVEN),
-      new Card(SUIT_SPADE, KIND_SIX),
-      new Card(SUIT_SPADE, KIND_FIVE),
-      new Card(SUIT_SPADE, KIND_FOUR),
-      new Card(SUIT_SPADE, KIND_THREE),
-      new Card(SUIT_SPADE, KIND_TWO),
-      new Card(SUIT_CLUBS, KIND_ACE),
-      new Card(SUIT_CLUBS, KIND_KING),
-      new Card(SUIT_CLUBS, KIND_QUEEN),
-      new Card(SUIT_CLUBS, KIND_JACK),
-      new Card(SUIT_CLUBS, KIND_TEN),
-      new Card(SUIT_CLUBS, KIND_NINE),
-      new Card(SUIT_CLUBS, KIND_EIGHT),
-      new Card(SUIT_CLUBS, KIND_SEVEN),
-      new Card(SUIT_CLUBS, KIND_SIX),
-      new Card(SUIT_CLUBS, KIND_FIVE),
-      new Card(SUIT_CLUBS, KIND_FOUR),
-      new Card(SUIT_CLUBS, KIND_THREE),
-      new Card(SUIT_CLUBS, KIND_TWO),
-      new Card(SUIT_DIAMOND, KIND_ACE),
-      new Card(SUIT_DIAMOND, KIND_KING),
-      new Card(SUIT_DIAMOND, KIND_QUEEN),
-      new Card(SUIT_DIAMOND, KIND_JACK),
-      new Card(SUIT_DIAMOND, KIND_TEN),
-      new Card(SUIT_DIAMOND, KIND_NINE),
-      new Card(SUIT_DIAMOND, KIND_EIGHT),
-      new Card(SUIT_DIAMOND, KIND_SEVEN),
-      new Card(SUIT_DIAMOND, KIND_SIX),
-      new Card(SUIT_DIAMOND, KIND_FIVE),
-      new Card(SUIT_DIAMOND, KIND_FOUR),
-      new Card(SUIT_DIAMOND, KIND_THREE),
-      new Card(SUIT_DIAMOND, KIND_TWO),
-      new Card(SUIT_HEART, KIND_ACE),
-      new Card(SUIT_HEART, KIND_KING),
-      new Card(SUIT_HEART, KIND_QUEEN),
-      new Card(SUIT_HEART, KIND_JACK),
-      new Card(SUIT_HEART, KIND_TEN),
-      new Card(SUIT_HEART, KIND_NINE),
-      new Card(SUIT_HEART, KIND_EIGHT),
-      new Card(SUIT_HEART, KIND_SEVEN),
-      new Card(SUIT_HEART, KIND_SIX),
-      new Card(SUIT_HEART, KIND_FIVE),
-      new Card(SUIT_HEART, KIND_FOUR),
-      new Card(SUIT_HEART, KIND_THREE),
-      new Card(SUIT_HEART, KIND_TWO),
-      new Card(SUIT_SPADE, KIND_ACE),
-      new Card(SUIT_SPADE, KIND_KING),
-      new Card(SUIT_SPADE, KIND_QUEEN),
-      new Card(SUIT_SPADE, KIND_JACK),
-      new Card(SUIT_SPADE, KIND_TEN),
-      new Card(SUIT_SPADE, KIND_NINE),
-      new Card(SUIT_SPADE, KIND_EIGHT),
-      new Card(SUIT_SPADE, KIND_SEVEN),
-      new Card(SUIT_SPADE, KIND_SIX),
-      new Card(SUIT_SPADE, KIND_FIVE),
-      new Card(SUIT_SPADE, KIND_FOUR),
-      new Card(SUIT_SPADE, KIND_THREE),
-      new Card(SUIT_SPADE, KIND_TWO),
-      new Card(SUIT_CLUBS, KIND_ACE),
-      new Card(SUIT_CLUBS, KIND_KING),
-      new Card(SUIT_CLUBS, KIND_QUEEN),
-      new Card(SUIT_CLUBS, KIND_JACK),
-      new Card(SUIT_CLUBS, KIND_TEN),
-      new Card(SUIT_CLUBS, KIND_NINE),
-      new Card(SUIT_CLUBS, KIND_EIGHT),
-      new Card(SUIT_CLUBS, KIND_SEVEN),
-      new Card(SUIT_CLUBS, KIND_SIX),
-      new Card(SUIT_CLUBS, KIND_FIVE),
-      new Card(SUIT_CLUBS, KIND_FOUR),
-      new Card(SUIT_CLUBS, KIND_THREE),
-      new Card(SUIT_CLUBS, KIND_TWO),
-      new Card(SUIT_DIAMOND, KIND_ACE),
-      new Card(SUIT_DIAMOND, KIND_KING),
-      new Card(SUIT_DIAMOND, KIND_QUEEN),
-      new Card(SUIT_DIAMOND, KIND_JACK),
-      new Card(SUIT_DIAMOND, KIND_TEN),
-      new Card(SUIT_DIAMOND, KIND_NINE),
-      new Card(SUIT_DIAMOND, KIND_EIGHT),
-      new Card(SUIT_DIAMOND, KIND_SEVEN),
-      new Card(SUIT_DIAMOND, KIND_SIX),
-      new Card(SUIT_DIAMOND, KIND_FIVE),
-      new Card(SUIT_DIAMOND, KIND_FOUR),
-      new Card(SUIT_DIAMOND, KIND_THREE),
-      new Card(SUIT_DIAMOND, KIND_TWO),
-      new Card(SUIT_HEART, KIND_ACE),
-      new Card(SUIT_HEART, KIND_KING),
-      new Card(SUIT_HEART, KIND_QUEEN),
-      new Card(SUIT_HEART, KIND_JACK),
-      new Card(SUIT_HEART, KIND_TEN),
-      new Card(SUIT_HEART, KIND_NINE),
-      new Card(SUIT_HEART, KIND_EIGHT),
-      new Card(SUIT_HEART, KIND_SEVEN),
-      new Card(SUIT_HEART, KIND_SIX),
-      new Card(SUIT_HEART, KIND_FIVE),
-      new Card(SUIT_HEART, KIND_FOUR),
-      new Card(SUIT_HEART, KIND_THREE),
-      new Card(SUIT_HEART, KIND_TWO),
-      new Card(SUIT_SPADE, KIND_ACE),
-      new Card(SUIT_SPADE, KIND_KING),
-      new Card(SUIT_SPADE, KIND_QUEEN),
-      new Card(SUIT_SPADE, KIND_JACK),
-      new Card(SUIT_SPADE, KIND_TEN),
-      new Card(SUIT_SPADE, KIND_NINE),
-      new Card(SUIT_SPADE, KIND_EIGHT),
-      new Card(SUIT_SPADE, KIND_SEVEN),
-      new Card(SUIT_SPADE, KIND_SIX),
-      new Card(SUIT_SPADE, KIND_FIVE),
-      new Card(SUIT_SPADE, KIND_FOUR),
-      new Card(SUIT_SPADE, KIND_THREE),
-      new Card(SUIT_SPADE, KIND_TWO),
-      new Card(SUIT_CLUBS, KIND_ACE),
-      new Card(SUIT_CLUBS, KIND_KING),
-      new Card(SUIT_CLUBS, KIND_QUEEN),
-      new Card(SUIT_CLUBS, KIND_JACK),
-      new Card(SUIT_CLUBS, KIND_TEN),
-      new Card(SUIT_CLUBS, KIND_NINE),
-      new Card(SUIT_CLUBS, KIND_EIGHT),
-      new Card(SUIT_CLUBS, KIND_SEVEN),
-      new Card(SUIT_CLUBS, KIND_SIX),
-      new Card(SUIT_CLUBS, KIND_FIVE),
-      new Card(SUIT_CLUBS, KIND_FOUR),
-      new Card(SUIT_CLUBS, KIND_THREE),
-      new Card(SUIT_CLUBS, KIND_TWO),
-      new Card(SUIT_DIAMOND, KIND_ACE),
-      new Card(SUIT_DIAMOND, KIND_KING),
-      new Card(SUIT_DIAMOND, KIND_QUEEN),
-      new Card(SUIT_DIAMOND, KIND_JACK),
-      new Card(SUIT_DIAMOND, KIND_TEN),
-      new Card(SUIT_DIAMOND, KIND_NINE),
-      new Card(SUIT_DIAMOND, KIND_EIGHT),
-      new Card(SUIT_DIAMOND, KIND_SEVEN),
-      new Card(SUIT_DIAMOND, KIND_SIX),
-      new Card(SUIT_DIAMOND, KIND_FIVE),
-      new Card(SUIT_DIAMOND, KIND_FOUR),
-      new Card(SUIT_DIAMOND, KIND_THREE),
-      new Card(SUIT_DIAMOND, KIND_TWO),
-      new Card(SUIT_HEART, KIND_ACE),
-      new Card(SUIT_HEART, KIND_KING),
-      new Card(SUIT_HEART, KIND_QUEEN),
-      new Card(SUIT_HEART, KIND_JACK),
-      new Card(SUIT_HEART, KIND_TEN),
-      new Card(SUIT_HEART, KIND_NINE),
-      new Card(SUIT_HEART, KIND_EIGHT),
-      new Card(SUIT_HEART, KIND_SEVEN),
-      new Card(SUIT_HEART, KIND_SIX),
-      new Card(SUIT_HEART, KIND_FIVE),
-      new Card(SUIT_HEART, KIND_FOUR),
-      new Card(SUIT_HEART, KIND_THREE),
-      new Card(SUIT_HEART, KIND_TWO),
-      new Card(SUIT_SPADE, KIND_ACE),
-      new Card(SUIT_SPADE, KIND_KING),
-      new Card(SUIT_SPADE, KIND_QUEEN),
-      new Card(SUIT_SPADE, KIND_JACK),
-      new Card(SUIT_SPADE, KIND_TEN),
-      new Card(SUIT_SPADE, KIND_NINE),
-      new Card(SUIT_SPADE, KIND_EIGHT),
-      new Card(SUIT_SPADE, KIND_SEVEN),
-      new Card(SUIT_SPADE, KIND_SIX),
-      new Card(SUIT_SPADE, KIND_FIVE),
-      new Card(SUIT_SPADE, KIND_FOUR),
-      new Card(SUIT_SPADE, KIND_THREE),
-      new Card(SUIT_SPADE, KIND_TWO),
-      new Card(SUIT_CLUBS, KIND_ACE),
-      new Card(SUIT_CLUBS, KIND_KING),
-      new Card(SUIT_CLUBS, KIND_QUEEN),
-      new Card(SUIT_CLUBS, KIND_JACK),
-      new Card(SUIT_CLUBS, KIND_TEN),
-      new Card(SUIT_CLUBS, KIND_NINE),
-      new Card(SUIT_CLUBS, KIND_EIGHT),
-      new Card(SUIT_CLUBS, KIND_SEVEN),
-      new Card(SUIT_CLUBS, KIND_SIX),
-      new Card(SUIT_CLUBS, KIND_FIVE),
-      new Card(SUIT_CLUBS, KIND_FOUR),
-      new Card(SUIT_CLUBS, KIND_THREE),
-      new Card(SUIT_CLUBS, KIND_TWO),
-      new Card(SUIT_DIAMOND, KIND_ACE),
-      new Card(SUIT_DIAMOND, KIND_KING),
-      new Card(SUIT_DIAMOND, KIND_QUEEN),
-      new Card(SUIT_DIAMOND, KIND_JACK),
-      new Card(SUIT_DIAMOND, KIND_TEN),
-      new Card(SUIT_DIAMOND, KIND_NINE),
-      new Card(SUIT_DIAMOND, KIND_EIGHT),
-      new Card(SUIT_DIAMOND, KIND_SEVEN),
-      new Card(SUIT_DIAMOND, KIND_SIX),
-      new Card(SUIT_DIAMOND, KIND_FIVE),
-      new Card(SUIT_DIAMOND, KIND_FOUR),
-      new Card(SUIT_DIAMOND, KIND_THREE),
-      new Card(SUIT_DIAMOND, KIND_TWO),
-      new Card(SUIT_HEART, KIND_ACE),
-      new Card(SUIT_HEART, KIND_KING),
-      new Card(SUIT_HEART, KIND_QUEEN),
-      new Card(SUIT_HEART, KIND_JACK),
-      new Card(SUIT_HEART, KIND_TEN),
-      new Card(SUIT_HEART, KIND_NINE),
-      new Card(SUIT_HEART, KIND_EIGHT),
-      new Card(SUIT_HEART, KIND_SEVEN),
-      new Card(SUIT_HEART, KIND_SIX),
-      new Card(SUIT_HEART, KIND_FIVE),
-      new Card(SUIT_HEART, KIND_FOUR),
-      new Card(SUIT_HEART, KIND_THREE),
-      new Card(SUIT_HEART, KIND_TWO),
-      new Card(SUIT_SPADE, KIND_ACE),
-      new Card(SUIT_SPADE, KIND_KING),
-      new Card(SUIT_SPADE, KIND_QUEEN),
-      new Card(SUIT_SPADE, KIND_JACK),
-      new Card(SUIT_SPADE, KIND_TEN),
-      new Card(SUIT_SPADE, KIND_NINE),
-      new Card(SUIT_SPADE, KIND_EIGHT),
-      new Card(SUIT_SPADE, KIND_SEVEN),
-      new Card(SUIT_SPADE, KIND_SIX),
-      new Card(SUIT_SPADE, KIND_FIVE),
-      new Card(SUIT_SPADE, KIND_FOUR),
-      new Card(SUIT_SPADE, KIND_THREE),
-      new Card(SUIT_SPADE, KIND_TWO),
-    ]
-
-    // NOTE: knuth shuffle
-    let ci = this.Cards.length, ri // current index, random index
-
-    while (ci != 0) {
-      ri = Math.floor(Math.random() * ci)
-      ci--
-
-      // NOTE: swap values using array destructuring
-      [this.Cards[ci], this.Cards[ri]] = [this.Cards[ri], this.Cards[ci]]
     }
   }
 }

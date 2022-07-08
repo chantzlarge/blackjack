@@ -35,9 +35,10 @@ export default class Player {
   Id: string
   Balance: number = 500
   Name!: string
-  Hand: Card[] = []
+  Hands: Card[][] = [[], []]
+  HasInsurance: boolean = false
   CurrentBet: number = 0
-  PreviousBet: number = 0
+  PreviousBets: number[] = []
   SessionId!: string
 
   constructor() {
@@ -48,18 +49,29 @@ export default class Player {
   }
 
   BuyInsurance() {
-    // TBD
+    this.HasInsurance = true
+    this.Balance -= .5 * this.CurrentBet
   }
 
-  DealCard(player: Player) {
-    // TBD
+  DealCard(card: Card, hand: 0 | 1 = 0) {
+    this.Hands[hand].push(card)
   }
 
-  PlaceBet() {
-    // TBD
+  PlaceBet(amount: number) {
+    this.PreviousBets.push(this.CurrentBet)
+    this.CurrentBet = amount
+    this.Balance -= this.CurrentBet
+
+    if (this.Balance < 0) {
+      this.Balance += this.CurrentBet
+      this.CurrentBet = this.PreviousBets.pop()!
+
+      throw new Error('bet amount exceeds current balance')
+    }
   }
 
   SplitHand() {
-    // TBD
+    // NOTE: split hands using array destructuring
+    [this.Hands[0][0], this.Hands[1][0]] = [this.Hands[0][0], this.Hands[0][1]]
   }
 }

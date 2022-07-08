@@ -8,11 +8,11 @@ export default class TableService {
     this.tableRepository = tableRepository
   }
 
-  AddPlayer() {
+  AddPlayer(sessionId: string) {
     // TBD
   }
 
-  GetPlayer() {
+  GetPlayer(id: string) {
     // TBD
   }
 
