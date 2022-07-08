@@ -33,15 +33,33 @@ const animals = [
 
 export default class Player {
   Id: string
-  SessionId!: string
-  TableId!: string
+  Balance: number = 500
   Name!: string
   Hand: Card[] = []
+  CurrentBet: number = 0
+  PreviousBet: number = 0
+  SessionId!: string
 
-  constructor (tableId: string) {
+  constructor() {
     this.Id = uuidv4()
-    this.TableId = tableId
 
+    // NOTE: random array selection using bitwise OR operator
     this.Name = `${adjectives[~~Math.floor(Math.random() * adjectives.length)]} ${animals[~~Math.floor(Math.random() * adjectives.length)]}`
+  }
+
+  BuyInsurance() {
+    // TBD
+  }
+
+  DealCard(player: Player) {
+    // TBD
+  }
+
+  PlaceBet() {
+    // TBD
+  }
+
+  SplitHand() {
+    // TBD
   }
 }

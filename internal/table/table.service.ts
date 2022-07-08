@@ -8,6 +8,14 @@ export default class TableService {
     this.tableRepository = tableRepository
   }
 
+  AddPlayer() {
+    // TBD
+  }
+
+  GetPlayer() {
+    // TBD
+  }
+
   CloseTable() {
     // TBD
   }
@@ -16,7 +24,7 @@ export default class TableService {
     return new Table()
   }
 
-  DeleteTable() {
+  RemovePlayer() {
     // TBD
   }
 }

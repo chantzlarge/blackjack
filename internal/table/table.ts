@@ -18,10 +18,14 @@ import Card, {
   KIND_KING,
   KIND_ACE,
 } from '../card/card'
+import Player from '../player/player'
 
 export default class Table {
   Id!: string
-  Deck: Card[] = []
+  Cards: Card[] = []
+  Players: Player[] = []
+  MaxBet: number = 5
+  MinBet: number = 50
 
   constructor() {
     this.Id = uuidv4()
@@ -29,17 +33,39 @@ export default class Table {
     this.ShuffleDeck()
   }
 
+  AddPlayer(player: Player) {
+    const i = this.Players.findIndex(p => p.Id === player.Id)
+    i === -1 ? this.Players.push(player) : this.Players[i] = player
+  }
+
+  UpdatePlayer(player: Player) {
+    const i = this.Players.findIndex(p => p.Id === player.Id)
+    if (i === -1) {
+      throw new Error("")
+    } else {
+      this.Players[i] = player
+    }
+  }
+
   CardsRemaining(): number {
-    return this.Deck.length
+    return this.Cards.length
   }
 
   DrawCard(): Card | undefined {
-    return this.Deck.pop()
+    return this.Cards.pop()
+  }
+
+  GetPlayer(player: Player): Player | undefined {
+    return this.Players.find(p => p.Id === player.Id || p.SessionId === player.SessionId)
+  }
+
+  RemovePlayer() {
+    // TBD
   }
 
   ShuffleDeck() {
     // NOTE: initializing deck with 6 decks
-    this.Deck = [
+    this.Cards = [
       new Card(SUIT_CLUBS, KIND_ACE),
       new Card(SUIT_CLUBS, KIND_KING),
       new Card(SUIT_CLUBS, KIND_QUEEN),
@@ -355,14 +381,14 @@ export default class Table {
     ]
 
     // NOTE: knuth shuffle
-    let ci = this.Deck.length, ri // current index, random index
+    let ci = this.Cards.length, ri // current index, random index
 
     while (ci != 0) {
       ri = Math.floor(Math.random() * ci)
       ci--
 
       // NOTE: swap values using array destructuring
-      [this.Deck[ci], this.Deck[ri]] = [this.Deck[ri], this.Deck[ci]]
+      [this.Cards[ci], this.Cards[ri]] = [this.Cards[ri], this.Cards[ci]]
     }
   }
 }

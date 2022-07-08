@@ -1,23 +1,19 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
-import PlayerService from './internal/player/player.service'
 import TableService from './internal/table/table.service'
 import SessionRepository from './internal/session/session.repository'
 import SessionService from './internal/session/session.service'
-import PlayerRepository from './internal/player/player.repository'
 import TableRepository from './internal/table/table.repository'
 
 const app = express()
 const expressWs = require('express-ws')(app)
 
 // repositories
-const playerRepository = new PlayerRepository()
 const sessionRepository = new SessionRepository()
 const tableRepository = new TableRepository()
 
 // services
-const playerService = new PlayerService(playerRepository)
 const sessionService = new SessionService(sessionRepository)
 const tableService = new TableService(tableRepository)
 
@@ -28,14 +24,12 @@ app.use(cors())
 app.use('/', express.static(path.join(__dirname, './web/dist')))
 
 // routes
-app.get('/api/player/current', function (req, res) {
-  const sessionId = req.body.session.Id
-  // const sessionSecret = req.body.session.Secret
+// app.get('/api/player/current', function (req, res) {
+//   const sessionId = req.body.session.Id
+//   // const sessionSecret = req.body.session.Secret
 
-  const player = playerService.CurrentPlayer(sessionId)
-
-  res.json(player)
-})
+//   res.json(player)
+// })
 
 app.get('/api/session/current', function (req, res) {
   // const sessionId = req.body.session.Id
@@ -57,7 +51,6 @@ app.post('/api/table/create', function (req, res) {
   // const sessionSecret = req.body.Secret
 
   const table = tableService.CreateTable()
-  const player = playerService.CreatePlayer(table.Id)
 
   res.json(table)
 })
