@@ -6,8 +6,8 @@
 
 > TL;DR should include an unordered-list of featured aspects of the README
 
-- This-is: a free and open-source implementation of the game of blackjack
-- Built-with: [express](https://expressjs.com/), [NodeJS](https://nodejs.org/en/), [ReactJS](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), and [UIkit](https://getuikit.com/)
+- **This-is**: a free and open-source implementation of the game of blackjack
+- **Built-with**: [express](https://expressjs.com/), [NodeJS](https://nodejs.org/en/), [ReactJS](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), and [UIkit](https://getuikit.com/)
 
 ## Getting Started
 
