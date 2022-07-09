@@ -5,7 +5,7 @@ import Card from './card'
 export default function Hand(props: { hand: H }) {
   console.log(props.hand)
   return (
-    <div className='uk-width-auto'>
+    <div>
       <div className='uk-flex uk-flex-center'>
         {props.hand.Cards.map(card => <Card key={card.Id} card={card} />)}
       </div>

@@ -17,21 +17,42 @@ export default function Table() {
     return state.table
   })
 
-  return (
-        <div className='uk-section' >
-    <div className='uk-container'>
-        <div className='uk-inline' data-uk-height-viewport>
+  return (<>
+    <div className='uk-section-xsmall'>
+      <div className='uk-container'>
+        <span className='uk-float-left' data-uk-icon="sign-out"></span>
+        <span className='uk-float-right' data-uk-icon="push"></span>
+      </div>
+    </div>
+    <div className='uk-section' >
+      <div className='uk-container'>
+        <div className='uk-inline uk-width-expand' data-uk-height-viewport="offset-bottom:20;">
 
           <div className='uk-position-top'>
-            <Hand hand={h} />
+            <div>
+              <Hand hand={h} />
+            </div>
           </div>
 
           <div className='uk-position-bottom'>
-            <Hand hand={h} />
+            <div>
+              <Hand hand={h} />
+            </div>
+            <div>
+              <div className='uk-grid uk-child-width-1-2' data-uk-grid>
+                  <div>
+                    left
+                  </div>
+                  <div>
+                    right
+                  </div>
+              </div>
+            </div>
           </div>
 
         </div>
       </div>
     </div>
+  </>
   )
 }
