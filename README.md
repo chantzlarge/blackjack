@@ -6,9 +6,12 @@
 
 > TL;DR should include an unordered-list of featured aspects of the README
 
+- This-is: a free and open-source implementation of the game of blackjack
+- Built-with: [express](https://expressjs.com/), [NodeJS](https://nodejs.org/en/), [ReactJS](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), and [UIkit](https://getuikit.com/)
+
 ## Getting Started
 
-This is an free and open-source implementation of the game of blackjack. For a state diagram illustrating the available actions and application states visit: [Blackjack | Google Drawing](https://docs.google.com/drawings/d/1Hm6ilZd6r_4mZhA6JFYeuBdMt4ddQ403KA4h8g-ZIiw/edit?usp=sharing).
+This is a free and open-source implementation of the game of blackjack. For a state diagram illustrating the available actions and application states visit: [Blackjack | Google Drawing](https://docs.google.com/drawings/d/1Hm6ilZd6r_4mZhA6JFYeuBdMt4ddQ403KA4h8g-ZIiw/edit?usp=sharing).
 
 ### Prerequisites
 
