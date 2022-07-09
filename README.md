@@ -2,6 +2,8 @@
 
 # [@chantzlarge](https://github.com/chantzlarge/)/[blackjack](https://github.com/chantzlarge/blackjack/)
 
+![out](https://user-images.githubusercontent.com/4284843/178112064-95e68410-19ea-4645-88a5-1debfde7d439.gif)
+
 ## TL;DR
 
 > TL;DR should include an unordered-list of featured aspects of the README
