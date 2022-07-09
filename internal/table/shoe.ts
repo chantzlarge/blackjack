@@ -28,8 +28,6 @@ export default class Shoe {
         while (ci != 0) {
             ri = Math.floor(Math.random() * ci)
             ci--
-
-            // NOTE: swap values using array destructuring
             [this.Cards[ci], this.Cards[ri]] = [this.Cards[ri], this.Cards[ci]]
         }
     }

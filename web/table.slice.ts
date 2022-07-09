@@ -3,7 +3,7 @@ import { response } from 'express'
 import Table from '../internal/table/table'
 import Session from '../internal/session/session'
 
-const ws = new WebSocket('ws://192.168.1.2:3000/socket')
+const ws = new WebSocket('ws://172.20.10.3:3000/socket')
 
 ws.onopen = (ev) => {
   console.log(ev)
@@ -14,7 +14,7 @@ ws.onmessage = (ev) => {
 }
 
 export const createTable = createAsyncThunk('tables/createTable', async (session: Session) => {
-  const response = await fetch('http://192.168.1.2:3000/api/table/create', {
+  const response = await fetch('http://172.20.10.3:3000/api/table/create', {
     body: JSON.stringify(session),
     headers: {
       'Accept': 'application/json',

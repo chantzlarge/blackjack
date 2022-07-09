@@ -133,6 +133,8 @@ function renderSwitch(card: C): string {
 
 export default function Card(props: { card: C }) {
   return (
-    <h1 className='uk-heading-2xlarge uk-text-center'>{renderSwitch(props.card)}</h1>
+    <div className=''>
+      <h1 className='uk-heading-2xlarge uk-text-center'>{renderSwitch(props.card)}</h1>
+    </div>
   )
 }
