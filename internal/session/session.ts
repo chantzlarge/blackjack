@@ -6,7 +6,7 @@ export default class Session {
   PlayerId!: string
   TableId!: string
 
-  constructor() {
+  constructor () {
     this.Id = uuidv4()
     // TODO: hash secret
     this.Secret = Buffer.from(uuidv4()).toString('base64')

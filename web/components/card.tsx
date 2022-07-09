@@ -17,10 +17,10 @@ import {
   SUIT_CLUBS,
   SUIT_DIAMOND,
   SUIT_HEART,
-  SUIT_SPADE,
+  SUIT_SPADE
 } from '../../internal/card/card'
 
-function renderSwitch(card: C): string {
+function renderSwitch (card: C): string {
   switch (`${card.Value}${card.Suit}`) {
     case `${VALUE_ACE}${SUIT_DIAMOND}`:
       return '🂡'
@@ -131,7 +131,7 @@ function renderSwitch(card: C): string {
   }
 }
 
-export default function Card(props: { card: C }) {
+export default function Card (props: { card: C }) {
   return (
     <span className='uk-text-center' style={{ fontSize: 'inherit' }}>{renderSwitch(props.card)}</span>
   )

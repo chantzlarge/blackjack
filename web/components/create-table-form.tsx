@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch } from '../store'
+import { AppDispatch, RootState } from '../store'
 import { createTable } from '../table.slice'
-import { RootState } from '../store'
 import Session from '../../internal/session/session'
 import { useNavigate } from 'react-router-dom'
 
-export default function CreateTableForm() {
+export default function CreateTableForm () {
   const [inputs, setInputs] = useState({})
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
@@ -21,7 +20,7 @@ export default function CreateTableForm() {
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault()
     dispatch(createTable(session!))
-    
+
     navigate('/table')
   }
 

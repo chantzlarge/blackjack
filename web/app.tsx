@@ -9,7 +9,7 @@ import CreateOrJoinTable from './components/create-or-join-table'
 import Card from './components/card'
 import Table from './components/table'
 
-export default function App() {
+export default function App () {
   const dispatch = useDispatch<AppDispatch>()
   const [cookies, setCookie] = useCookies(['session-id'])
 
@@ -21,11 +21,11 @@ export default function App() {
     console.log(`session: ${JSON.stringify(session)}`)
     console.log(`cookies['session-id']: ${cookies['session-id']}`)
 
-    if (session && !cookies['session-id']) {
+    if ((session != null) && !cookies['session-id']) {
       setCookie('session-id', session.Id, { path: '/' })
-    } else if (!session && cookies['session-id']) {
+    } else if ((session == null) && cookies['session-id']) {
       dispatch(getSession(cookies['session-id']))
-    } else if (!session && !cookies['session-id']) {
+    } else if ((session == null) && !cookies['session-id']) {
       dispatch(createSession())
     }
   })

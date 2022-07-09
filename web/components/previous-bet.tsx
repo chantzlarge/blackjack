@@ -1,9 +1,9 @@
 import React from 'react'
 
 export default class PreviousBet extends React.Component {
-  render() {
+  render () {
     return (
-      <h5>$15</h5>
+      <h3 className='uk-text-muted'>$15</h3>
     )
   }
 }

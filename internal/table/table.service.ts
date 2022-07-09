@@ -4,27 +4,27 @@ import TableRepository from './table.repository'
 export default class TableService {
   tableRepository: TableRepository
 
-  constructor(tableRepository: TableRepository) {
+  constructor (tableRepository: TableRepository) {
     this.tableRepository = tableRepository
   }
 
-  AddPlayer(sessionId: string) {
+  AddPlayer (sessionId: string) {
     // TBD
   }
 
-  GetPlayer(id: string) {
+  GetPlayer (id: string) {
     // TBD
   }
 
-  CloseTable() {
+  CloseTable () {
     // TBD
   }
 
-  CreateTable(): Table {
+  CreateTable (): Table {
     return new Table()
   }
 
-  RemovePlayer() {
+  RemovePlayer () {
     // TBD
   }
 }

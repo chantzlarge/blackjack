@@ -68,7 +68,7 @@ app.ws('/socket', function (ws, req) {
   })
 })
 
-app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html'))) 
+app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html')))
 
 const server = app.listen(3000, '0.0.0.0', function () {
   // @ts-expect-error

@@ -17,7 +17,7 @@ export const createTable = createAsyncThunk('tables/createTable', async (session
   const response = await fetch('http://172.20.10.3:3000/api/table/create', {
     body: JSON.stringify(session),
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     method: 'POST'
@@ -32,7 +32,7 @@ export const tableSlice = createSlice({
   name: 'tables',
   initialState: null as Table | null,
   reducers: {
-    joinTable(state, action) {
+    joinTable (state, action) {
       ws.send(action.payload)
     }
   },

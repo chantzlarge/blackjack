@@ -4,7 +4,7 @@ import Dealer from './dealer'
 import Shoe from './shoe'
 
 export default class Table {
-  Id!: string
+  Id: string = uuidv4()
   CurrentPlayer!: number
   Shoe: Shoe = new Shoe()
   Dealer: Dealer = new Dealer()
@@ -12,40 +12,38 @@ export default class Table {
   MinBet: number = 50
   Players: Player[] = []
 
-  constructor() {
-    this.Id = uuidv4()
-
+  constructor () {
     this.Shoe.ShuffleAndLoad()
   }
 
-  AddPlayer(player: Player) {
+  AddPlayer (player: Player) {
     const i = this.Players.findIndex(p => p.Id === player.Id)
     i === -1 ? this.Players.push(player) : this.Players[i] = player
   }
 
-  ServeDealer() {
+  ServeDealer () {
     const card = this.Shoe.DrawCard()
 
     this.Dealer.Hand.Deal(card!)
   }
 
-  ServePlayer(playerId: string, hand: 0 | 1 = 0) {
+  ServePlayer (playerId: string, hand: 0 | 1 = 0) {
     const player = this.GetPlayer(playerId)
-    
+
     player!.Hands[hand].Deal(this.Shoe.DrawCard()!)
-    
+
     this.UpdatePlayer(player!)
   }
 
-  GetPlayer(id?: string, sessionId?: string): Player | undefined {
+  GetPlayer (id?: string, sessionId?: string): Player | undefined {
     return this.Players.find(p => p.Id === id || p.SessionId === sessionId)
   }
 
-  RemovePlayer(player: Player) {
+  RemovePlayer (player: Player) {
     this.Players = this.Players.filter(p => p.Id === player.Id || p.SessionId === player.SessionId)
   }
 
-  Settle() {
+  Settle () {
     this.Players = this.Players.map(p => {
       if (true) {
         p.Balance += p.CurrentBet
@@ -55,10 +53,10 @@ export default class Table {
     })
   }
 
-  UpdatePlayer(player: Player) {
+  UpdatePlayer (player: Player) {
     const i = this.Players.findIndex(p => p.Id === player.Id)
     if (i === -1) {
-      throw new Error("")
+      throw new Error('')
     } else {
       this.Players[i] = player
     }
