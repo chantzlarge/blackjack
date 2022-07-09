@@ -11,7 +11,7 @@
 
 ## Getting Started
 
-This is a free and open-source implementation of the game of blackjack. For a state diagram illustrating the available actions and application states visit: [Blackjack | Google Drawing](https://docs.google.com/drawings/d/1Hm6ilZd6r_4mZhA6JFYeuBdMt4ddQ403KA4h8g-ZIiw/edit?usp=sharing).
+This is a free and open-source implementation of the game of blackjack. For a state diagram illustrating the available actions and application states visit: [Blackjack State Machine Diagram | Google Drawing](https://docs.google.com/drawings/d/1Hm6ilZd6r_4mZhA6JFYeuBdMt4ddQ403KA4h8g-ZIiw/edit?usp=sharing).
 
 ### Prerequisites
 
