@@ -82,6 +82,10 @@ This is an free and open-source implementation of the game of blackjack. For a s
 > contributors or users.
 
 - [How to play: Blackjack | Bicycle](https://bicyclecards.com/how-to-play/blackjack/)
+- [HTML Reference | MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference)
+- [JavaScript Reference | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference)
+- [TypeScript Documentation | TypeScript](https://www.typescriptlang.org/docs/)
+- [UIkit Documentation](https://getuikit.com/docs/introduction)
 - [Unicode 14.0.0](https://www.unicode.org/versions/Unicode14.0.0/)
-- [WebRTC API](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API)
-- [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
+- [WebRTC API | MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API)
+- [WebSocket | MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
