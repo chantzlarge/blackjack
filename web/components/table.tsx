@@ -24,32 +24,53 @@ export default function Table() {
         <span className='uk-float-right' data-uk-icon="push"></span>
       </div>
     </div>
-    <div className='uk-section' >
+    <div className='uk-section'>
       <div className='uk-container'>
-        <div className='uk-inline uk-width-expand' data-uk-height-viewport="offset-bottom:20;">
+        <div className='uk-inline uk-width-expand' data-uk-height-viewport="offset-bottom: 50;">
 
+          {/* top */}
           <div className='uk-position-top'>
             <div>
-              <Hand hand={h} />
+              <Hand hand={h} isDealer={true} />
             </div>
           </div>
 
+          {/* left */}
+          <div className='uk-position-left'>
+            <h3>left</h3>
+          </div>
+
+          {/* center */}
+          <div className='uk-position-center'>
+            <h3 className='uk-text-muted'>BLACKJACK</h3>
+          </div>
+
+          {/* right */}
+          <div className='uk-position-right'>
+            <h3>right</h3>
+          </div>
+
+          {/* bottom */}
           <div className='uk-position-bottom'>
             <div>
-              <Hand hand={h} />
-            </div>
-            <div>
-              <div className='uk-grid uk-child-width-1-2' data-uk-grid>
-                  <div>
-                    left
-                  </div>
-                  <div>
-                    right
-                  </div>
-              </div>
+              <Hand hand={h} isDealer={false} />
             </div>
           </div>
 
+        </div>
+      </div>
+    </div>
+
+    <div className='uk-section uk-section-small'>
+      <div className='uk-container'>
+        <div className='uk-grid uk-child-width-1-2' data-uk-grid>
+          <div>
+            <h3 className='uk-heading-small'>$5,000</h3>
+            <h5 className='uk-text-muted'>$15</h5>
+          </div>
+          <div>
+            ACTIONS
+          </div>
         </div>
       </div>
     </div>

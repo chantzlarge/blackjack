@@ -133,8 +133,6 @@ function renderSwitch(card: C): string {
 
 export default function Card(props: { card: C }) {
   return (
-    <div className=''>
-      <h1 className='uk-heading-2xlarge uk-text-center'>{renderSwitch(props.card)}</h1>
-    </div>
+    <span className='uk-text-center' style={{ fontSize: 'inherit' }}>{renderSwitch(props.card)}</span>
   )
 }
