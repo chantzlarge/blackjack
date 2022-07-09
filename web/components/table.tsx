@@ -6,6 +6,8 @@ import { RootState } from '../store'
 import Hand from './hand'
 import { default as C } from '../../internal/card/card'
 import { default as H } from '../../internal/card/hand'
+import Balance from './balance'
+import PreviousBet from './previous-bet'
 
 export default function Table() {
   const h = new H()
@@ -65,8 +67,8 @@ export default function Table() {
       <div className='uk-container'>
         <div className='uk-grid uk-child-width-1-2' data-uk-grid>
           <div>
-            <h3 className='uk-heading-small'>$5,000</h3>
-            <h5 className='uk-text-muted'>$15</h5>
+            <Balance />
+            <PreviousBet />
           </div>
           <div>
             ACTIONS

@@ -1,5 +1,7 @@
 import React from 'react'
 
 export default function Balance() {
-  return (<p>balance works!</p>)
+  return (
+    <h3 className='uk-heading-small'>$5,000</h3>
+  )
 }

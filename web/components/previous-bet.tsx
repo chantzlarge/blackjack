@@ -1,7 +1,9 @@
 import React from 'react'
 
 export default class PreviousBet extends React.Component {
-  render () {
-    return (<p>previous bet works!</p>)
+  render() {
+    return (
+      <h5>$15</h5>
+    )
   }
 }
