@@ -8,6 +8,8 @@
 
 ## Getting Started
 
+This is an free and open-source implementation of the game of blackjack. For a state diagram illustrating the available actions and application states visit: [Blackjack | Google Drawing](https://docs.google.com/drawings/d/1Hm6ilZd6r_4mZhA6JFYeuBdMt4ddQ403KA4h8g-ZIiw/edit?usp=sharing).
+
 ### Prerequisites
 
 > Prerequisites should include a list of dependencies necessary for the 
