@@ -2,7 +2,7 @@
 
 # [@chantzlarge](https://github.com/chantzlarge/)/[blackjack](https://github.com/chantzlarge/blackjack/)
 
-![out](https://user-images.githubusercontent.com/4284843/178112064-95e68410-19ea-4645-88a5-1debfde7d439.gif)
+![out](https://user-images.githubusercontent.com/4284843/178115062-17a6f19f-4f3f-49e0-ad39-e0c3284439d3.gif)
 
 ## TL;DR
 
