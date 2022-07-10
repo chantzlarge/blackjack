@@ -11,7 +11,7 @@ export default function Hand (props: { hand: H, isDealer: boolean }) {
         {props.hand.Cards.map(card => <Card key={card.Id} card={card} />)}
       </div>
       <div>
-        {!props.isDealer && <h5 className='uk-text-muted uk-text-center'>{props.hand.Score()}</h5>}
+        {!props.isDealer && <h3 className='uk-text-muted uk-text-center'>{props.hand.Score()}</h3>}
       </div>
     </div>
   )

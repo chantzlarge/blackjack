@@ -8,8 +8,9 @@ import { default as H } from '../../internal/card/hand'
 import { default as P } from '../../internal/player/player'
 import Balance from './balance'
 import PreviousBet from './previous-bet'
+import PlaceBet from './place-bet'
 
-export default function Table () {
+export default function Table() {
   const h = new H()
   const p = new P()
 
@@ -20,7 +21,6 @@ export default function Table () {
   // p.DealCard(new C('diamond', 'two'))
   // p.DealCard(new C('diamond', 'ace'))
   p.DealCard(new C('diamond', 'eight'))
-  p.DealCard(new C('diamond', 'ten'))
 
   h.Deal(new C('spade', 'ace'))
   h.Deal(new C('diamond', 'two'))
@@ -32,59 +32,62 @@ export default function Table () {
 
   return (
     <>
-      <div className='uk-section-xsmall'>
-        <div className='uk-container'>
-          <span className='uk-float-left' data-uk-icon='sign-out' />
-          <span className='uk-float-right' data-uk-icon='push' />
-        </div>
-      </div>
-      <div className='uk-section'>
-        <div className='uk-container'>
-          <div className='uk-inline uk-width-expand' data-uk-height-viewport='offset-bottom: 50;'>
+      <div className='uk-width-expand uk-inline' data-uk-height-viewport>
 
-            {/* top */}
-            <div className='uk-position-top'>
+        {/* top */}
+        <div className='uk-position-top'>
+          <div className='uk-section uk-section-small'>
+            <div className='uk-container'>
+              <div>
+                <span className='uk-float-left' data-uk-icon='sign-out' />
+                <span className='uk-float-right' data-uk-icon='push' />
+              </div>
               <div>
                 <Hand hand={h} isDealer />
               </div>
             </div>
-
-            {/* left */}
-            <div className='uk-position-left'>
-              {/* TODO */}
-            </div>
-
-            {/* center */}
-            <div className='uk-position-center'>
-              <h3 className='uk-text-muted'>BLACKJACK</h3>
-            </div>
-
-            {/* right */}
-            <div className='uk-position-right'>
-              {/* TODO */}
-            </div>
-
-            {/* bottom */}
-            <div className='uk-position-bottom'>
-              {p.Hands.map(h => <Hand key={h.Id} hand={h} isDealer={false} />)}
-            </div>
-
           </div>
         </div>
-      </div>
 
-      <div className='uk-section uk-section-xsmall'>
-        <div className='uk-container uk-container-small'>
-          <div className='uk-grid uk-child-width-1-2' data-uk-grid>
-            <div>
-              <Balance />
-              <PreviousBet />
-            </div>
-            <div>
-              ACTIONS
+        {/* left */}
+        <div className='uk-position-left'>
+          {/* TODO */}
+        </div>
+
+        {/* center */}
+        <div className='uk-position-center'>
+        </div>
+
+        {/* right */}
+        <div className='uk-position-right'>
+          {/* TODO */}
+        </div>
+
+        {/* bottom */}
+        <div className='uk-position-bottom'>
+          <div className='uk-section uk-section-medium'>
+            <div className='uk-container uk-container-small'>
+              <div>
+                <h3 className='uk-heading-small uk-text-muted uk-text-center'>BLACKJACK</h3>
+              </div>
+              <div className='uk-margin'>
+                {p.Hands.map(h => <Hand key={h.Id} hand={h} isDealer={false} />)}
+              </div>
+              <div className='uk-margin-large'>
+                <div data-uk-grid>
+                  <div className='uk-width-1-2 uk-width-2-3@s'>
+                    <Balance />
+                    <PreviousBet />
+                  </div>
+                  <div className='uk-width-1-2 uk-width-1-3@s'>
+                    <PlaceBet />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
       </div>
     </>
   )
