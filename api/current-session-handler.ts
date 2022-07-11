@@ -1,5 +1,5 @@
 import express from 'express'
-import SessionService from 'session/session.service'
+import SessionService from '../internal/session/session.service'
 
 export default class CurrentSessionHandler {
   sessionService: SessionService

@@ -1,6 +1,6 @@
-import Card from '../card/card'
+import Card from './card'
 import { v4 as uuidv4 } from 'uuid'
-import Hand from '../hand/hand'
+import Hand from './hand'
 
 const adjectives = [
   'agreeable',
@@ -40,7 +40,6 @@ export default class Player {
   HasInsurance: boolean = false
   CurrentBet: number = 0
   PreviousBets: number[] = []
-  SessionId!: string
 
   constructor () {
     this.Id = uuidv4()

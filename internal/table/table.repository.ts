@@ -1,23 +1,21 @@
-import Table from "./table";
+import Table from './table'
 
 export default class TableRepository {
-    tables: Table[] = []
+  tables: Table[] = []
 
-    DeleteTable(id: string) {
-        this.tables = this.tables.filter(t => t.Id !== id)
-    }
+  DeleteTable (id: string) {
+    this.tables = this.tables.filter(t => t.Id !== id)
+  }
 
-    InsertTable(table: Table) {
-        this.tables.push(table)
-    }
+  InsertTable (table: Table) {
+    this.tables.push(table)
+  }
 
-    SelectTableById(id: string): Table | undefined {
-        return this.tables.find(t => t.Id === id)
-    }
+  SelectTableById (id: string): Table | undefined {
+    return this.tables.find(t => t.Id === id)
+  }
 
-    UpdateTable(table: Table) {
-        const index = this.tables.findIndex(t => t.Id === table.Id)
-
-        this.tables[index] = table
-    }
+  UpdateTable (table: Table) {
+    this.tables = this.tables.map(t => t.Id === table.Id ? table : t)
+  }
 }

@@ -3,13 +3,12 @@ import { useSelector } from 'react-redux'
 import { default as T } from '../../internal/table/table'
 import { RootState } from '../store'
 import Hand from './hand'
-import { default as C } from '../../internal/card/card'
-import { default as H } from '../../internal/hand/hand'
-import { default as P } from '../../internal/player/player'
+import { default as C } from '../../internal/table/card'
+import { default as H } from '../../internal/table/hand'
+import { default as P } from '../../internal/table/player'
 import Balance from './balance'
 import PreviousBet from './previous-bet'
 import PlaceBet from './place-bet'
-import HitOrStand from './hit-or-stand'
 import Hit from './hit'
 
 export default function Table () {
@@ -41,8 +40,8 @@ export default function Table () {
           <div className='uk-section uk-section-small'>
             <div className='uk-container'>
               <div>
-                <button className='uk-button-icon uk-float-left' data-uk-icon='menu'></button>
-                <button className='uk-button-icon uk-float-right' data-uk-icon='sign-out'></button>
+                <button className='uk-button-icon uk-float-left' data-uk-icon='menu' />
+                <button className='uk-button-icon uk-float-right' data-uk-icon='sign-out' />
               </div>
               <div>
                 <Hand hand={h} isDealer />

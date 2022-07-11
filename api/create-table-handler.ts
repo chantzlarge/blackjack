@@ -1,5 +1,6 @@
 import express from 'express'
-import TableService from 'table/table.service'
+import Player from '../internal/table/player'
+import TableService from '../internal/table/table.service'
 
 export default class CreateTableHandler {
   tableService: TableService
@@ -13,7 +14,13 @@ export default class CreateTableHandler {
     // const sessionSecret = request.body.Secret
 
     const table = this.tableService.CreateTable()
+    const player = new Player()
 
-    response.json(table)
+    const out = this.tableService.AddPlayer({
+      SessionId: 'asdf',
+      TableId: table.Id,
+    })
+
+    response.json(out)
   }
 }

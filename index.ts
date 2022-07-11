@@ -11,10 +11,9 @@ import CreateSessionHandler from './api/create-session-handler'
 import CurrentSessionHandler from './api/current-session-handler'
 import JoinTableHandler from './api/join-table-handler'
 import WebSocketHandler from './api/websocket-handler'
-import onSocket from './api/websocket-handler'
 
 const app = express()
-const WebSocket = require('express-ws')(app)
+const expressWs = require('express-ws')(app)
 
 // repositories
 const sessionRepository = new SessionRepository()
@@ -36,18 +35,18 @@ const webSocketHandler = new WebSocketHandler(tableService)
 app.use(express.json())
 app.use(cors())
 app.use('/', express.static(path.join(__dirname, 'web', 'dist')))
-app.use((request, response, next) =>
-  authenticateSessionHandler.Handle(request, response, next))
+app.use((req, res, next) =>
+  authenticateSessionHandler.Handle(req, res, next))
 
 // routes
 app.get('/api/session/current', (req, res) =>
   currentSessionHandler.Handle(req, res))
 
-app.post('/api/session/create', (request, response) =>
-  createSessionHandler.Handle(request, response))
+app.post('/api/session/create', (req, res) =>
+  createSessionHandler.Handle(req, res))
 
-app.post('/api/table/create', (request, response) =>
-  createTableHandler.Handle(request, response))
+app.post('/api/table/create', (req, res) =>
+  createTableHandler.Handle(req, res))
 
 app.post('/api/table/join', (req, res) =>
   joinTableHandler.Handle(req, res))

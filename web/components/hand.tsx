@@ -1,5 +1,5 @@
 import React from 'react'
-import { default as H } from '../../internal/hand/hand'
+import { default as H } from '../../internal/table/hand'
 import Card from './card'
 
 export default function Hand (props: { hand: H, isDealer: boolean }) {

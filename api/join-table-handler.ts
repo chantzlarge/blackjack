@@ -1,5 +1,5 @@
 import express from 'express'
-import TableService from 'table/table.service'
+import TableService from '../internal/table/table.service'
 
 export default class CreateTableHandler {
   tableService: TableService

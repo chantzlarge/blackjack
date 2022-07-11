@@ -1,18 +1,18 @@
-import Deck from '../deck/deck'
-import Card from '../card/card'
+import Deck from './deck'
+import Card from './card'
 
 export default class Shoe {
   Cards: Card[] = []
 
-  CardsRemaining(): number {
+  CardsRemaining (): number {
     return this.Cards.length
   }
 
-  DrawCard(): Card | undefined {
+  DrawCard (): Card | undefined {
     return this.Cards.pop()
   }
 
-  ShuffleAndLoad() {
+  ShuffleAndLoad () {
     this.Cards = [
       ...new Deck().Cards,
       ...new Deck().Cards,
@@ -23,7 +23,7 @@ export default class Shoe {
       ...new Deck().Cards
     ]
 
-    let currentIndex = this.Cards.length;
+    let currentIndex = this.Cards.length
     let randomIndex
 
     while (currentIndex != 0) {
