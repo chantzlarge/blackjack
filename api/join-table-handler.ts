@@ -12,7 +12,7 @@ export default class CreateTableHandler {
     // const sessionId = req.body.Id
     // const sessionSecret = req.body.Secret
 
-    this.tableService.JoinTable()
+    // this.tableService.JoinTable()
 
     // res.json(t)
   }

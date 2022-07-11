@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Player from '../player/player'
-import Dealer from './dealer'
-import Shoe from './shoe'
+import Dealer from '../dealer/dealer'
+import Shoe from '../shoe/shoe'
 
 export default class Table {
   Id: string = uuidv4()
@@ -39,8 +39,8 @@ export default class Table {
     return this.Players.find(p => p.Id === id || p.SessionId === sessionId)
   }
 
-  RemovePlayer (player: Player) {
-    this.Players = this.Players.filter(p => p.Id === player.Id || p.SessionId === player.SessionId)
+  RemovePlayer (playerId: string) {
+    this.Players = this.Players.filter(p => p.Id === playerId)
   }
 
   Settle () {

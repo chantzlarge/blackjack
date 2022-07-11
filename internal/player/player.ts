@@ -1,6 +1,6 @@
 import Card from '../card/card'
 import { v4 as uuidv4 } from 'uuid'
-import Hand from '../card/hand'
+import Hand from '../hand/hand'
 
 const adjectives = [
   'agreeable',

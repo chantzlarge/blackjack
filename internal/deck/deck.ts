@@ -16,7 +16,7 @@ import Card, {
   SUIT_DIAMOND,
   SUIT_HEART,
   SUIT_SPADE
-} from './card'
+} from '../card/card'
 
 export default class Deck {
   Cards: Card[] = [

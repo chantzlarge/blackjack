@@ -1,34 +1,43 @@
+import Player from '../player/player'
 import Table from './table'
 import TableRepository from './table.repository'
 
 export default class TableService {
   tableRepository: TableRepository
 
-  constructor (tableRepository: TableRepository) {
+  constructor(tableRepository: TableRepository) {
     this.tableRepository = tableRepository
   }
 
-  AddPlayer (sessionId: string) {
-    // TBD
+  AddPlayer(id: string, player: Player) {
+    const table = this.tableRepository.SelectTableById(id)
+
+    table?.AddPlayer(player)
+
+    this.tableRepository.UpdateTable(table!)
   }
 
-  GetPlayer (id: string) {
-    // TBD
+  CreateTable(): Table {
+    const table = new Table()
+
+    this.tableRepository.InsertTable(table)
+
+    return table
   }
 
-  CloseTable () {
-    // TBD
+  DeleteTable(id: string) {
+    this.tableRepository.DeleteTable(id)
   }
 
-  CreateTable (): Table {
-    return new Table()
+  GetTable(id: string): Table | undefined {
+    return this.tableRepository.SelectTableById(id)
   }
 
-  JoinTable () {
-    // TBD
-  }
+  RemovePlayer(id: string, playerId: string) {
+    const table = this.tableRepository.SelectTableById(id)
 
-  RemovePlayer () {
-    // TBD
+    table?.RemovePlayer(playerId)
+
+    this.tableRepository.UpdateTable(table!)
   }
 }

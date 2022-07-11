@@ -4,7 +4,7 @@ import { default as T } from '../../internal/table/table'
 import { RootState } from '../store'
 import Hand from './hand'
 import { default as C } from '../../internal/card/card'
-import { default as H } from '../../internal/card/hand'
+import { default as H } from '../../internal/hand/hand'
 import { default as P } from '../../internal/player/player'
 import Balance from './balance'
 import PreviousBet from './previous-bet'
@@ -41,8 +41,8 @@ export default function Table () {
           <div className='uk-section uk-section-small'>
             <div className='uk-container'>
               <div>
-                <span className='uk-float-left' data-uk-icon='sign-out' />
-                <span className='uk-float-right' data-uk-icon='push' />
+                <button className='uk-button-icon uk-float-left' data-uk-icon='menu'></button>
+                <button className='uk-button-icon uk-float-right' data-uk-icon='sign-out'></button>
               </div>
               <div>
                 <Hand hand={h} isDealer />

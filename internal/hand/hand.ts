@@ -13,7 +13,7 @@ import Card, {
   VALUE_FOUR,
   VALUE_THREE,
   VALUE_TWO
-} from './card'
+} from '../card/card'
 
 export default class Hand {
   Id: string = uuidv4()

@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Table from '../internal/table/table'
 import Session from '../internal/session/session'
 
-const webSocket = new WebSocket('ws://localhost:3000/socket')
+const ws = new WebSocket('ws://localhost:3000/socket')
 
-webSocket.onopen = (event) => {
+ws.onopen = (event) => {
   console.log(event)
 }
 
-webSocket.onmessage = (event) => {
+ws.onmessage = (event) => {
   console.log(event)
 }
 
@@ -56,14 +56,18 @@ export const tableSlice = createSlice({
 
       console.log(`created table: ${JSON.stringify(table)}`)
 
-      return table
+      state = table
+
+      return state
     })
     builder.addCase(joinTable.fulfilled, (state, action) => {
       const table = action.payload
 
+      state = table
+
       console.log(`joined table: ${JSON.stringify(table)}`)
 
-      return table
+      return state
     })
   }
 })
