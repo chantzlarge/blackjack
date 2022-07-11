@@ -1,13 +1,20 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
-import TableService from './internal/table/table.service'
 import SessionRepository from './internal/session/session.repository'
 import SessionService from './internal/session/session.service'
 import TableRepository from './internal/table/table.repository'
+import TableService from './internal/table/table.service'
+import AuthenticateSessionHandler from './api/authenticate-session-handler'
+import CreateTableHandler from './api/create-table-handler'
+import CreateSessionHandler from './api/create-session-handler'
+import CurrentSessionHandler from './api/current-session-handler'
+import JoinTableHandler from './api/join-table-handler'
+import WebSocketHandler from './api/websocket-handler'
+import onSocket from './api/websocket-handler'
 
 const app = express()
-const expressWs = require('express-ws')(app)
+const WebSocket = require('express-ws')(app)
 
 // repositories
 const sessionRepository = new SessionRepository()
@@ -17,64 +24,46 @@ const tableRepository = new TableRepository()
 const sessionService = new SessionService(sessionRepository)
 const tableService = new TableService(tableRepository)
 
+// handlers
+const authenticateSessionHandler = new AuthenticateSessionHandler(sessionService)
+const createSessionHandler = new CreateSessionHandler(sessionService)
+const createTableHandler = new CreateTableHandler(tableService)
+const currentSessionHandler = new CurrentSessionHandler(sessionService)
+const joinTableHandler = new JoinTableHandler(tableService)
+const webSocketHandler = new WebSocketHandler(tableService)
+
 // middleware
 app.use(express.json())
 app.use(cors())
-
 app.use('/', express.static(path.join(__dirname, 'web', 'dist')))
+app.use((request, response, next) =>
+  authenticateSessionHandler.Handle(request, response, next))
 
 // routes
-// app.get('/api/player/current', function (req, res) {
-//   const sessionId = req.body.session.Id
-//   // const sessionSecret = req.body.session.Secret
+app.get('/api/session/current', (req, res) =>
+  currentSessionHandler.Handle(req, res))
 
-//   res.json(player)
-// })
+app.post('/api/session/create', (request, response) =>
+  createSessionHandler.Handle(request, response))
 
-app.get('/api/session/current', function (req, res) {
-  // const sessionId = req.body.session.Id
-  // const sessionSecret = req.body.session.Secret
+app.post('/api/table/create', (request, response) =>
+  createTableHandler.Handle(request, response))
 
-  const session = sessionService.GetSession()
-
-  res.json(session)
-})
-
-app.post('/api/session/create', function (req, res) {
-  const session = sessionService.GetSession()
-
-  res.json(session)
-})
-
-app.post('/api/table/create', function (req, res) {
-  // const sessionId = req.body.Id
-  // const sessionSecret = req.body.Secret
-
-  const table = tableService.CreateTable()
-
-  res.json(table)
-})
-
-app.post('/api/table/join', function (req, res) {
-  const table = tableService.CreateTable()
-
-  res.json(table)
-})
+app.post('/api/table/join', (req, res) =>
+  joinTableHandler.Handle(req, res))
 
 // @ts-expect-error
-app.ws('/socket', function (ws, req) {
-  ws.on('message', function (msg: any) {
-    console.log(msg)
-  })
-})
+app.ws('/socket', (ws, req) =>
+  webSocketHandler.Handle(ws, req))
 
-app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html')))
+app.get('*', (_, res) =>
+  res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html')))
 
 const server = app.listen(3000, '0.0.0.0', function () {
   // @ts-expect-error
-  const host = server.address()!.address
+  const address = server.address()!.address
   // @ts-expect-error
   const port = server.address()!.port
 
-  console.log('server is listening at http://%s:%s', host, port)
+  console.log('server is listening at http://%s:%s', address, port)
 })

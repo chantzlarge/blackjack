@@ -9,8 +9,10 @@ import { default as P } from '../../internal/player/player'
 import Balance from './balance'
 import PreviousBet from './previous-bet'
 import PlaceBet from './place-bet'
+import HitOrStand from './hit-or-stand'
+import Hit from './hit'
 
-export default function Table() {
+export default function Table () {
   const h = new H()
   const p = new P()
 
@@ -18,7 +20,7 @@ export default function Table() {
   // p.DealCard(new C('clubs', 'three'))
   p.DealCard(new C('clubs', 'four'))
   // p.DealCard(new C('diamond', 'five'))
-  // p.DealCard(new C('diamond', 'two'))
+  p.DealCard(new C('diamond', 'two'))
   // p.DealCard(new C('diamond', 'ace'))
   p.DealCard(new C('diamond', 'eight'))
 
@@ -55,8 +57,7 @@ export default function Table() {
         </div>
 
         {/* center */}
-        <div className='uk-position-center'>
-        </div>
+        <div className='uk-position-center' />
 
         {/* right */}
         <div className='uk-position-right'>
@@ -75,12 +76,12 @@ export default function Table() {
               </div>
               <div className='uk-margin-large'>
                 <div data-uk-grid>
-                  <div className='uk-width-1-2 uk-width-2-3@s'>
+                  <div className='uk-width-1-3 uk-width-2-3@s'>
                     <Balance />
                     <PreviousBet />
                   </div>
-                  <div className='uk-width-1-2 uk-width-1-3@s'>
-                    <PlaceBet />
+                  <div className='uk-width-2-3 uk-width-1-3@s'>
+                    <Hit />
                   </div>
                 </div>
               </div>

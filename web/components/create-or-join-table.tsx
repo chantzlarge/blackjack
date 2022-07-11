@@ -2,7 +2,7 @@ import React from 'react'
 import CreateTableForm from './create-table-form'
 import JoinTableForm from './join-table-form'
 
-export default function CreateOrJoinTable() {
+export default function CreateOrJoinTable () {
   return (
     <div className='uk-section uk-section-xlarge'>
       <div className='uk-container'>

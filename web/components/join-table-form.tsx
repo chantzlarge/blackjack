@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { joinTable } from '../table.slice'
+// import { joinTable } from '../table.slice'
 
 export default function JoinTableForm () {
   const [inputs, setInputs] = useState({
@@ -15,7 +15,7 @@ export default function JoinTableForm () {
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault()
-    dispatch(joinTable(inputs.code))
+    // dispatch(joinTable(inputs.code))
   }
 
   return (

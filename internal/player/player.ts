@@ -58,6 +58,14 @@ export default class Player {
     this.Hands[hand].Deal(card)
   }
 
+  DecreaseBalance (amount: number) {
+    this.Balance -= amount
+  }
+
+  IncreaseBalance (amount: number) {
+    this.Balance += amount
+  }
+
   PlaceBet (amount: number) {
     this.PreviousBets.push(this.CurrentBet)
     this.CurrentBet = amount

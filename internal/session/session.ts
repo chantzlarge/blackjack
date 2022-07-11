@@ -8,7 +8,6 @@ export default class Session {
 
   constructor () {
     this.Id = uuidv4()
-    // TODO: hash secret
     this.Secret = Buffer.from(uuidv4()).toString('base64')
   }
 }

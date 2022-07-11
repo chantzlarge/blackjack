@@ -9,14 +9,23 @@ export default class SessionService {
   }
 
   CreateSession (): Session {
-    return new Session()
+    const s = new Session()
+    this.sessionRepository.insertSession(s)
+
+    return s
   }
 
-  DeleteSession (): Session {
-    return new Session()
+  GetSession (id?: string, secret?: string): Session | null {
+    if (id) {
+      return this.sessionRepository.selectSessionById(id)
+    } else if (secret) {
+      return this.sessionRepository.selectSessionBySecret(secret)
+    }
+
+    return null
   }
 
-  GetSession (): Session {
-    return new Session()
+  RevokeSession (id: string) {
+    this.sessionRepository.deleteSession(id)
   }
 }

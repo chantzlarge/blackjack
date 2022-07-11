@@ -24,6 +24,10 @@ export default class TableService {
     return new Table()
   }
 
+  JoinTable () {
+    // TBD
+  }
+
   RemovePlayer () {
     // TBD
   }
