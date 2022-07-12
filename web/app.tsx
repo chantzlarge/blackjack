@@ -4,9 +4,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { AppDispatch, RootState } from './store'
 import Session from '../internal/session/session'
-import { createSession, getSession } from './session.slice'
+import { createSession, currentSession } from './session.slice'
 import CreateOrJoinTable from './components/create-or-join-table'
-import Card from './components/card'
 import Table from './components/table'
 
 export default function App () {
@@ -24,7 +23,7 @@ export default function App () {
     if ((session != null) && !cookies['session-id']) {
       setCookie('session-id', session.Id, { path: '/' })
     } else if ((session == null) && cookies['session-id']) {
-      dispatch(getSession(cookies['session-id']))
+      dispatch(currentSession(cookies['session-id']))
     } else if ((session == null) && !cookies['session-id']) {
       dispatch(createSession())
     }

@@ -10,15 +10,16 @@ export default class CreateTableHandler {
   }
 
   Handle (request: express.Request, response: express.Response) {
-    // const sessionId = request.body.Id
-    // const sessionSecret = request.body.Secret
+    const authHeader = request.header('Authorization')
+
+    console.log(authHeader)
 
     const table = this.tableService.CreateTable()
     const player = new Player()
 
     const out = this.tableService.AddPlayer({
       SessionId: 'asdf',
-      TableId: table.Id,
+      TableId: table.Id
     })
 
     response.json(out)

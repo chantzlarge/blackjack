@@ -4,28 +4,30 @@ import SessionRepository from './session.repository'
 export default class SessionService {
   sessionRepository: SessionRepository
 
-  constructor (sessionRepository: SessionRepository) {
+  constructor(sessionRepository: SessionRepository) {
     this.sessionRepository = sessionRepository
   }
 
-  CreateSession (): Session {
+  AuthenticateSession(secret: string): Session | undefined {
+    return this.sessionRepository.selectSessionBySecret(secret)
+  }
+
+  CreateSession(): Session {
     const s = new Session()
     this.sessionRepository.insertSession(s)
 
     return s
   }
 
-  GetSession (id?: string, secret?: string): Session | null {
-    if (id) {
-      return this.sessionRepository.selectSessionById(id)
-    } else if (secret) {
-      return this.sessionRepository.selectSessionBySecret(secret)
-    }
-
-    return null
+  GetSession(id: string): Session | undefined {
+    return this.sessionRepository.selectSessionById(id)
   }
 
-  RevokeSession (id: string) {
+  UpdateSession(session: Session) {
+    return this.sessionRepository.updateSession(session)
+  }
+
+  RevokeSession(id: string) {
     this.sessionRepository.deleteSession(id)
   }
 }

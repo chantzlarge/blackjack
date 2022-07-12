@@ -1,30 +1,31 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { default as T } from '../../internal/table/table'
 import { RootState } from '../store'
+import CurrentBalance from './current-balance'
 import Hand from './hand'
-import { default as C } from '../../internal/table/card'
+import Hit from './hit'
+import PlaceBet from './place-bet'
+import PreviousBet from './previous-bet'
+import Stand from './stand'
+import { default as C, Kind, Suit } from '../../internal/table/card'
 import { default as H } from '../../internal/table/hand'
 import { default as P } from '../../internal/table/player'
-import Balance from './balance'
-import PreviousBet from './previous-bet'
-import PlaceBet from './place-bet'
-import Hit from './hit'
+import { default as T } from '../../internal/table/table'
 
-export default function Table () {
+export default function Table() {
   const h = new H()
   const p = new P()
 
-  p.DealCard(new C('spade', 'ace'))
-  // p.DealCard(new C('clubs', 'three'))
-  p.DealCard(new C('clubs', 'four'))
-  // p.DealCard(new C('diamond', 'five'))
-  p.DealCard(new C('diamond', 'two'))
-  // p.DealCard(new C('diamond', 'ace'))
-  p.DealCard(new C('diamond', 'eight'))
+  p.DealCard(new C(Suit.Spade, Kind.Ace))
+  p.DealCard(new C(Suit.Clubs, Kind.Four))
+  p.DealCard(new C(Suit.Diamond, Kind.Five))
+  p.DealCard(new C(Suit.Diamond, Kind.Two))
+  p.DealCard(new C(Suit.Diamond, Kind.Ace))
+  p.DealCard(new C(Suit.Diamond, Kind.Eight))
 
-  h.Deal(new C('spade', 'ace'))
-  h.Deal(new C('diamond', 'two'))
+  h.Deal(new C(Suit.Spade, Kind.Ace))
+  h.Deal(new C(Suit.Diamond, Kind.Two))
+
   h.Sort()
 
   const table = useSelector<RootState, T | null>((state: { table: any }) => {
@@ -40,8 +41,8 @@ export default function Table () {
           <div className='uk-section uk-section-small'>
             <div className='uk-container'>
               <div>
-                <button className='uk-button-icon uk-float-left' data-uk-icon='menu' />
-                <button className='uk-button-icon uk-float-right' data-uk-icon='sign-out' />
+                <button className='uk-icon-button uk-float-left' data-uk-icon='menu' />
+                <button className='uk-icon-button uk-float-right' data-uk-icon='sign-out' />
               </div>
               <div>
                 <Hand hand={h} isDealer />
@@ -76,11 +77,12 @@ export default function Table () {
               <div className='uk-margin-large'>
                 <div data-uk-grid>
                   <div className='uk-width-1-3 uk-width-2-3@s'>
-                    <Balance />
+                    <CurrentBalance />
                     <PreviousBet />
                   </div>
                   <div className='uk-width-2-3 uk-width-1-3@s'>
                     <Hit />
+                    <Stand />
                   </div>
                 </div>
               </div>

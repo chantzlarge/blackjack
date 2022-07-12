@@ -2,7 +2,7 @@ import express from 'express'
 import WebSocket from 'express-ws'
 import TableService from '../internal/table/table.service'
 
-export default class WebSocketHandler {
+export default class BalanceHandler {
   tableService: TableService
 
   constructor (tableService: TableService) {
@@ -13,12 +13,7 @@ export default class WebSocketHandler {
     ws.on('message', function (message: any) {
       const data = JSON.parse(message)
 
-      switch (data.action) {
-        case 'PLACE_BET':
-          // this.tableService
-        default:
-          console.log(data)
-      }
+      console.log(data)
     })
   }
 }

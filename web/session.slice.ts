@@ -1,22 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Session from '../internal/session/session'
+import API from './api'
+
+const api = new API()
 
 export const createSession = createAsyncThunk('sessions/createSession', async () => {
   console.log('creating session...')
 
-  const response = await fetch('http://localhost:3000/api/session/create', { method: 'POST' })
-  const data = await response.json()
+  const session = api.CreateSession()
 
-  return data
+  return session
 })
 
-export const getSession = createAsyncThunk('sessions/getSession', async (sessionId: string) => {
-  console.log(`getting session... ${sessionId}`)
+export const currentSession = createAsyncThunk('sessions/currentSession', async (sessionId: string) => {
+  console.log(`getting current session... ${sessionId}`)
 
-  const response = await fetch('http://localhost:3000/api/session/current', { method: 'GET' })
-  const data = await response.json()
+  const session = api.CurrentSession()
 
-  return data
+  return session
 })
 
 export const sessionSlice = createSlice({
@@ -33,8 +34,8 @@ export const sessionSlice = createSlice({
 
       return state
     })
-    builder.addCase(getSession.fulfilled, (state, action) => {
-      console.log(`got session... ${action.payload}`)
+    builder.addCase(currentSession.fulfilled, (state, action) => {
+      console.log(`got current session... ${action.payload}`)
 
       state = action.payload
 

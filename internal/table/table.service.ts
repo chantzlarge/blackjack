@@ -1,5 +1,6 @@
 import Player from './player'
 import Table from './table'
+import TablePublisher from './table.publisher'
 import TableRepository from './table.repository'
 
 interface AddPlayerInput {
@@ -12,9 +13,14 @@ interface AddPlayerOutput {
 }
 
 export default class TableService {
+  tablePublisher: TablePublisher
   tableRepository: TableRepository
 
-  constructor (tableRepository: TableRepository) {
+  constructor (
+    tablePublisher: TablePublisher,
+    tableRepository: TableRepository
+  ) {
+    this.tablePublisher = tablePublisher
     this.tableRepository = tableRepository
   }
 
@@ -39,7 +45,7 @@ export default class TableService {
     return table
   }
 
-  DeleteTable (id: string) {
+  CloseTable (id: string) {
     this.tableRepository.DeleteTable(id)
   }
 

@@ -1,32 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Table from '../internal/table/table'
 import Session from '../internal/session/session'
+import { useDispatch } from 'react-redux'
+import API from './api'
 
-const ws = new WebSocket('ws://localhost:3000/socket')
-
-ws.onopen = (event) => {
-  console.log(event)
-}
-
-ws.onmessage = (event) => {
-  console.log(event)
-}
+const api = new API()
 
 export const createTable = createAsyncThunk('tables/createTable', async (session: Session) => {
   console.log('creating table...')
 
-  const response = await fetch('http://localhost:3000/api/table/create', {
-    // body: JSON.stringify(session),
-    // headers: {
-    //   'Accept': 'application/json',
-    //   'Content-Type': 'application/json'
-    // },
-    method: 'POST'
-  })
+  const table = api.CreateTable()
 
-  const data = await response.json()
-
-  return data
+  return table
 })
 
 export const joinTable = createAsyncThunk('tables/joinTable', async (session: Session) => {
@@ -49,7 +34,11 @@ export const joinTable = createAsyncThunk('tables/joinTable', async (session: Se
 export const tableSlice = createSlice({
   name: 'tables',
   initialState: null as Table | null,
-  reducers: {},
+  reducers: {
+    updateTable(state, action) {
+
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(createTable.fulfilled, (state, action) => {
       const table = action.payload
@@ -71,3 +60,5 @@ export const tableSlice = createSlice({
     })
   }
 })
+
+const { updateTable } = tableSlice.actions

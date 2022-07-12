@@ -10,10 +10,14 @@ import CreateTableHandler from './api/create-table-handler'
 import CreateSessionHandler from './api/create-session-handler'
 import CurrentSessionHandler from './api/current-session-handler'
 import JoinTableHandler from './api/join-table-handler'
-import WebSocketHandler from './api/websocket-handler'
+import BalanceHandler from './api/balance-handler'
+import TablePublisher from './internal/table/table.publisher'
 
 const app = express()
 const expressWs = require('express-ws')(app)
+
+// publishers
+const tablePublisher = new TablePublisher()
 
 // repositories
 const sessionRepository = new SessionRepository()
@@ -21,15 +25,15 @@ const tableRepository = new TableRepository()
 
 // services
 const sessionService = new SessionService(sessionRepository)
-const tableService = new TableService(tableRepository)
+const tableService = new TableService(tablePublisher, tableRepository)
 
 // handlers
 const authenticateSessionHandler = new AuthenticateSessionHandler(sessionService)
+const balanceHandler = new BalanceHandler(tableService)
 const createSessionHandler = new CreateSessionHandler(sessionService)
 const createTableHandler = new CreateTableHandler(tableService)
 const currentSessionHandler = new CurrentSessionHandler(sessionService)
 const joinTableHandler = new JoinTableHandler(tableService)
-const webSocketHandler = new WebSocketHandler(tableService)
 
 // middleware
 app.use(express.json())
@@ -39,21 +43,25 @@ app.use((req, res, next) =>
   authenticateSessionHandler.Handle(req, res, next))
 
 // routes
-app.get('/api/session/current', (req, res) =>
-  currentSessionHandler.Handle(req, res))
+// @ts-expect-error
+app.ws('/socket', (ws, req) =>
+  balanceHandler.Handle(ws, req))
+
+// @ts-expect-error
+app.ws('/api/table', (ws, req) =>
+  balanceHandler.Handle(ws, req))
 
 app.post('/api/session/create', (req, res) =>
   createSessionHandler.Handle(req, res))
+
+app.get('/api/session/current', (req, res) =>
+  currentSessionHandler.Handle(req, res))
 
 app.post('/api/table/create', (req, res) =>
   createTableHandler.Handle(req, res))
 
 app.post('/api/table/join', (req, res) =>
   joinTableHandler.Handle(req, res))
-
-// @ts-expect-error
-app.ws('/socket', (ws, req) =>
-  webSocketHandler.Handle(ws, req))
 
 app.get('*', (_, res) =>
   res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html')))

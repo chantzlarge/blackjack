@@ -12,7 +12,7 @@ export default class AuthenticateSessionHandler {
     const body = req.body
 
     if (body?.session) {
-      const session = this.sessionService.GetSession(undefined, body.session?.secret)
+      const session = this.sessionService.GetSession(body.session?.secret)
     }
 
     next()

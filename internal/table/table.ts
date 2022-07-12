@@ -3,6 +3,16 @@ import Player from './player'
 import Dealer from './dealer'
 import Shoe from './shoe'
 
+enum State {
+  Initial = 'initial',
+  PlacingBets = 'placing_bets',
+  BuyingInsurance = 'buying_insurance',
+  PayingNaturals = 'paying_naturals',
+  DealingToPlayers = 'dealing_to_players',
+  DealingToDealer = 'dealing_to_dealer',
+  SettlingBets = 'settling_bets',
+}
+
 export default class Table {
   Id: string = uuidv4()
   CurrentPlayer: number = 0
@@ -11,16 +21,24 @@ export default class Table {
   MaxBet: number = 5
   MinBet: number = 50
   Players: Player[] = []
+  State: State = State.Initial
 
-  constructor() {
+  constructor () {
     this.Shoe.ShuffleAndLoad()
   }
 
-  AddPlayer(player: Player): number {
+  AddPlayer (player: Player): number {
     return this.Players.push(player)
   }
 
-  DealToPlayers() {
+  NextPlayer () {
+    this.CurrentPlayer += 1
+    if (this.CurrentPlayer >= this.Players.length) {
+      this.CurrentPlayer = 0
+    }
+  }
+
+  DealToPlayers () {
     this.Players = this.Players.map(p => {
       for (let i = 0; i < 2; i++) {
         const card = this.Shoe.DrawCard()
@@ -32,13 +50,13 @@ export default class Table {
     })
   }
 
-  ServeDealer() {
+  ServeDealer () {
     const card = this.Shoe.DrawCard()
 
     this.Dealer.Hand.Deal(card!)
   }
 
-  ServePlayer(playerId: string, hand: 0 | 1 = 0) {
+  ServePlayer (playerId: string, hand: 0 | 1 = 0) {
     const player = this.GetPlayer(playerId)
 
     player!.Hands[hand].Deal(this.Shoe.DrawCard()!)
@@ -46,15 +64,15 @@ export default class Table {
     this.UpdatePlayer(player!)
   }
 
-  GetPlayer(id: string): Player | undefined {
+  GetPlayer (id: string): Player | undefined {
     return this.Players.find(p => p.Id === id)
   }
 
-  RemovePlayer(playerId: string) {
+  RemovePlayer (playerId: string) {
     this.Players = this.Players.filter(p => p.Id === playerId)
   }
 
-  SettleBets() {
+  SettleBets () {
     this.Players = this.Players.map(p => {
       if (true) {
         p.Balance += p.CurrentBet
@@ -64,9 +82,7 @@ export default class Table {
     })
   }
 
-  UpdatePlayer(player: Player) {
-    const index = this.Players.findIndex(p => p.Id === player.Id)
-
-    this.Players[index] = player
+  UpdatePlayer (player: Player) {
+    this.Players = this.Players.map(p => p.Id === player.Id ? player : p)
   }
 }

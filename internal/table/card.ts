@@ -1,29 +1,34 @@
 import { v4 as uuidv4 } from 'uuid'
 
-export const SUIT_CLUBS = 'clubs'
-export const SUIT_DIAMOND = 'diamond'
-export const SUIT_HEART = 'heart'
-export const SUIT_SPADE = 'spade'
-export const KIND_ACE = 'ace'
-export const KIND_KING = 'king'
-export const KIND_QUEEN = 'queen'
-export const KIND_JACK = 'jack'
-export const KIND_NINE = 'nine'
-export const KIND_EIGHT = 'eight'
-export const KIND_TEN = 'ten'
-export const KIND_SEVEN = 'seven'
-export const KIND_SIX = 'six'
-export const KIND_FIVE = 'five'
-export const KIND_FOUR = 'four'
-export const KIND_THREE = 'three'
-export const KIND_TWO = 'two'
+export const enum Suit {
+  Clubs = 'clubs',
+  Diamond = 'clubs',
+  Heart = 'heart',
+  Spade = 'spade',
+}
+
+export const enum Kind {
+  Ace = 'ace',
+  King = 'king',
+  Queen = 'queen',
+  Jack = 'jack',
+  Nine = 'nine',
+  Eight = 'eight',
+  Ten = 'ten',
+  Seven = 'seven',
+  Six = 'six',
+  Five = 'five',
+  Four = 'four',
+  Three = 'three',
+  Two = 'two',
+}
 
 export default class Card {
   Id: string = uuidv4()
-  Suit: string
-  Kind: string
+  Suit: Suit
+  Kind: Kind
 
-  constructor (suit: 'spade' | 'heart' | 'diamond' | 'clubs', kind: 'two' | 'three' | 'four' | 'five' | 'six' | 'seven' | 'eight' | 'nine' | 'ten' | 'jack' | 'queen' | 'king' | 'ace') {
+  constructor (suit: Suit, kind: Kind) {
     this.Suit = suit
     this.Kind = kind
   }

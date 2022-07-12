@@ -1,14 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import Player from '../internal/table/player'
 
-const ws = new WebSocket('ws://localhost:3000/socket')
-
-ws.onopen = (event) => {
-  console.log(event)
-}
-
-ws.onmessage = (event) => {
-  console.log(event)
-}
 
 // export const buyInsurance = createAsyncThunk('players/buyInsurance', async () => {
 //   console.log('buying insurance...')
@@ -33,17 +25,17 @@ export const getCurrentPlayer = createAsyncThunk('players/getCurrentPlayer', asy
 export const hit = createAsyncThunk('players/hit', async () => {
   console.log('hit...')
 
-  ws.send(JSON.stringify({
-    // message: 'message'
-  }))
+  // ws.send(JSON.stringify({
+  //   // message: 'message'
+  // }))
 })
 
 export const placeBet = createAsyncThunk('players/placeBet', async () => {
   console.log('placing bet...')
 
-  ws.send(JSON.stringify({
-    amount: 5.00
-  }))
+  // ws.send(JSON.stringify({
+  //   amount: 5.00
+  // }))
 })
 
 // export const sitOut = createAsyncThunk('players/sitOut', async () => {
@@ -66,8 +58,19 @@ export const placeBet = createAsyncThunk('players/placeBet', async () => {
 
 export const playerSlice = createSlice({
   name: 'players',
-  initialState: [],
-  reducers: {},
+  initialState: null as Player | null,
+  reducers: {
+    changeBalance (state, action) {
+      const balance = action.payload
+      const player = state
+
+      if (player != null) {
+        player.Balance = balance
+      }
+
+      return player
+    }
+  },
   extraReducers: (builder) => {
     // builder.addCase(buyInsurance.fulfilled, (state, action) => {
     //   const player = action.payload
@@ -113,3 +116,5 @@ export const playerSlice = createSlice({
     // })
   }
 })
+
+export const { changeBalance } = playerSlice.actions
