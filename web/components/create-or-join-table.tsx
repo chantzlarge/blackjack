@@ -15,9 +15,15 @@ export default function CreateOrJoinTable() {
       <div className='uk-section uk-section-xlarge'>
         <div className='uk-container'>
           <div className='uk-flex uk-flex-center uk-child-width-1-1' data-uk-grid>
-            <CreateTableForm />
-            <hr className='uk-divider'></hr>
-            <JoinTableForm />
+            <div>
+              <CreateTableForm />
+            </div>
+            <div>
+              <hr></hr>
+            </div>
+            <div>
+              <JoinTableForm />
+            </div>
           </div>
         </div>
       </div>
