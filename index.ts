@@ -1,16 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
+import SessionController from './internal/session/session.controller'
 import SessionRepository from './internal/session/session.repository'
 import SessionService from './internal/session/session.service'
 import TableRepository from './internal/table/table.repository'
 import TableService from './internal/table/table.service'
-import AuthenticateSessionHandler from './api/authenticate-session-handler'
-import CreateTableHandler from './api/create-table-handler'
-import CreateSessionHandler from './api/create-session-handler'
-import CurrentSessionHandler from './api/current-session-handler'
-import JoinTableHandler from './api/join-table-handler'
-import BalanceHandler from './api/balance-handler'
+import TableController from './internal/table/table.controller'
 import TablePublisher from './internal/table/table.publisher'
 
 const app = express()
@@ -27,41 +23,39 @@ const tableRepository = new TableRepository()
 const sessionService = new SessionService(sessionRepository)
 const tableService = new TableService(tablePublisher, tableRepository)
 
-// handlers
-const authenticateSessionHandler = new AuthenticateSessionHandler(sessionService)
-const balanceHandler = new BalanceHandler(tableService)
-const createSessionHandler = new CreateSessionHandler(sessionService)
-const createTableHandler = new CreateTableHandler(tableService)
-const currentSessionHandler = new CurrentSessionHandler(sessionService)
-const joinTableHandler = new JoinTableHandler(tableService)
+// controllers
+const sessionController = new SessionController(sessionService)
+const tableController = new TableController(sessionService, tableService)
 
 // middleware
 app.use(express.json())
 app.use(cors())
 app.use('/', express.static(path.join(__dirname, 'web', 'dist')))
 app.use((req, res, next) =>
-  authenticateSessionHandler.Handle(req, res, next))
+  sessionController.AuthenticateSession(req, res, next))
 
 // routes
-// @ts-expect-error
-app.ws('/socket', (ws, req) =>
-  balanceHandler.Handle(ws, req))
+app.get('/api/session/:sessionId', (req, res) =>
+  sessionController.GetSession(req, res))
 
-// @ts-expect-error
-app.ws('/api/table', (ws, req) =>
-  balanceHandler.Handle(ws, req))
-
-app.post('/api/session/create', (req, res) =>
-  createSessionHandler.Handle(req, res))
-
-app.get('/api/session/current', (req, res) =>
-  currentSessionHandler.Handle(req, res))
+app.post('/api/session/grant', (req, res) =>
+  sessionController.GrantSession(req, res))
 
 app.post('/api/table/create', (req, res) =>
-  createTableHandler.Handle(req, res))
+  tableController.CreateTable(req, res))
+
+// @ts-ignore
+app.ws('/api/table/connect', (ws, req) =>
+  tableController.Connect(ws, req))
+
+app.get('/api/table/:tableId/player/:playerId', (req, res) =>
+  tableController.GetPlayer(req, res))
+
+app.get('/api/table/:tableId', (req, res) =>
+  tableController.GetTable(req, res))
 
 app.post('/api/table/join', (req, res) =>
-  joinTableHandler.Handle(req, res))
+  tableController.JoinTable(req, res))
 
 app.get('*', (_, res) =>
   res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html')))

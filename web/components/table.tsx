@@ -1,35 +1,41 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '../store'
+import React, { useContext, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../store'
 import CurrentBalance from './current-balance'
 import Hand from './hand'
 import Hit from './hit'
-import PlaceBet from './place-bet'
+// import PlaceBet from './place-bet'
 import PreviousBet from './previous-bet'
 import Stand from './stand'
-import { default as C, Kind, Suit } from '../../internal/table/card'
-import { default as H } from '../../internal/table/hand'
-import { default as P } from '../../internal/table/player'
+// import { default as C, Kind, Suit } from '../../internal/table/card'
+// import { default as H } from '../../internal/table/hand'
+// import { default as P } from '../../internal/table/player'
+import { default as S } from '../../internal/session/session'
 import { default as T } from '../../internal/table/table'
+import { getTable } from '../table.slice'
+import { getSession } from '../session.slice'
+import { SessionContext } from '../session.context'
 
 export default function Table() {
-  const h = new H()
-  const p = new P()
+  // const api = new API()
 
-  p.DealCard(new C(Suit.Spade, Kind.Ace))
-  p.DealCard(new C(Suit.Clubs, Kind.Four))
-  p.DealCard(new C(Suit.Diamond, Kind.Five))
-  p.DealCard(new C(Suit.Diamond, Kind.Two))
-  p.DealCard(new C(Suit.Diamond, Kind.Ace))
-  p.DealCard(new C(Suit.Diamond, Kind.Eight))
+  const dispatch = useDispatch<AppDispatch>()
+  const session = useSelector((state: RootState) => state.session)
+  const table = useSelector((state: RootState) => state.table)
 
-  h.Deal(new C(Suit.Spade, Kind.Ace))
-  h.Deal(new C(Suit.Diamond, Kind.Two))
+  useEffect(() => {
+    console.log(`table: ${JSON.stringify(table)}`)
 
-  h.Sort()
-
-  const table = useSelector<RootState, T | null>((state: { table: any }) => {
-    return state.table
+    if (session && !table) {
+      dispatch(getTable({
+        input: {
+          Parameters: {
+            TableId: session.TableId!
+          }
+        },
+        session: session!
+      }))
+    }
   })
 
   return (
@@ -45,7 +51,7 @@ export default function Table() {
                 <button className='uk-icon-button uk-float-right' data-uk-icon='sign-out' />
               </div>
               <div>
-                <Hand hand={h} isDealer />
+                {session && table && <Hand hand={table.Dealer.Hand} isDealer />}
               </div>
             </div>
           </div>
@@ -72,7 +78,7 @@ export default function Table() {
                 <h3 className='uk-heading-small uk-text-muted uk-text-center'>BLACKJACK</h3>
               </div>
               <div className='uk-margin'>
-                {p.Hands.map(h => <Hand key={h.Id} hand={h} isDealer={false} />)}
+                {session && table && table.Players.map(p => p.Hands.map(h => <Hand key={h.Id} hand={h} isDealer={false} />)) }
               </div>
               <div className='uk-margin-large'>
                 <div data-uk-grid>

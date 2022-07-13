@@ -1,34 +1,57 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Table from '../internal/table/table'
+
+import {
+  CreateTableInput,
+  GetPlayerInput,
+  GetTableInput,
+  JoinTableInput,
+} from '../internal/table/table.service'
 import Session from '../internal/session/session'
-import { useDispatch } from 'react-redux'
-import API from './api'
+import TableClient from './api'
 
-const api = new API()
+const tableClient = new TableClient()
 
-export const createTable = createAsyncThunk('tables/createTable', async (session: Session) => {
-  console.log('creating table...')
+export const createTable = createAsyncThunk('tables/createTable', async (input: CreateTableInput) => {
+  const output = await tableClient
+    .CreateTable(input)
 
-  const table = api.CreateTable()
+  console.log(output)
 
-  return table
+  const table = output.Response
+
+  return table ? table : null
 })
 
-export const joinTable = createAsyncThunk('tables/joinTable', async (session: Session) => {
-  console.log('joining table...')
+export const getTable = createAsyncThunk('tables/getTable', async (props: { input: GetTableInput, session: Session }) => {
+  const input = props.input
+  const session = props.session
 
-  const response = await fetch('http://localhost:3000/api/table/join', {
-    body: JSON.stringify(session),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    method: 'POST'
-  })
 
-  const data = await response.json()
+  const output = await tableClient
+    .WithSession(session)
+    .GetTable(input)
 
-  return data
+  console.log(output)
+
+  const table = output.Response
+
+  return table ? table : null
+})
+
+export const joinTable = createAsyncThunk('tables/joinTable', async (props: { input: JoinTableInput, session: Session }) => {
+  const input = props.input
+  const session = props.session
+
+  const output = await tableClient
+    .WithSession(session)
+    .JoinTable(input)
+
+  console.log(output)
+
+  const table = output.Response
+
+  return table ? table : null
 })
 
 export const tableSlice = createSlice({
@@ -36,14 +59,18 @@ export const tableSlice = createSlice({
   initialState: null as Table | null,
   reducers: {
     updateTable(state, action) {
-
     }
   },
   extraReducers: (builder) => {
     builder.addCase(createTable.fulfilled, (state, action) => {
       const table = action.payload
 
-      console.log(`created table: ${JSON.stringify(table)}`)
+      state = table
+
+      return state
+    })
+    builder.addCase(getTable.fulfilled, (state, action) => {
+      const table = action.payload
 
       state = table
 
@@ -53,8 +80,6 @@ export const tableSlice = createSlice({
       const table = action.payload
 
       state = table
-
-      console.log(`joined table: ${JSON.stringify(table)}`)
 
       return state
     })

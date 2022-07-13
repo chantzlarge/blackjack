@@ -1,14 +1,17 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../store'
-import { hit } from '../player.slice'
+import { useSelector } from 'react-redux'
+import TableClient from '../api'
+import { RootState } from '../store'
+import { default as S } from '../../internal/session/session'
 
-export default function Hit () {
-  const dispatch = useDispatch<AppDispatch>()
+export default function Hit() {
+  const session = useSelector<RootState, S | null>((state) => {
+    return state.session
+  })
 
   return (
     <div className='uk-margin'>
-      <button onClick={() => dispatch(hit())} className='uk-button uk-border-rounded uk-width-expand uk-button-primary'>HIT</button>
+      <button className='uk-button uk-border-rounded uk-width-expand uk-button-primary'>HIT</button>
     </div>
   )
 }

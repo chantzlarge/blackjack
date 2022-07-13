@@ -7,7 +7,11 @@ test('SHOULD create table', function () {
   const tablePublisher = new TablePublisher()
   const tableRepository = new TableRepository()
   const tableService = new TableService(tablePublisher, tableRepository)
-  const table = tableService.CreateTable()
+  const table = tableService.CreateTable({
+    Parameters: {
+      SessionId: 'test'
+    }
+  })
 
   expect(table).toBeDefined()
 })

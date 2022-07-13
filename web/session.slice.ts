@@ -1,45 +1,40 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Session from '../internal/session/session'
+import { GetSessionInput, GrantSessionInput } from '../internal/session/session.service'
 import API from './api'
 
 const api = new API()
 
-export const createSession = createAsyncThunk('sessions/createSession', async () => {
-  console.log('creating session...')
-
-  const session = api.CreateSession()
-
-  return session
+export const getSession = createAsyncThunk('sessions/getSession', async (input: GetSessionInput) => {
+  const output = await api.GetSession(input)
+  
+  console.log(`output: ${JSON.stringify(output)}`)
+  
+  return output.Ok ? output.Response : null
 })
 
-export const currentSession = createAsyncThunk('sessions/currentSession', async (sessionId: string) => {
-  console.log(`getting current session... ${sessionId}`)
-
-  const session = api.CurrentSession()
-
-  return session
+export const grantSession = createAsyncThunk('sessions/grantSession', async (input: GrantSessionInput) => {
+  const output = await api.GrantSession(input)
+  
+  console.log(`output: ${JSON.stringify(output)}`)
+  
+  return output.Ok ? output.Response : null
 })
 
 export const sessionSlice = createSlice({
   name: 'sessions',
   initialState: null as Session | null,
-  reducers: {
-    // TBD
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createSession.fulfilled, (state, action) => {
-      console.log(`created session... ${JSON.stringify(action.payload)}`)
+    builder.addCase(getSession.fulfilled, (_, action) => {
+      const session = action.payload
 
-      state = action.payload
-
-      return state
+      return session
     })
-    builder.addCase(currentSession.fulfilled, (state, action) => {
-      console.log(`got current session... ${action.payload}`)
+    builder.addCase(grantSession.fulfilled, (_, action) => {
+      const session = action.payload
 
-      state = action.payload
-
-      return state
+      return session
     })
   }
 })

@@ -1,10 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { playerSlice } from './player.slice'
 import { sessionSlice } from './session.slice'
 import { tableSlice } from './table.slice'
 
 const reducers = {
-  player: playerSlice.reducer,
   session: sessionSlice.reducer,
   table: tableSlice.reducer
 }
@@ -15,5 +13,5 @@ export const store = configureStore({
   reducer: reducer
 })
 
-export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>

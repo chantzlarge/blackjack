@@ -38,16 +38,8 @@ export default class Table {
     }
   }
 
-  DealToPlayers () {
-    this.Players = this.Players.map(p => {
-      for (let i = 0; i < 2; i++) {
-        const card = this.Shoe.DrawCard()
-
-        p.DealCard(card!)
-      }
-
-      return p
-    })
+  DealCardToPlayer (playerId: string) {
+    this.Players = this.Players.map(p => p.Id === playerId ? p.DealCard(this.Shoe.DrawCard()!) : p)
   }
 
   ServeDealer () {

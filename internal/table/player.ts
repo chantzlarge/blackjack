@@ -1,5 +1,5 @@
-import Card from './card'
 import { v4 as uuidv4 } from 'uuid'
+import Card from './card'
 import Hand from './hand'
 
 const adjectives = [
@@ -53,8 +53,10 @@ export default class Player {
     this.Balance -= 0.5 * this.CurrentBet
   }
 
-  DealCard (card: Card, hand: 0 | 1 = 0) {
+  DealCard (card: Card, hand: 0 | 1 = 0): Player {
     this.Hands[hand].Deal(card)
+    
+    return this
   }
 
   DecreaseBalance (amount: number) {
