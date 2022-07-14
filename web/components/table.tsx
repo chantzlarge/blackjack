@@ -4,11 +4,12 @@ import { AppDispatch, RootState } from '../store'
 import CurrentBalance from './current-balance'
 import Hand from './hand'
 import Hit from './hit'
+import LeaveTable from './leave-table'
 import PreviousBet from './previous-bet'
 import Stand from './stand'
-import { getCurrentTable } from '../table.slice'
 import { useNavigate } from 'react-router-dom'
-import { getCurrentPlayer } from '../player.slice'
+import PlaceBet from './place-bet'
+import { State } from '../../internal/table'
 
 export default function Table() {
   const dispatch = useDispatch<AppDispatch>()
@@ -18,7 +19,7 @@ export default function Table() {
   const table = useSelector((state: RootState) => state.table)
 
   useEffect(() => {
-    if (!session && !player && !table) {
+    if (!session || !table || !player) {
       navigate('/')
     }
   })
@@ -32,8 +33,12 @@ export default function Table() {
           <div className='uk-section uk-section-small'>
             <div className='uk-container'>
               <div>
-                <button className='uk-icon-button uk-float-left' data-uk-icon='menu' />
-                <button className='uk-icon-button uk-float-right' data-uk-icon='sign-out' />
+                <div className='uk-float-left'>
+                  <button className='uk-icon-button' data-uk-icon='menu' />
+                </div>
+                <div className='uk-float-right'>
+                  <LeaveTable />
+                </div>
               </div>
               <div>
                 {table && <Hand key={table?.Dealer.Hand.Id} hand={table?.Dealer.Hand!} isDealer />}
@@ -63,17 +68,25 @@ export default function Table() {
                 <h3 className='uk-heading-small uk-text-muted uk-text-center'>BLACKJACK</h3>
               </div>
               <div className='uk-margin'>
-                {/* {player && <Hand key={player?.Hands[0]?.Id} hand={player?.Hands[0]!} isDealer={false} />} */}
+                {player && <Hand key={player?.Hands[0]?.Id} hand={player?.Hands[0]!} isDealer={false} />}
               </div>
               <div className='uk-margin-large'>
                 <div data-uk-grid>
-                  <div className='uk-width-1-3 uk-width-2-3@s'>
+                  <div className='uk-width-1-3 uk-width-1-2@s uk-width-2-3@m'>
                     <CurrentBalance />
                     <PreviousBet />
                   </div>
-                  <div className='uk-width-2-3 uk-width-1-3@s'>
-                    <Hit />
-                    <Stand />
+                  <div className='uk-width-2-3 uk-width-1-2@s uk-width-1-3@m'>
+                    {
+                      {
+                        'placing_bets': <PlaceBet />,
+                        'dealing_to_players': <h1>Dealing to Players</h1>,
+                        'buying_insurance': <h1>Buying Insurance</h1>,
+                        'paying_naturals': <h1>Paying Naturals</h1>,
+                        'dealing_to_dealer': <h1>Dealing to Dealer</h1>,
+                        'settling_bets': <h1>Settling Bets</h1>,
+                      }[table?.State!]
+                    }
                   </div>
                 </div>
               </div>

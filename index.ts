@@ -25,7 +25,7 @@ const tableRepository = new TableRepository()
 
 // services
 const playerService = new PlayerService(sessionRepository, tableRepository)
-const sessionService = new SessionService(sessionRepository)
+const sessionService = new SessionService(sessionRepository, tableRepository)
 const tableService = new TableService(sessionRepository, tableRepository)
 
 // controllers
@@ -47,9 +47,6 @@ app.get('/api/session', (req, res) =>
 app.post('/api/session/current', (req, res) =>
   sessionController.GetCurrentSession(req, res))
 
-app.delete('/api/session', (req, res) =>
-  sessionController.RevokeSession(req, res))
-
 app.post('/api/table/create', (req, res) =>
   tableController.CreateTable(req, res))
 
@@ -65,6 +62,9 @@ app.get('/api/player/buyinsurance', (req, res) =>
 
 app.post('/api/player/current', (req, res) =>
   playerController.GetCurrentPlayer(req, res))
+
+app.post('/api/player/leavetable', (req, res) =>
+  playerController.LeaveTable(req, res))
 
 app.post('/api/player/sit', (req, res) =>
   playerController.Sit(req, res))

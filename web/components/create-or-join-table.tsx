@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getCurrentTable } from '../table.slice'
 import { AppDispatch, RootState } from '../store'
 import CreateTableForm from './create-table-form'
 import JoinTableForm from './join-table-form'
-import { getCurrentSession } from '../session.slice'
 
 export default function CreateOrJoinTable() {
   const dispatch = useDispatch<AppDispatch>()

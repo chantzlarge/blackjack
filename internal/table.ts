@@ -3,8 +3,7 @@ import Dealer from './dealer'
 import Player from './player'
 import Shoe from './shoe'
 
-enum State {
-  Initial = 'initial',
+export const enum State {
   PlacingBets = 'placing_bets',
   BuyingInsurance = 'buying_insurance',
   PayingNaturals = 'paying_naturals',
@@ -21,7 +20,7 @@ export default class Table {
   MaxBet: number = 5
   MinBet: number = 50
   Players: Player[] = []
-  State: State = State.Initial
+  State: State = State.PlacingBets
 
   constructor () {
     this.Shoe.ShuffleAndLoad()

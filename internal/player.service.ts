@@ -5,7 +5,7 @@ import Player from "./player";
 export interface BetInput {
     Parameters: {
         SessionId: string
-        Amount: string
+        Amount: number
     }
 }
 
@@ -110,8 +110,47 @@ export default class PlayerService {
     }
 
     Bet(input: BetInput): BetOutput {
+        const table = this.tableRepository.SelectTableBySessionId(input.Parameters.SessionId)
+
+        if (!table) {
+            return {
+                Errors: ['table not found'],
+                Ok: false,
+            }
+        } else if (table.MaxBet < input.Parameters.Amount) {
+            return {
+                Errors: ['bet amount is more than table maximum'],
+                Ok: false,
+            }
+        } else if (table.MinBet > input.Parameters.Amount) {
+            return {
+                Errors: ['bet amount is less than table minimum'],
+                Ok: false,
+            }
+        }
+
+        const player = this.tableRepository.SelectPlayerBySessionId(input.Parameters.SessionId)
+
+        if (!player) {
+            return {
+                Errors: ['player not found'],
+                Ok: false,
+            }
+        } else if (input.Parameters.Amount > player.Balance) {
+            return {
+                Errors: ['bet amount exceeds player balance'],
+                Ok: false,
+            }
+        }
+
+        player.CurrentBet = input.Parameters.Amount
+        player.Balance -= player.CurrentBet
+
+        this.tableRepository.UpdatePlayer(player)
+
         return {
             Ok: true,
+            Response: player
         }
     }
 
@@ -143,6 +182,16 @@ export default class PlayerService {
     }
 
     LeaveTable(input: LeaveTableInput): LeaveTableOutput {
+        const player = this.tableRepository.SelectPlayerBySessionId(input.Parameters.SessionId)
+
+        if (!player) {
+            return {
+                Ok: false,
+            }
+        }
+
+        this.tableRepository.DeletePlayer(player?.Id)
+
         return {
             Ok: true,
         }

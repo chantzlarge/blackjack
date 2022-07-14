@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 export default function CreateTableForm() {
   const [inputs, setInputs] = useState({})
   const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
   const session = useSelector((state: RootState) => state.session)
 
   const handleChange = (event: { target: { name: any, value: any } }) => {
@@ -28,7 +27,7 @@ export default function CreateTableForm() {
     <div>
       <form onSubmit={handleSubmit}>
         <div className='uk-margin'>
-          {(session != null) && <button className='uk-button uk-button-primary uk-width-1-1 uk-border-rounded'>CREATE TABLE</button>}
+          {<button className='uk-button uk-button-primary uk-width-1-1 uk-border-rounded'>CREATE TABLE</button>}
         </div>
       </form>
     </div>

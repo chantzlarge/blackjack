@@ -1,6 +1,8 @@
 import {
   GetCurrentPlayerInput,
   GetCurrentPlayerOutput,
+  LeaveTableInput,
+  LeaveTableOutput,
 } from '../internal/player.service'
 
 import {
@@ -8,8 +10,6 @@ import {
   GrantSessionOutput,
   GetCurrentSessionInput,
   GetCurrentSessionOutput,
-  RevokeSessionInput,
-  RevokeSessionOutput
 } from '../internal/session.service'
 
 import {
@@ -118,8 +118,8 @@ export default class API {
     return output
   }
 
-  async RevokeSession (input: RevokeSessionInput): Promise<RevokeSessionOutput> {
-    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/revoke`, {
+  async LeaveTable (input: LeaveTableInput): Promise<LeaveTableOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/leavetable`, {
       body: JSON.stringify(input),
       headers: {
         Accept: 'application/json',
@@ -128,7 +128,7 @@ export default class API {
       method: 'POST'
     })
 
-    const output: RevokeSessionOutput = await response.json()
+    const output: LeaveTableOutput = await response.json()
 
     return output
   }

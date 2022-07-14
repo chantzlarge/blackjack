@@ -56,6 +56,10 @@ export default class TableService {
     const player = new Player(input.Parameters.SessionId)
     const table = new Table()
 
+
+    player.Hands[0].Deal(table.Shoe.DrawCard()!)
+    player.Hands[0].Deal(table.Shoe.DrawCard()!)
+
     table.Players.push(player)
     
     this.tableRepository.InsertTable(table)

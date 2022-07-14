@@ -10,7 +10,7 @@ import { getCurrentSession, grantSession } from './session.slice'
 import { getCurrentTable } from './table.slice'
 
 export default function App() {
-  const [cookies, setCookie] = useCookies(['session-id'])
+  const [cookies, setCookie, removeCookie] = useCookies(['session-id'])
   const dispatch = useDispatch<AppDispatch>()
   const player = useSelector((state: RootState) => state.player)
   const session = useSelector((state: RootState) => state.session)
@@ -21,32 +21,41 @@ export default function App() {
     console.log('session', session)
     console.log('table', table)
 
-    if (!cookies['session-id'] && !session) {
-      dispatch(grantSession())
-    } else if (cookies['session-id'] && !session) {
+    const sessionId = cookies['session-id']
+
+    console.log('session-id', sessionId)
+
+    if (!session && !sessionId) {
+      console.log('granting session...')
+      dispatch(grantSession({
+        Parameters: {
+          SessionId: sessionId
+        }
+      }))
+    } else if (!session && sessionId) {
+      console.log('getting session...')
       dispatch(getCurrentSession({
-        Parameters: {
-          SessionId: cookies['session-id']
-        }
+        Parameters: { SessionId: sessionId }
       }))
-    } else if (!cookies['session-id'] && session) {
+    } else if (session && !sessionId) {
+      console.log('setting session-id cookie...')
       setCookie('session-id', session.Id)
-    }
-
-    if (session && !player) {
-      dispatch(getCurrentPlayer({
-        Parameters: {
-          SessionId: session.Id
-        }
-      }))
-    }
-
-    if (session && !table) {
-      dispatch(getCurrentTable({
-        Parameters: {
-          SessionId: session.Id
-        }
-      }))
+    } else if (session && sessionId) {
+      if (!player) {
+        console.log('getting current player...')
+        dispatch(getCurrentPlayer({
+          Parameters: {
+            SessionId: session.Id
+          }
+        }))
+      } else if (!table) {
+        console.log('getting current table...')
+        dispatch(getCurrentTable({
+          Parameters: {
+            SessionId: session.Id
+          }
+        }))
+      }
     }
   })
 

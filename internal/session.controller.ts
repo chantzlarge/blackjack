@@ -7,8 +7,6 @@ import SessionService, {
   GetCurrentSessionOutput,
   GrantSessionInput,
   GrantSessionOutput,
-  RevokeSessionInput,
-  RevokeSessionOutput,
 } from 'session.service'
 
 export default class SessionController {
@@ -40,13 +38,6 @@ export default class SessionController {
   GrantSession(request: Request, response: Response) {
     const input: GrantSessionInput = request.body
     const output: GrantSessionOutput = this.sessionService.GrantSession(input)
-
-    response.json(output)
-  }
-
-  RevokeSession(request: Request, response: Response) {
-    const input: RevokeSessionInput = request.body
-    const output: RevokeSessionOutput = this.sessionService.RevokeSession(input)
 
     response.json(output)
   }

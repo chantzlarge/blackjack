@@ -5,8 +5,6 @@ import {
   GetCurrentSessionOutput, 
   GrantSessionInput, 
   GrantSessionOutput, 
-  RevokeSessionInput,
-  RevokeSessionOutput, 
 } from '../internal/session.service'
 import API from './api'
 
@@ -24,12 +22,6 @@ export const grantSession = createAsyncThunk('sessions/grantSession', async (inp
   return output.Ok ? output.Response : null
 })
 
-export const revokeSession = createAsyncThunk('sessions/revokeSession', async (input: RevokeSessionInput) => {
-  const output: RevokeSessionOutput = await api.RevokeSession(input)
-
-  return output.Ok ? output.Response : null
-})
-
 export const sessionSlice = createSlice({
   name: 'sessions',
   initialState: null as Session | null,
@@ -37,6 +29,5 @@ export const sessionSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getCurrentSession.fulfilled, (_, action) => action.payload)
     builder.addCase(grantSession.fulfilled, (_, action) => action.payload)
-    builder.addCase(revokeSession.fulfilled, () => null)
   }
 })
