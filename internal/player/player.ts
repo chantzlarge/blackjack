@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
-import Card from './card'
-import Hand from './hand'
+import Card from '../table/card'
+import Hand from '../table/hand'
 
 const adjectives = [
   'agreeable',
@@ -34,6 +34,8 @@ const animals = [
 
 export default class Player {
   Id: string
+  SessionId: string
+  TableId: string
   Balance: number = 500
   Name!: string
   Hands: Hand[] = [new Hand()]
@@ -41,8 +43,10 @@ export default class Player {
   CurrentBet: number = 0
   PreviousBets: number[] = []
 
-  constructor () {
+  constructor (sessionId: string, tableId: string) {
     this.Id = uuidv4()
+    this.SessionId = sessionId
+    this.TableId = tableId
 
     // NOTE: random array selection using bitwise OR operator
     this.Name = `${adjectives[~~Math.floor(Math.random() * adjectives.length)]} ${animals[~~Math.floor(Math.random() * adjectives.length)]}`
@@ -55,7 +59,7 @@ export default class Player {
 
   DealCard (card: Card, hand: 0 | 1 = 0): Player {
     this.Hands[hand].Deal(card)
-    
+
     return this
   }
 

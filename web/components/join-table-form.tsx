@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 // import { joinTable } from '../table.slice'
 
-export default function JoinTableForm() {
+export default function JoinTableForm () {
   const [inputs, setInputs] = useState({
     code: ''
   })

@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../store'
 
 export default function PlaceBet () {
-
   return (
     <div className='uk-grid-small uk-child-width-1-2' data-uk-grid>
       <div>

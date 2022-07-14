@@ -1,123 +1,169 @@
-import Table from "../internal/table/table"
+import Table from '../internal/table/table'
 
 import {
-    CreateTableInput,
-    CreateTableOutput,
-    GetPlayerInput,
-    GetPlayerOutput,
-    GetTableInput,
-    GetTableOutput,
-    JoinTableInput,
-    JoinTableOutput,
-} from "../internal/table/table.service"
+  CreatePlayerInput,
+  CreatePlayerOutput,
+  CurrentPlayerInput,
+  CurrentPlayerOutput,
+  GetPlayerInput,
+  GetPlayerOutput,
+} from '../internal/player/player.service'
 
 import {
-    GetSessionInput,
-    GetSessionOutput,
-    GrantSessionInput,
-    GrantSessionOutput,
-} from "../internal/session/session.service"
+  CreateSessionInput,
+  CreateSessionOutput,
+  GetSessionInput,
+  GetSessionOutput,
+  UpdateSessionInput,
+  UpdateSessionOutput
+} from '../internal/session/session.service'
 
-import Session from "../internal/session/session"
+import {
+  CreateTableInput,
+  CreateTableOutput,
+  GetTableInput,
+  GetTableOutput,
+  JoinTableInput,
+  JoinTableOutput
+} from '../internal/table/table.service'
+
+import Session from '../internal/session/session'
 
 const DEFAULT_ADDRESS = 'localhost:3000'
 
 export default class API {
-    session!: Session
+  session!: Session
 
-    constructor() { }
+  constructor () { }
 
-    async CreateTable(input: CreateTableInput): Promise<CreateTableOutput> {
-        const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/create`, {
-            body: JSON.stringify(input),
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: 'POST'
-        })
+  async CreateSession (input: CreateSessionInput): Promise<CreateSessionOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session`, {
+      headers: { Accept: 'application/json' },
+      method: 'POST'
+    })
 
-        const output: CreateTableOutput = await response.json()
+    const output: CreateSessionOutput = await response.json()
 
-        return output
-    }
+    return output
+  }
 
-    async GetPlayer(input: GetPlayerInput): Promise<GetPlayerOutput> {
-        const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/${input.Parameters.TableId}/player/${input.Parameters.PlayerId}`, {
-            body: JSON.stringify(input),
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Basic ${Buffer.from(`${this.session.Id}:${this.session.Secret}`).toString('base64')}`,
-            },
-            method: 'POST'
-        })
+  async CreatePlayer (input: CreatePlayerInput): Promise<CreatePlayerOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    })
 
-        const output: GetPlayerOutput = await response.json()
+    const output: CreatePlayerOutput = await response.json()
 
-        return output
-    }
+    return output
+  }
 
-    async GetSession(input: GetSessionInput): Promise<GetSessionOutput> {
-        const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/${input.Parameters.SessionId}`, {
-            headers: { Accept: 'application/json' },
-            method: 'GET'
-        })
 
-        const output: GetSessionOutput = await response.json()
+  async CreateTable (input: CreateTableInput): Promise<CreateTableOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/create`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    })
 
-        return output
-    }
+    const output: CreateTableOutput = await response.json()
 
-    async GetTable(input: GetTableInput): Promise<GetTableOutput> {
-        const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/${input.Parameters.TableId}`, {
-            body: JSON.stringify(input),
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Basic ${Buffer.from(`${this.session.Id}:${this.session.Secret}`).toString('base64')}`,
-            },
-            method: 'GET'
-        })
+    return output
+  }
 
-        const output: GetTableOutput = await response.json()
 
-        return output
-    }
+  async CurrentPlayer (input: CurrentPlayerInput): Promise<CurrentPlayerOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/current`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    })
 
-    async GrantSession(input: GrantSessionInput): Promise<GrantSessionOutput> {
-        const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/grant`, {
-            headers: {
-                Accept: 'application/json',
-            },
-            method: 'POST'
-        })
+    const output: CurrentPlayerOutput = await response.json()
 
-        const output: GrantSessionOutput = await response.json()
+    return output
+  }
 
-        return output
-    }
+  async GetPlayer (input: GetPlayerInput): Promise<GetPlayerOutput> {
+    console.log(input)
+    
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/${input.Parameters.PlayerId}`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+      },
+      method: 'GET'
+    })
 
-    async JoinTable(input: JoinTableInput): Promise<JoinTableOutput> {
-        const sessionId = this.session?.Id
-        const sessionSecret = this.session?.Secret
+    const output: GetPlayerOutput = await response.json()
 
-        const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/join`, {
-            body: JSON.stringify(input),
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Basic ${Buffer.from(`${sessionId}:${sessionSecret}`).toString('base64')}`,
-                'Content-Type': 'application/json'
-            },
-            method: 'POST'
-        })
+    return output
+  }
 
-        const output: JoinTableOutput = await response.json()
+  async GetSession (input: GetSessionInput): Promise<GetSessionOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/${input.Parameters.SessionId}`, {
+      headers: { Accept: 'application/json' },
+      method: 'GET'
+    })
 
-        return output
-    }
+    const output: GetSessionOutput = await response.json()
 
-    WithSession(session: Session): API {
-        this.session = session
+    return output
+  }
 
-        return this
-    }
+  async GetTable (input: GetTableInput): Promise<GetTableOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/${input.Parameters.TableId}`, {
+      headers: {
+        Accept: 'application/json',
+      },
+      method: 'GET'
+    })
+
+    const output: GetTableOutput = await response.json()
+
+    return output
+  }
+
+  async JoinTable (input: JoinTableInput): Promise<JoinTableOutput> {
+    const sessionId = this.session?.Id
+    const sessionSecret = this.session?.Secret
+
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/join`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    })
+
+    const output: JoinTableOutput = await response.json()
+
+    return output
+  }
+
+  async UpdateSession (input: UpdateSessionInput): Promise<UpdateSessionOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/${input.Parameters.Id}`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'PUT'
+    })
+
+    const output: UpdateSessionOutput = await response.json()
+
+    return output
+  }
 }

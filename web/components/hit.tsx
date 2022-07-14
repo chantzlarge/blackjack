@@ -4,7 +4,7 @@ import TableClient from '../api'
 import { RootState } from '../store'
 import { default as S } from '../../internal/session/session'
 
-export default function Hit() {
+export default function Hit () {
   const session = useSelector<RootState, S | null>((state) => {
     return state.session
   })

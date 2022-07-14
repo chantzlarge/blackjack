@@ -1,28 +1,43 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { getTable } from '../table.slice'
+import { AppDispatch, RootState } from '../store'
 import CreateTableForm from './create-table-form'
 import JoinTableForm from './join-table-form'
+import { updateSession } from '../session.slice'
 
 export default function CreateOrJoinTable() {
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+  const player = useSelector((state: RootState) => state.player)
+  const session = useSelector((state: RootState) => state.session)
+  const table = useSelector((state: RootState) => state.table)
+
+  useEffect(() => {
+    if (session && player && table) {
+      navigate('/table')
+    }
+  })
+
   return (
     <>
-      <div className='uk-section uk-section-large'>
-        <div className='uk-container'>
-          <div className='uk-text-center'>
-            <h1 className='uk-heading-xlarge'>BLACKJACK</h1>
-          </div>
-        </div>
-      </div>
       <div className='uk-section uk-section-xlarge'>
-        <div className='uk-container'>
-          <div className='uk-flex uk-flex-center uk-child-width-1-1' data-uk-grid>
-            <div>
-              <CreateTableForm />
+        <div className='uk-container uk-container-small'>
+          <div className='uk-child-width-1-1' data-uk-grid>
+            <div className='uk-margin-large'>
+              <h1 className='uk-heading-xlarge uk-text-center'>BLACKJACK</h1>
             </div>
-            <div>
-              <hr></hr>
-            </div>
-            <div>
-              <JoinTableForm />
+            <div className='uk-margin-large'>
+              <div className='uk-margin-medium'>
+                <CreateTableForm />
+              </div>
+              <div className='uk-margin-medium'>
+                <hr />
+              </div>
+              <div className='uk-margin-medium'>
+                <JoinTableForm />
+              </div>
             </div>
           </div>
         </div>
@@ -31,7 +46,7 @@ export default function CreateOrJoinTable() {
         <div className='uk-container'>
           <div className='uk-flex uk-flex-center'>
             <ul className='uk-iconnav'>
-              <li><a href="https://github.com/chantzlarge" target={'_blank'} data-uk-icon="icon:github;"></a> </li>
+              <li><a href='https://github.com/chantzlarge' target='_blank' data-uk-icon='icon:github;' rel='noreferrer' /> </li>
             </ul>
           </div>
         </div>

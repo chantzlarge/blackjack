@@ -9,7 +9,7 @@ export interface AuthenticateSessionInput {
 }
 
 export interface AuthenticateSessionOutput {
-    Errors?: string[]
+  Errors?: string[]
   Ok: boolean
   Response?: Session
 }
@@ -21,17 +21,17 @@ export interface GetSessionInput {
 }
 
 export interface GetSessionOutput {
-    Errors?: string[]
+  Errors?: string[]
   Ok: boolean
   Response?: Session
 }
 
-export interface GrantSessionInput {
+export interface CreateSessionInput {
   Parameters: {}
 }
 
-export interface GrantSessionOutput {
-    Errors?: string[]
+export interface CreateSessionOutput {
+  Errors?: string[]
   Ok: boolean
   Response?: Session
 }
@@ -43,11 +43,21 @@ export interface RevokeSessionInput {
 }
 
 export interface RevokeSessionOutput {
-    Errors?: string[]
+  Errors?: string[]
   Ok: boolean
   Response?: {
     Id: string
   }
+}
+
+export interface UpdateSessionInput {
+  Parameters: Session
+}
+
+export interface UpdateSessionOutput {
+  Errors?: string[]
+  Ok: boolean
+  Response?: Session
 }
 
 export default class SessionService {
@@ -64,7 +74,7 @@ export default class SessionService {
     if (!sessionId || !sessionSecret) {
       return {
         Ok: false,
-        Errors: ["invalid input"]
+        Errors: ['invalid input']
       }
     }
 
@@ -72,11 +82,11 @@ export default class SessionService {
 
     // TODO: replace with hash comparison
 
-    if (!session || (session.Secret !== sessionSecret)) {
+    if ((session == null) || (session.Secret !== sessionSecret)) {
       return {
         Ok: false,
         Errors: [
-          "unauthorized"
+          'unauthorized'
         ]
       }
     }
@@ -87,7 +97,7 @@ export default class SessionService {
     }
   }
 
-  GrantSession(input: GrantSessionInput): GrantSessionOutput {
+  CreateSession(input: CreateSessionInput): CreateSessionOutput {
     const session = new Session()
 
     this.sessionRepository.insertSession(session)
@@ -103,18 +113,18 @@ export default class SessionService {
 
     if (!sessionId) {
       return {
-        Errors: ["invalid input"],
-        Ok: false,
+        Errors: ['invalid input'],
+        Ok: false
       }
     }
 
     const session = this.sessionRepository.selectSession(sessionId)
 
-    if (!session) {
+    if (session == null) {
       return {
         Ok: false,
         Errors: [
-          "not found"
+          'not found'
         ]
       }
     }
@@ -131,7 +141,7 @@ export default class SessionService {
     if (!sessionId) {
       return {
         Ok: false,
-        Errors: ["invalid input"]
+        Errors: ['invalid input']
       }
     }
 
@@ -142,6 +152,17 @@ export default class SessionService {
       Response: {
         Id: sessionId
       }
+    }
+  }
+
+  UpdateSession(input: UpdateSessionInput): UpdateSessionOutput {
+    const session = input.Parameters
+
+    this.sessionRepository.updateSession(session)
+
+    return {
+      Ok: true,
+      Response: session
     }
   }
 }

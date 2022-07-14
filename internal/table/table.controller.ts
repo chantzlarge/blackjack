@@ -1,65 +1,57 @@
-import { Request, Response } from 'express';
-import express from 'express'
-import expressWs from 'express-ws';
-import SessionService from "session/session.service";
-import TableService, { GetPlayerInput, GetTableInput } from "table/table.service";
-import Player from './player';
+import express, { Request, Response } from 'express'
+import expressWs from 'express-ws'
+import SessionService from 'session/session.service'
+
+import TableService, { 
+  CreateTableInput,
+  CreateTableOutput,
+  GetTableInput,
+  GetTableOutput,
+ } from 'table/table.service'
 
 export default class TableController {
-    sessionService: SessionService
+  sessionService: SessionService
+  tableService: TableService
+
+  constructor (
+    sessionService: SessionService,
     tableService: TableService
+  ) {
+    this.sessionService = sessionService
+    this.tableService = tableService
+  }
 
-    constructor(
-        sessionService: SessionService,
-        tableService: TableService,
-    ) {
-        this.sessionService = sessionService
-        this.tableService = tableService
+  Connect (ws: expressWs.Application, req: express.Request) {
+    ws.on('open', (message) => console.log(message))
+    ws.on('message', (message) => console.log(message))
+  }
+
+  CreateTable (request: Request, response: Response) {
+    const input: CreateTableInput = request.body
+    const output: CreateTableOutput= this.tableService.CreateTable(input)
+
+    response.json(output)
+  }
+
+  GetTable (request: Request, response: Response) {
+    const input: GetTableInput = {
+      Parameters: {
+        TableId: request.params['tableId']
+      }
     }
+    
+    const output: GetTableOutput = this.tableService.GetTable(input)
 
-    Connect(ws: expressWs.Application, req: express.Request) {
-        ws.on('open', (message) => console.log(message))
-        ws.on('message', (message) => console.log(message))
-    }
+    console.log('got table', output.Response)
 
-    CreateTable(request: Request, response: Response) {
-        const input = request.body
-        const createTableOutput = this.tableService.CreateTable(input)
+    response.json(output)
+  }
 
-        const addPlayerOutput = this.tableService.AddPlayer({
-            Parameters: {
-                TableId: createTableOutput.Response?.Id!
-            }
-        })
+  JoinTable (request: Request, response: Response) {
 
-        response.json(addPlayerOutput)
-    }
+  }
 
-    GetPlayer(request: Request, response: Response) {
-        const input: GetPlayerInput = {
-            Parameters: {
-                PlayerId: request.params['playerId'],
-                TableId: request.params['tableId']
-            }
-        }
+  CloseTable (request: Request, response: Response) {
 
-        const output = this.tableService.GetPlayer(input)
-
-        response.json(output)
-    }
-
-    GetTable(request: Request, response: Response) {
-        const input: GetTableInput = request.body
-        const output = this.tableService.GetTable(input)
-
-        response.json(output)
-    }
-
-    JoinTable(request: Request, response: Response) {
-
-    }
-
-    CloseTable(request: Request, response: Response) {
-
-    }
+  }
 }

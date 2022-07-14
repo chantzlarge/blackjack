@@ -1,78 +1,55 @@
-import Player from './player'
 import Table from './table'
 import TablePublisher from './table.publisher'
 import TableRepository from './table.repository'
 
-interface Input {
-  Parameters?: {}
-}
-
-interface Output {
-  Errors?: string[]
-  Ok: boolean
-  Response?: any
-}
-
-export interface AddPlayerInput extends Input {
-  Parameters: {
-    TableId: string
-  }
-}
-
-export interface AddPlayerOutput extends Output {
-  Response?: Table
-}
-
-export interface CreateTableInput extends Input {
+export interface CreateTableInput {
   Parameters: {
     SessionId: string
   }
 }
 
-export interface CreateTableOutput extends Output {
+export interface CreateTableOutput {
+Errors?: string[]
+Ok: boolean
   Response?: Table
 }
 
-export interface CloseTableInput extends Input {
+export interface DeleteTableInput {
   Parameters: {
     TableId: string
   }
 }
 
-export interface CloseTableOutput extends Output {
+export interface DeleteTableOutput {
+  Errors?: string[]
+  Ok: boolean
   Response?: {
     Id: string
   }
 }
-export interface GetPlayerInput extends Input {
-  Parameters: {
-    PlayerId: string
-    TableId: string
-  }
-}
 
-export interface GetPlayerOutput extends Output {
-  Response?: Player
-}
-
-export interface GetTableInput extends Input {
+export interface GetTableInput {
   Parameters: {
     TableId: string
   }
 }
 
-export interface GetTableOutput extends Output {
+export interface GetTableOutput {
+  Errors?: string[]
+  Ok: boolean
   Response?: Table
 }
 
-export interface JoinTableInput extends Input {
+export interface JoinTableInput {
   Parameters: {
     TableId: string
     Code: string
   }
 }
 
-export interface JoinTableOutput extends Output {
+export interface JoinTableOutput {
+  Errors?: string[]
+  Ok: boolean
   Response?: Table
 }
 
@@ -88,26 +65,6 @@ export default class TableService {
     this.tableRepository = tableRepository
   }
 
-  AddPlayer(input: AddPlayerInput): AddPlayerOutput {
-    const tableId = input.Parameters.TableId
-    const table = this.tableRepository.SelectTableById(tableId)
-    const player = new Player()
-
-    if (!table) {
-      return {
-        Ok: false
-      }
-    }
-
-    table.AddPlayer(player)
-
-    this.tableRepository.UpdateTable(table!)
-
-    return {
-      Ok: true,
-      Response: table
-    }
-  }
 
   CreateTable(input: CreateTableInput): CreateTableOutput {
     const table = new Table()
@@ -120,33 +77,23 @@ export default class TableService {
     }
   }
 
-  CloseTable(id: string) {
-    this.tableRepository.DeleteTable(id)
-  }
+  DeleteTable(input: DeleteTableInput): DeleteTableOutput {
 
-  GetPlayer(input: GetPlayerInput): GetPlayerOutput {
-    const playerId = input.Parameters.PlayerId
-    const tableId = input.Parameters.TableId
-
-    const table = this.tableRepository.SelectTableById(tableId)
-    const player = table?.Players.find(p => p.Id === playerId)
-
-    if (!player) {
-      return {
-        Ok: false
-      }
-    }
+    this.tableRepository.DeleteTable(input.Parameters.TableId)
 
     return {
       Ok: true,
-      Response: player
+      Response: {
+        Id: input.Parameters.TableId
+      }
     }
   }
+
 
   GetTable(input: GetTableInput): GetTableOutput {
     const table = this.tableRepository.SelectTableById(input.Parameters.TableId)
 
-    if (!table) {
+    if (table == null) {
       return {
         Ok: false
       }
@@ -157,15 +104,6 @@ export default class TableService {
       Response: table
     }
   }
-
-  DealCardToPlayer(playerId: string, tableId: string): Table {
-    let table = this.tableRepository.SelectTableById(tableId)
-
-    console.log(table)
-
-    return table!
-  }
-
 
   JoinTable(input: JoinTableInput): JoinTableOutput {
     const tableId = input.Parameters.TableId
@@ -173,8 +111,8 @@ export default class TableService {
 
     if (!tableId || !code) {
       return {
-        Errors: ["invalid input"],
-        Ok: false,
+        Errors: ['invalid input'],
+        Ok: false
       }
     }
 
@@ -184,13 +122,5 @@ export default class TableService {
       Ok: true,
       Response: table
     }
-  }
-
-  RemovePlayer(id: string, playerId: string) {
-    const table = this.tableRepository.SelectTableById(id)
-
-    table?.RemovePlayer(playerId)
-
-    this.tableRepository.UpdateTable(table!)
   }
 }

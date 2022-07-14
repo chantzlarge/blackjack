@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
 import { createTable } from '../table.slice'
-import Session from '../../internal/session/session'
 import { useNavigate } from 'react-router-dom'
-import { SessionContext } from '../session.context'
 
 export default function CreateTableForm() {
   const [inputs, setInputs] = useState({})
@@ -21,18 +19,16 @@ export default function CreateTableForm() {
 
     dispatch(createTable({
       Parameters: {
-        SessionId: session?.Id!,
-      },
+        SessionId: session?.Id!
+      }
     }))
-
-    navigate('/table')
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div className='uk-margin'>
-          {session && <button className='uk-button uk-button-primary uk-width-expand uk-border-rounded'>CREATE TABLE</button>}
+          {(session != null) && <button className='uk-button uk-button-primary uk-width-1-1 uk-border-rounded'>CREATE TABLE</button>}
         </div>
       </form>
     </div>

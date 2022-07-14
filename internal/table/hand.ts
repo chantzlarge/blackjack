@@ -5,12 +5,12 @@ export default class Hand {
   Id: string = uuidv4()
   Cards: Card[] = []
 
-  Deal(card: Card) {
+  Deal (card: Card) {
     this.Cards.push(card)
     this.Sort()
   }
 
-  Score(): number {
+  Score (): number {
     return this.Cards.reduce((score, card) => {
       switch (card.Kind) {
         case Kind.Ace:
@@ -45,7 +45,7 @@ export default class Hand {
     }, 0)
   }
 
-  Sort() {
+  Sort () {
     this.Cards = this.Cards.sort((a, b) => {
       if (
         (a.Kind === Kind.Ace) &&

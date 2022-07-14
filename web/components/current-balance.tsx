@@ -1,9 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../store'
+import { getPlayer } from '../player.slice'
 
-export default function CurrentBalance () {
+export default function CurrentBalance() {
+  const dispatch = useDispatch<AppDispatch>()
+  const player = useSelector((state: RootState) => state.player)
+  const session = useSelector((state: RootState) => state.session)
+
+  useEffect(() => {
+    // if (!player && session && session.PlayerId && session.TableId) {
+    //   dispatch(getPlayer({
+    //     Parameters: {
+    //       PlayerId: session.PlayerId,
+    //     }
+    //   }))
+    // }
+  })
+
   return (
     <div className='uk-margin'>
-      <h1>$5,000</h1>
+      {player && <h1>{player.Balance}</h1>}
     </div>
   )
 }
