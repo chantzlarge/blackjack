@@ -5,9 +5,9 @@ import { useCookies } from 'react-cookie'
 import { AppDispatch, RootState } from './store'
 import CreateOrJoinTable from './components/create-or-join-table'
 import Table from './components/table'
-import { createSession, getSession, updateSession } from './session.slice'
-import { getTable } from './table.slice'
-import { createPlayer, currentPlayer, getPlayer } from './player.slice'
+import { getCurrentPlayer } from './player.slice'
+import { getCurrentSession, grantSession } from './session.slice'
+import { getCurrentTable } from './table.slice'
 
 export default function App() {
   const [cookies, setCookie] = useCookies(['session-id'])
@@ -21,39 +21,32 @@ export default function App() {
     console.log('session', session)
     console.log('table', table)
 
-    if (!session && !cookies['session-id']) {
-      dispatch(createSession({
-        Parameters: {}
-      }))
-    } else if (!session && cookies['session-id']) {
-      dispatch(getSession({
+    if (!cookies['session-id'] && !session) {
+      dispatch(grantSession())
+    } else if (cookies['session-id'] && !session) {
+      dispatch(getCurrentSession({
         Parameters: {
           SessionId: cookies['session-id']
         }
       }))
-    } else if (session) {
+    } else if (!cookies['session-id'] && session) {
       setCookie('session-id', session.Id)
+    }
 
-      if (!table && !player) {
-        dispatch(currentPlayer({
-          Parameters: {
-            SessionId: session.Id,
-          }
-        }))
-      } else if (player && !table) {
-        dispatch(getTable({
-          Parameters: {
-            TableId: player.TableId,
-          }
-        }))
-      } else if (table && !player) {
-        dispatch(createPlayer({
-          Parameters: {
-            SessionId: session.Id,
-            TableId: table.Id,
-          }
-        }))
-      }
+    if (session && !player) {
+      dispatch(getCurrentPlayer({
+        Parameters: {
+          SessionId: session.Id
+        }
+      }))
+    }
+
+    if (session && !table) {
+      dispatch(getCurrentTable({
+        Parameters: {
+          SessionId: session.Id
+        }
+      }))
     }
   })
 

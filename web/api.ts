@@ -1,33 +1,27 @@
-import Table from '../internal/table/table'
+import {
+  GetCurrentPlayerInput,
+  GetCurrentPlayerOutput,
+} from '../internal/player.service'
 
 import {
-  CreatePlayerInput,
-  CreatePlayerOutput,
-  CurrentPlayerInput,
-  CurrentPlayerOutput,
-  GetPlayerInput,
-  GetPlayerOutput,
-} from '../internal/player/player.service'
-
-import {
-  CreateSessionInput,
-  CreateSessionOutput,
-  GetSessionInput,
-  GetSessionOutput,
-  UpdateSessionInput,
-  UpdateSessionOutput
-} from '../internal/session/session.service'
+  GrantSessionInput,
+  GrantSessionOutput,
+  GetCurrentSessionInput,
+  GetCurrentSessionOutput,
+  RevokeSessionInput,
+  RevokeSessionOutput
+} from '../internal/session.service'
 
 import {
   CreateTableInput,
   CreateTableOutput,
-  GetTableInput,
-  GetTableOutput,
+  GetCurrentTableInput,
+  GetCurrentTableOutput,
   JoinTableInput,
   JoinTableOutput
-} from '../internal/table/table.service'
+} from '../internal/table.service'
 
-import Session from '../internal/session/session'
+import Session from '../internal/session'
 
 const DEFAULT_ADDRESS = 'localhost:3000'
 
@@ -35,33 +29,6 @@ export default class API {
   session!: Session
 
   constructor () { }
-
-  async CreateSession (input: CreateSessionInput): Promise<CreateSessionOutput> {
-    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session`, {
-      headers: { Accept: 'application/json' },
-      method: 'POST'
-    })
-
-    const output: CreateSessionOutput = await response.json()
-
-    return output
-  }
-
-  async CreatePlayer (input: CreatePlayerInput): Promise<CreatePlayerOutput> {
-    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player`, {
-      body: JSON.stringify(input),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    })
-
-    const output: CreatePlayerOutput = await response.json()
-
-    return output
-  }
-
 
   async CreateTable (input: CreateTableInput): Promise<CreateTableOutput> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/create`, {
@@ -78,8 +45,20 @@ export default class API {
     return output
   }
 
+  async GrantSession (input?: GrantSessionInput): Promise<GrantSessionOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session`, {
+      headers: { 
+        Accept: 'application/json' 
+      },
+      method: 'GET'
+    })
 
-  async CurrentPlayer (input: CurrentPlayerInput): Promise<CurrentPlayerOutput> {
+    const output: GrantSessionOutput = await response.json()
+
+    return output
+  }
+
+  async GetCurrentPlayer (input: GetCurrentPlayerInput): Promise<GetCurrentPlayerOutput> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/current`, {
       body: JSON.stringify(input),
       headers: {
@@ -89,55 +68,42 @@ export default class API {
       method: 'POST'
     })
 
-    const output: CurrentPlayerOutput = await response.json()
+    const output: GetCurrentPlayerOutput = await response.json()
 
     return output
   }
 
-  async GetPlayer (input: GetPlayerInput): Promise<GetPlayerOutput> {
-    console.log(input)
-    
-    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/${input.Parameters.PlayerId}`, {
+  async GetCurrentSession (input: GetCurrentSessionInput): Promise<GetCurrentSessionOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/current`, {
       body: JSON.stringify(input),
-      headers: {
-        Accept: 'application/json',
+      headers: { 
+        Accept: 'application/json', 
+        'Content-Type': 'application/json' 
       },
-      method: 'GET'
+      method: 'POST'
     })
 
-    const output: GetPlayerOutput = await response.json()
+    const output: GetCurrentSessionOutput = await response.json()
 
     return output
   }
 
-  async GetSession (input: GetSessionInput): Promise<GetSessionOutput> {
-    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/${input.Parameters.SessionId}`, {
-      headers: { Accept: 'application/json' },
-      method: 'GET'
-    })
-
-    const output: GetSessionOutput = await response.json()
-
-    return output
-  }
-
-  async GetTable (input: GetTableInput): Promise<GetTableOutput> {
-    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/${input.Parameters.TableId}`, {
-      headers: {
-        Accept: 'application/json',
+  async GetCurrentTable (input: GetCurrentTableInput): Promise<GetCurrentTableOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/current`, {
+      body: JSON.stringify(input),
+      headers: { 
+        Accept: 'application/json', 
+        'Content-Type': 'application/json' 
       },
-      method: 'GET'
+      method: 'POST'
     })
 
-    const output: GetTableOutput = await response.json()
+    const output: GetCurrentTableOutput = await response.json()
 
     return output
   }
 
   async JoinTable (input: JoinTableInput): Promise<JoinTableOutput> {
-    const sessionId = this.session?.Id
-    const sessionSecret = this.session?.Secret
-
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/join`, {
       body: JSON.stringify(input),
       headers: {
@@ -152,17 +118,17 @@ export default class API {
     return output
   }
 
-  async UpdateSession (input: UpdateSessionInput): Promise<UpdateSessionOutput> {
-    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/${input.Parameters.Id}`, {
+  async RevokeSession (input: RevokeSessionInput): Promise<RevokeSessionOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/revoke`, {
       body: JSON.stringify(input),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      method: 'PUT'
+      method: 'POST'
     })
 
-    const output: UpdateSessionOutput = await response.json()
+    const output: RevokeSessionOutput = await response.json()
 
     return output
   }

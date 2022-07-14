@@ -1,34 +1,31 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import Session from '../internal/session/session'
-import { GetSessionInput, CreateSessionInput, UpdateSessionInput } from '../internal/session/session.service'
+import Session from '../internal/session'
+import { 
+  GetCurrentSessionInput, 
+  GetCurrentSessionOutput, 
+  GrantSessionInput, 
+  GrantSessionOutput, 
+  RevokeSessionInput,
+  RevokeSessionOutput, 
+} from '../internal/session.service'
 import API from './api'
 
 const api = new API()
 
-export const getSession = createAsyncThunk('sessions/getSession', async (input: GetSessionInput) => {
-  const output = await api.GetSession(input)
-
-  console.log(`get session: ${JSON.stringify(output)}`)
-
+export const getCurrentSession = createAsyncThunk('sessions/getCurrentSession', async (input: GetCurrentSessionInput) => {
+  const output: GetCurrentSessionOutput = await api.GetCurrentSession(input)
 
   return output.Ok ? output.Response : null
 })
 
-export const createSession = createAsyncThunk('sessions/createSession', async (input: CreateSessionInput) => {
-  const output = await api.CreateSession(input)
-
-  console.log(`create session: ${JSON.stringify(output)}`)
-
+export const grantSession = createAsyncThunk('sessions/grantSession', async (input?: GrantSessionInput) => {
+  const output: GrantSessionOutput = await api.GrantSession(input)
 
   return output.Ok ? output.Response : null
 })
 
-export const updateSession = createAsyncThunk('sessions/updateSession', async (input: UpdateSessionInput) => {
-  const output = await api.UpdateSession(input)
-
-  console.log(`update session: ${JSON.stringify(output)}`)
-
-  await new Promise(r => setTimeout(r, 2000));
+export const revokeSession = createAsyncThunk('sessions/revokeSession', async (input: RevokeSessionInput) => {
+  const output: RevokeSessionOutput = await api.RevokeSession(input)
 
   return output.Ok ? output.Response : null
 })
@@ -38,8 +35,8 @@ export const sessionSlice = createSlice({
   initialState: null as Session | null,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getSession.fulfilled, (_, action) => action.payload)
-    builder.addCase(createSession.fulfilled, (_, action) => action.payload)
-    builder.addCase(updateSession.fulfilled, (_, action) => action.payload)
+    builder.addCase(getCurrentSession.fulfilled, (_, action) => action.payload)
+    builder.addCase(grantSession.fulfilled, (_, action) => action.payload)
+    builder.addCase(revokeSession.fulfilled, () => null)
   }
 })

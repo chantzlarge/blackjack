@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Dealer from './dealer'
+import Player from './player'
 import Shoe from './shoe'
 
 enum State {
@@ -19,6 +20,7 @@ export default class Table {
   Dealer: Dealer = new Dealer()
   MaxBet: number = 5
   MinBet: number = 50
+  Players: Player[] = []
   State: State = State.Initial
 
   constructor () {

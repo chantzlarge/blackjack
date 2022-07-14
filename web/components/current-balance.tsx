@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
-import { getPlayer } from '../player.slice'
+import { getCurrentPlayer } from '../player.slice'
 
 export default function CurrentBalance() {
   const dispatch = useDispatch<AppDispatch>()

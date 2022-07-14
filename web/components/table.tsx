@@ -6,10 +6,9 @@ import Hand from './hand'
 import Hit from './hit'
 import PreviousBet from './previous-bet'
 import Stand from './stand'
-import { getTable } from '../table.slice'
+import { getCurrentTable } from '../table.slice'
 import { useNavigate } from 'react-router-dom'
-import { updateSession } from '../session.slice'
-import { createPlayer, currentPlayer, getPlayer } from '../player.slice'
+import { getCurrentPlayer } from '../player.slice'
 
 export default function Table() {
   const dispatch = useDispatch<AppDispatch>()
@@ -64,7 +63,7 @@ export default function Table() {
                 <h3 className='uk-heading-small uk-text-muted uk-text-center'>BLACKJACK</h3>
               </div>
               <div className='uk-margin'>
-                {player && <Hand key={player?.Hands[0]?.Id} hand={player?.Hands[0]!} isDealer={false} />}
+                {/* {player && <Hand key={player?.Hands[0]?.Id} hand={player?.Hands[0]!} isDealer={false} />} */}
               </div>
               <div className='uk-margin-large'>
                 <div data-uk-grid>

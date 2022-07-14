@@ -1,44 +1,39 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
-import PlayerController from './internal/player/player.controller'
-import PlayerRepository from './internal/player/player.repository'
-import PlayerService from './internal/player/player.service'
-import SessionController from './internal/session/session.controller'
-import SessionRepository from './internal/session/session.repository'
-import SessionService from './internal/session/session.service'
-import TableRepository from './internal/table/table.repository'
-import TableService from './internal/table/table.service'
-import TableController from './internal/table/table.controller'
-import TablePublisher from './internal/table/table.publisher'
+
+// player imports
+import PlayerController from './internal/player.controller'
+import PlayerService from './internal/player.service'
+
+// session imports
+import SessionController from './internal/session.controller'
+import SessionRepository from './internal/session.repository'
+import SessionService from './internal/session.service'
+
+// table imports
+import TableController from './internal/table.controller'
+import TableRepository from './internal/table.repository'
+import TableService from './internal/table.service'
 
 const app = express()
 const expressWs = require('express-ws')(app)
 
-// publishers
-
-const tablePublisher = new TablePublisher()
-
 // repositories
-
-const playerRepository = new PlayerRepository()
 const sessionRepository = new SessionRepository()
 const tableRepository = new TableRepository()
 
 // services
-
-const playerService = new PlayerService(playerRepository)
+const playerService = new PlayerService(sessionRepository, tableRepository)
 const sessionService = new SessionService(sessionRepository)
-const tableService = new TableService(tablePublisher, tableRepository)
+const tableService = new TableService(sessionRepository, tableRepository)
 
 // controllers
-
 const playerController = new PlayerController(playerService)
 const sessionController = new SessionController(sessionService)
-const tableController = new TableController(sessionService, tableService)
+const tableController = new TableController(tableService)
 
 // middleware
-
 app.use(express.json())
 app.use(cors())
 app.use('/', express.static(path.join(__dirname, 'web', 'dist')))
@@ -46,15 +41,14 @@ app.use((req, res, next) =>
   sessionController.AuthenticateSession(req, res, next))
 
 // routes
+app.get('/api/session', (req, res) =>
+  sessionController.GrantSession(req, res))
 
-app.get('/api/session/:sessionId', (req, res) =>
-sessionController.GetSession(req, res))
+app.post('/api/session/current', (req, res) =>
+  sessionController.GetCurrentSession(req, res))
 
-app.post('/api/session', (req, res) =>
-sessionController.CreateSession(req, res))
-
-app.put('/api/session/:sessionId', (req, res) =>
-  sessionController.UpdateSession(req, res))
+app.delete('/api/session', (req, res) =>
+  sessionController.RevokeSession(req, res))
 
 app.post('/api/table/create', (req, res) =>
   tableController.CreateTable(req, res))
@@ -63,17 +57,29 @@ app.post('/api/table/create', (req, res) =>
 app.ws('/api/table/connect', (ws, req) =>
   tableController.Connect(ws, req))
 
-app.post('/api/player', (req, res) =>
-  playerController.CreatePlayer(req, res))
+app.get('/api/player/bet', (req, res) =>
+  playerController.Bet(req, res))
+
+app.get('/api/player/buyinsurance', (req, res) =>
+  playerController.BuyInsurance(req, res))
 
 app.post('/api/player/current', (req, res) =>
-  playerController.CurrentPlayer(req, res))
+  playerController.GetCurrentPlayer(req, res))
 
-app.get('/api/player/:playerId', (req, res) =>
-  playerController.GetPlayer(req, res))
+app.post('/api/player/sit', (req, res) =>
+  playerController.Sit(req, res))
 
-app.get('/api/table/:tableId', (req, res) =>
-  tableController.GetTable(req, res))
+app.post('/api/player/split', (req, res) =>
+  playerController.Split(req, res))
+
+app.post('/api/player/stand', (req, res) =>
+  playerController.Stand(req, res))
+
+app.post('/api/table/create', (req, res) =>
+  tableController.CreateTable(req, res))
+
+app.post('/api/table/current', (req, res) =>
+  tableController.GetCurrentTable(req, res))
 
 app.post('/api/table/join', (req, res) =>
   tableController.JoinTable(req, res))

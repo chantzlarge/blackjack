@@ -3,7 +3,7 @@ import {
   default as C,
   Kind,
   Suit
-} from '../../internal/table/card'
+} from '../../internal/card'
 
 function renderSwitch (card: C): string {
   switch (`${card.Kind}${card.Suit}`) {
