@@ -7,7 +7,7 @@ export default class Player {
     CurrentBet: number = 0
     PreviousBet: number = 0
     Balance: number = 500
-    Hands: Hand[] = [new Hand()]
+    Hands: Hand[] = []
 
     constructor(sessionId: string) {
         this.SessionId = sessionId

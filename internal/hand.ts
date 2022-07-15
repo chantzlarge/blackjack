@@ -7,11 +7,10 @@ export default class Hand {
 
   Deal (card: Card) {
     this.Cards.push(card)
-    this.Sort()
   }
 
   Score (): number {
-    return this.Cards.reduce((score, card) => {
+    return this.Sort().reduce((score, card) => {
       switch (card.Kind) {
         case Kind.Ace:
           return score + 11 < 21 ? score + 11 : score + 1
@@ -45,8 +44,8 @@ export default class Hand {
     }, 0)
   }
 
-  Sort () {
-    this.Cards = this.Cards.sort((a, b) => {
+  Sort (): Card[] {
+    return this.Cards.sort((a, b) => {
       if (
         (a.Kind === Kind.Ace) &&
         (b.Kind === Kind.Ace)

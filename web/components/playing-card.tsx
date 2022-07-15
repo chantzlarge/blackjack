@@ -1,11 +1,10 @@
 import React from 'react'
-import {
-  default as C,
+import Card, {
   Kind,
   Suit
 } from '../../internal/card'
 
-function renderSwitch (card: C): string {
+function renderSwitch (card: Card): string {
   switch (`${card.Kind}${card.Suit}`) {
     case `${Kind.Ace}${Suit.Diamond}`:
       return '🂡'
@@ -116,7 +115,7 @@ function renderSwitch (card: C): string {
   }
 }
 
-export default function Card (props: { card: C }) {
+export default function PlayingCard (props: { card: Card }) {
   return (
     <span className='uk-text-center' style={{ fontSize: 'inherit' }}>{renderSwitch(props.card)}</span>
   )

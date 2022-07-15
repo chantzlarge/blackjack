@@ -44,7 +44,7 @@ export default function CreateOrJoinTable() {
         <div className='uk-container'>
           <div className='uk-flex uk-flex-center'>
             <ul className='uk-iconnav'>
-              <li><a href='https://github.com/chantzlarge' target='_blank' data-uk-icon='icon:github;' rel='noreferrer' /> </li>
+              <li><a href='https://github.com/chantzlarge/blackjack' target='_blank' data-uk-icon='icon:github;' rel='noreferrer' /> </li>
             </ul>
           </div>
         </div>

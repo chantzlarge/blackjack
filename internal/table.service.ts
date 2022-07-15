@@ -2,6 +2,7 @@ import Player from './player'
 import SessionRepository from 'session.repository'
 import Table from './table'
 import TableRepository from './table.repository'
+import Hand from './hand'
 
 export interface CreateTableInput {
   Parameters: {
@@ -56,12 +57,12 @@ export default class TableService {
     const player = new Player(input.Parameters.SessionId)
     const table = new Table()
 
+    player.Hands.push(new Hand())
 
-    player.Hands[0].Deal(table.Shoe.DrawCard()!)
-    player.Hands[0].Deal(table.Shoe.DrawCard()!)
+    player.Hands.map(h => h.Deal(table.Shoe.DrawCard()!))
 
     table.Players.push(player)
-    
+
     this.tableRepository.InsertTable(table)
 
     return {

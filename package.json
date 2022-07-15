@@ -9,7 +9,8 @@
     "url": "https://chantzlarge.com"
   },
   "scripts": {
-    "build": "webpack --mode production",
+    "build:production": "webpack --mode production",
+    "build": "webpack --mode development",
     "start": "ts-node index.ts",
     "test": "jest"
   },
