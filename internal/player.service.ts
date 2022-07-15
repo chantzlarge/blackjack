@@ -111,41 +111,38 @@ export default class PlayerService {
     }
 
     Bet(input: BetInput): BetOutput {
-        const table = this.tableRepository.SelectTableBySessionId(input.Parameters.SessionId)
-
-        if (!table) {
-            return {
-                Errors: ['table not found'],
-                Ok: false,
-            }
-        } else if (table.MaxBet < input.Parameters.Amount) {
-            return {
-                Errors: ['bet amount is more than table maximum'],
-                Ok: false,
-            }
-        } else if (table.MinBet > input.Parameters.Amount) {
-            return {
-                Errors: ['bet amount is less than table minimum'],
-                Ok: false,
-            }
-        }
-
         const player = this.tableRepository.SelectPlayerBySessionId(input.Parameters.SessionId)
+        const table = this.tableRepository.SelectTableBySessionId(input.Parameters.SessionId)
 
         if (!player) {
             return {
                 Errors: ['player not found'],
                 Ok: false,
             }
-        } else if (input.Parameters.Amount > player.Balance) {
+        } else if (!table) {
+            return {
+                Errors: ['table not found'],
+                Ok: false,
+            }
+        } else if (table.MaxBet < (player?.CurrentBet + input.Parameters.Amount)) {
+            return {
+                Errors: ['bet amount is more than table maximum'],
+                Ok: false,
+            }
+        } else if (table.MinBet > (player?.CurrentBet + input.Parameters.Amount)) {
+            return {
+                Errors: ['bet amount is less than table minimum'],
+                Ok: false,
+            }
+        } else if (player.Balance < input.Parameters.Amount) {
             return {
                 Errors: ['bet amount exceeds player balance'],
                 Ok: false,
             }
         }
 
-        player.CurrentBet = input.Parameters.Amount
-        player.Balance -= player.CurrentBet
+        player.CurrentBet += input.Parameters.Amount
+        player.Balance -= input.Parameters.Amount
 
         table.Players = table.Players.map(p => p.Id === player.Id ? player : p)
 

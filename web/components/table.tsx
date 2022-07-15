@@ -3,14 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
 import CurrentBalance from './current-balance'
 import PlayerHand from './player-hand'
-import Hit from './hit'
 import LeaveTable from './leave-table'
-import PreviousBet from './previous-bet'
-import Stand from './stand'
 import { useNavigate } from 'react-router-dom'
 import PlaceBet from './place-bet'
-import { State } from '../../internal/table'
 import DealerHand from './dealer-hand'
+import CurrentBet from './current-bet'
 
 export default function Table() {
   const dispatch = useDispatch<AppDispatch>()
@@ -75,8 +72,8 @@ export default function Table() {
             <div className='uk-margin-large'>
               <div data-uk-grid>
                 <div className='uk-width-1-3 uk-width-1-2@s uk-width-2-3@m'>
+                  <CurrentBet />
                   <CurrentBalance />
-                  <PreviousBet />
                 </div>
                 <div className='uk-width-2-3 uk-width-1-2@s uk-width-1-3@m'>
                   {

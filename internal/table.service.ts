@@ -128,7 +128,15 @@ export default class TableService {
       case State.DealerTurn:
         console.log(table.State)
 
-        table.State = State.SettlingBets
+        if (table.Dealer.Hand.Score() <= 16) {
+          table.Dealer.Hand.DealCard(table.Shoe.DrawCard()!)
+        } else if (table.Dealer.Hand.Score() > 21) {
+          table.Dealer.Hand = new Hand()
+          table.State = State.SettlingBets
+        } else {
+          table.State = State.SettlingBets
+        }
+
         this.tableRepository.UpdateTable(table)
 
         break
@@ -141,11 +149,8 @@ export default class TableService {
           p.Balance += p.Hands
             .map(h => h.Score())
             .reduce((award, score) => {
-              if (score > dealerScore) {
-                award += 2 * p.CurrentBet
-              } else if (score === dealerScore) {
-                award += p.CurrentBet
-              }
+              if (score > dealerScore) award += 2 * p.CurrentBet
+              else if (score === dealerScore) award += p.CurrentBet
 
               return award
             }, 0)
