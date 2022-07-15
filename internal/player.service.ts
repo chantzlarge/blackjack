@@ -1,6 +1,7 @@
 import SessionRepository from "./session.repository";
 import TableRepository from "./table.repository";
 import Player from "./player";
+import { State } from "./table";
 
 export interface BetInput {
     Parameters: {
@@ -146,7 +147,15 @@ export default class PlayerService {
         player.CurrentBet = input.Parameters.Amount
         player.Balance -= player.CurrentBet
 
-        this.tableRepository.UpdatePlayer(player)
+        table.Players = table.Players.map(p => p.Id === player.Id ? player : p)
+
+        let i = table.Players.findIndex(p => p.CurrentBet === 0)
+
+        if (i === -1) {
+            table.State = State.DealingToPlayers
+        }
+
+        this.tableRepository.UpdateTable(table)
 
         return {
             Ok: true,

@@ -5,8 +5,10 @@ export default class Hand {
   Id: string = uuidv4()
   Cards: Card[] = []
 
-  Deal (card: Card) {
+  DealCard (card: Card): Hand {
     this.Cards.push(card)
+
+    return this
   }
 
   Score (): number {

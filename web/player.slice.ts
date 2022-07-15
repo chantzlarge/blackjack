@@ -5,10 +5,21 @@ import {
   GetCurrentPlayerOutput,
   LeaveTableInput, 
   LeaveTableOutput,
+  BetInput, 
+  BetOutput,
  } from '../internal/player.service'
 import API from './api'
 
 const api = new API()
+
+
+export const bet = createAsyncThunk('players/bet', async (input: BetInput) => {
+  const output: BetOutput = await api.Bet(input)
+
+  console.log(output)
+
+  return output.Ok ? output.Response : null
+})
 
 export const getCurrentPlayer = createAsyncThunk('players/getCurrentPlayer', async (input: GetCurrentPlayerInput) => {
   const output: GetCurrentPlayerOutput = await api.GetCurrentPlayer(input)
@@ -27,6 +38,7 @@ export const playerSlice = createSlice({
   initialState: null as Player | null,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(bet.fulfilled, (_, action) => action.payload)
     builder.addCase(getCurrentPlayer.fulfilled, (_, action) => action.payload)
     builder.addCase(leaveTable.fulfilled, () => null)
   }

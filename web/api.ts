@@ -1,4 +1,6 @@
 import {
+  BetInput,
+  BetOutput,
   GetCurrentPlayerInput,
   GetCurrentPlayerOutput,
   LeaveTableInput,
@@ -29,6 +31,21 @@ export default class API {
   session!: Session
 
   constructor () { }
+
+  async Bet (input: BetInput): Promise<BetOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/bet`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    })
+
+    const output: BetOutput = await response.json()
+
+    return output
+  }
 
   async CreateTable (input: CreateTableInput): Promise<CreateTableOutput> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/create`, {

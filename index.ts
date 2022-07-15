@@ -54,7 +54,7 @@ app.post('/api/table/create', (req, res) =>
 app.ws('/api/table/connect', (ws, req) =>
   tableController.Connect(ws, req))
 
-app.get('/api/player/bet', (req, res) =>
+app.post('/api/player/bet', (req, res) =>
   playerController.Bet(req, res))
 
 app.get('/api/player/buyinsurance', (req, res) =>

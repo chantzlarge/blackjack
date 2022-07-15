@@ -86,6 +86,8 @@ export default function Table() {
                       'buying_insurance': <h1>Buying Insurance</h1>,
                       'paying_naturals': <h1>Paying Naturals</h1>,
                       'dealing_to_dealer': <h1>Dealing to Dealer</h1>,
+                      'player_turn': <h1>Player Turn</h1>,
+                      'dealer_turn': <h1>Dealer Turn</h1>,
                       'settling_bets': <h1>Settling Bets</h1>,
                     }[table?.State!]
                   }
