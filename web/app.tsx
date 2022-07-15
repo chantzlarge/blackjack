@@ -9,7 +9,7 @@ import { getCurrentPlayer } from './player.slice'
 import { getCurrentSession, grantSession } from './session.slice'
 import { getCurrentTable } from './table.slice'
 
-export default function App() {
+export default function App () {
   const [cookies, setCookie, removeCookie] = useCookies(['session-id'])
   const dispatch = useDispatch<AppDispatch>()
   const player = useSelector((state: RootState) => state.player)
@@ -25,30 +25,30 @@ export default function App() {
 
     console.log('session-id', sessionId)
 
-    if (!session && !sessionId) {
+    if ((session == null) && !sessionId) {
       console.log('granting session...')
       dispatch(grantSession({
         Parameters: {
           SessionId: sessionId
         }
       }))
-    } else if (!session && sessionId) {
+    } else if ((session == null) && sessionId) {
       console.log('getting session...')
       dispatch(getCurrentSession({
         Parameters: { SessionId: sessionId }
       }))
-    } else if (session && !sessionId) {
+    } else if ((session != null) && !sessionId) {
       console.log('setting session-id cookie...')
       setCookie('session-id', session.Id)
-    } else if (session && sessionId) {
-      if (!player) {
+    } else if ((session != null) && sessionId) {
+      if (player == null) {
         console.log('getting current player...')
         dispatch(getCurrentPlayer({
           Parameters: {
             SessionId: session.Id
           }
         }))
-      } else if (!table) {
+      } else if (table == null) {
         console.log('getting current table...')
         dispatch(getCurrentTable({
           Parameters: {

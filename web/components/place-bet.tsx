@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
 import { bet } from '../player.slice'
 
-export default function PlaceBet() {
+export default function PlaceBet () {
   const dispatch = useDispatch<AppDispatch>()
   const session = useSelector((state: RootState) => state.session)
 
   const handleClick = (amount: number) => {
-    if (session) {
+    if (session != null) {
       dispatch(bet({
         Parameters: {
           Amount: amount,

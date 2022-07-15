@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
-import {Application} from 'express-ws'
-import TableService, { 
+import { Application } from 'express-ws'
+import TableService, {
   CreateTableInput,
   CreateTableOutput,
   GetCurrentTableInput,
   GetCurrentTableOutput,
   JoinTableInput,
-  JoinTableOutput,
- } from './table.service'
+  JoinTableOutput
+} from './table.service'
 
 export default class TableController {
   tableService: TableService
@@ -25,7 +25,7 @@ export default class TableController {
 
   CreateTable (request: Request, response: Response) {
     const input: CreateTableInput = request.body
-    const output: CreateTableOutput= this.tableService.CreateTable(input)
+    const output: CreateTableOutput = this.tableService.CreateTable(input)
 
     response.json(output)
   }
@@ -36,11 +36,11 @@ export default class TableController {
 
     response.json(output)
   }
-  
+
   JoinTable (request: Request, response: Response) {
     const input: JoinTableInput = request.body
     const output: JoinTableOutput = this.tableService.JoinTable(input)
-  
+
     response.json(output)
   }
 }

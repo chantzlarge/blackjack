@@ -2,7 +2,7 @@ import Player from './player'
 import SessionRepository from 'session.repository'
 import Table, { State } from './table'
 import TableRepository from './table.repository'
-import Hand from './hand'
+import Hand, { HandState } from './hand'
 
 export interface CreateTableInput {
   Parameters: {
@@ -45,19 +45,17 @@ export default class TableService {
   sessionRepository: SessionRepository
   tableRepository: TableRepository
 
-  constructor(
+  constructor (
     sessionRepository: SessionRepository,
-    tableRepository: TableRepository,
+    tableRepository: TableRepository
   ) {
     this.sessionRepository = sessionRepository
     this.tableRepository = tableRepository
   }
 
-  CreateTable(input: CreateTableInput): CreateTableOutput {
+  CreateTable (input: CreateTableInput): CreateTableOutput {
     const player = new Player(input.Parameters.SessionId)
     const table = new Table()
-
-    player.Hands.push(new Hand())
 
     table.Players.push(player)
 
@@ -69,7 +67,7 @@ export default class TableService {
     }
   }
 
-  GetCurrentTable(input: GetCurrentTableInput): GetCurrentTableOutput {
+  GetCurrentTable (input: GetCurrentTableInput): GetCurrentTableOutput {
     const table = this.tableRepository.SelectTableBySessionId(input.Parameters.SessionId)
 
     if (table == null) {
@@ -87,7 +85,13 @@ export default class TableService {
         console.log(table.State)
 
         table.Players = table.Players.map(p => {
-          p.Hands.push(new Hand().DealCard(table.Shoe.DrawCard()!).DealCard(table.Shoe.DrawCard()!))
+          const hand = new Hand()
+
+          for (let i = 0; i < 2; i++) {
+            hand.DealCard(table.Shoe.DrawCard()!)  
+          }
+
+          p.Hands.push(hand)
 
           return p
         })
@@ -121,7 +125,16 @@ export default class TableService {
       case State.PlayerTurn:
         console.log(table.State)
 
-        table.State = State.DealerTurn
+        const i = table.Players
+          .map(p => p.Hands)
+          .reduce((p, c) => [...p, ...c], [])
+          .map(h => h.State)
+          .findIndex(s => s === HandState.Hit)
+
+        if (i == -1) {
+          table.State = State.DealerTurn
+        }
+
         this.tableRepository.UpdateTable(table)
 
         break
@@ -147,6 +160,7 @@ export default class TableService {
         table.Dealer.Hand = new Hand()
         table.Players = table.Players.map(p => {
           p.Balance += p.Hands
+            .filter(h => h.State != HandState.Bust)
             .map(h => h.Score())
             .reduce((award, score) => {
               if (score > dealerScore) award += 2 * p.CurrentBet
@@ -171,9 +185,9 @@ export default class TableService {
     }
   }
 
-  JoinTable(input: JoinTableInput): JoinTableOutput {
+  JoinTable (input: JoinTableInput): JoinTableOutput {
     return {
-      Ok: true,
+      Ok: true
     }
   }
 }

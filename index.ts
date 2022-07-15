@@ -63,6 +63,9 @@ app.get('/api/player/buyinsurance', (req, res) =>
 app.post('/api/player/current', (req, res) =>
   playerController.GetCurrentPlayer(req, res))
 
+app.post('/api/player/hit', (req, res) =>
+  playerController.Hit(req, res))
+
 app.post('/api/player/leavetable', (req, res) =>
   playerController.LeaveTable(req, res))
 
