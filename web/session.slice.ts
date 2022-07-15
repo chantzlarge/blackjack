@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Session from '../internal/session'
-import { 
-  GetCurrentSessionInput, 
-  GetCurrentSessionOutput, 
-  GrantSessionInput, 
-  GrantSessionOutput, 
+import {
+  GetCurrentSessionInput,
+  GetCurrentSessionOutput,
+  GrantSessionInput,
+  GrantSessionOutput
 } from '../internal/session.service'
 import API from './api'
 

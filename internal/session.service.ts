@@ -41,15 +41,15 @@ export default class SessionService {
   sessionRepository: SessionRepository
   tableRepository: TableRepository
 
-  constructor(
+  constructor (
     sessionRepository: SessionRepository,
-    tableRepository: TableRepository,
+    tableRepository: TableRepository
   ) {
     this.sessionRepository = sessionRepository
     this.tableRepository = tableRepository
   }
 
-  AuthenticateSession(input: AuthenticateSessionInput): AuthenticateSessionOutput {
+  AuthenticateSession (input: AuthenticateSessionInput): AuthenticateSessionOutput {
     const session = this.sessionRepository.SelectSessionById(input.Parameters.SessionId)
 
     // if (!session || session.Secret !== input.Parameters.SessionSecret) {
@@ -60,17 +60,17 @@ export default class SessionService {
 
     return {
       Ok: true,
-      Response: session,
+      Response: session
     }
   }
 
-  GetCurrentSession(input: GetCurrentSessionInput): GetCurrentSessionOutput {
+  GetCurrentSession (input: GetCurrentSessionInput): GetCurrentSessionOutput {
     const session = this.sessionRepository.SelectSessionById(input.Parameters.SessionId)
 
-    if (!session) {
+    if (session == null) {
       return {
         Errors: ['not found'],
-        Ok: false,
+        Ok: false
       }
     }
 
@@ -80,7 +80,7 @@ export default class SessionService {
     }
   }
 
-  GrantSession(input?: GrantSessionInput): GrantSessionOutput {
+  GrantSession (input?: GrantSessionInput): GrantSessionOutput {
     const session = new Session()
 
     this.sessionRepository.InsertSession(session)

@@ -3,7 +3,7 @@ import React from 'react'
 import Hand from '../../internal/hand'
 import PlayingCard from './playing-card'
 
-export default function PlayerHand(props: { hand: Hand }) {
+export default function PlayerHand (props: { hand: Hand }) {
   console.log(props.hand)
   return (
     <div>

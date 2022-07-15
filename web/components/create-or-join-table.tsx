@@ -5,7 +5,7 @@ import { AppDispatch, RootState } from '../store'
 import CreateTableForm from './create-table-form'
 import JoinTableForm from './join-table-form'
 
-export default function CreateOrJoinTable() {
+export default function CreateOrJoinTable () {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const player = useSelector((state: RootState) => state.player)
@@ -13,7 +13,7 @@ export default function CreateOrJoinTable() {
   const table = useSelector((state: RootState) => state.table)
 
   useEffect(() => {
-    if (session && player && table) {
+    if ((session != null) && (player != null) && (table != null)) {
       navigate('/table')
     }
   })

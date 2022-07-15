@@ -1,12 +1,26 @@
+import { has } from 'immer/dist/internal'
 import { v4 as uuidv4 } from 'uuid'
 import Card, { Kind } from './card'
+
+export const enum HandState {
+  Bust = 'bust',
+  Hit = 'hit',
+  Stand = 'stand',
+}
 
 export default class Hand {
   Id: string = uuidv4()
   Cards: Card[] = []
+  State: HandState = HandState.Hit
 
-  Deal (card: Card) {
+  DealCard (card: Card): Hand {
     this.Cards.push(card)
+
+    if (this.Score() > 21) {
+      this.State = HandState.Bust
+    }
+
+    return this
   }
 
   Score (): number {
@@ -151,5 +165,9 @@ export default class Hand {
         return -1
       }
     })
+  }
+
+  Stand () {
+    this.State = HandState.Stand
   }
 }

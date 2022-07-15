@@ -54,7 +54,7 @@ app.post('/api/table/create', (req, res) =>
 app.ws('/api/table/connect', (ws, req) =>
   tableController.Connect(ws, req))
 
-app.get('/api/player/bet', (req, res) =>
+app.post('/api/player/bet', (req, res) =>
   playerController.Bet(req, res))
 
 app.get('/api/player/buyinsurance', (req, res) =>
@@ -62,6 +62,9 @@ app.get('/api/player/buyinsurance', (req, res) =>
 
 app.post('/api/player/current', (req, res) =>
   playerController.GetCurrentPlayer(req, res))
+
+app.post('/api/player/hit', (req, res) =>
+  playerController.Hit(req, res))
 
 app.post('/api/player/leavetable', (req, res) =>
   playerController.LeaveTable(req, res))

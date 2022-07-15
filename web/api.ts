@@ -1,15 +1,21 @@
 import {
+  BetInput,
+  BetOutput,
   GetCurrentPlayerInput,
   GetCurrentPlayerOutput,
+  HitInput,
+  HitOutput,
   LeaveTableInput,
   LeaveTableOutput,
+  StandInput,
+  StandOutput
 } from '../internal/player.service'
 
 import {
   GrantSessionInput,
   GrantSessionOutput,
   GetCurrentSessionInput,
-  GetCurrentSessionOutput,
+  GetCurrentSessionOutput
 } from '../internal/session.service'
 
 import {
@@ -21,14 +27,32 @@ import {
   JoinTableOutput
 } from '../internal/table.service'
 
-import Session from '../internal/session'
-
-const DEFAULT_ADDRESS = 'localhost:3000'
+const DEFAULT_ADDRESS = '192.168.1.2:3000'
 
 export default class API {
-  session!: Session
+  ws: WebSocket
 
-  constructor () { }
+  constructor () {
+    this.ws = new WebSocket(`ws://${DEFAULT_ADDRESS}/api/websocket`)
+
+    this.ws.onopen = (event) => console.log(event)
+    this.ws.onmessage = (event) => console.log(event)
+  }
+
+  async Bet (input: BetInput): Promise<BetOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/bet`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    })
+
+    const output: BetOutput = await response.json()
+
+    return output
+  }
 
   async CreateTable (input: CreateTableInput): Promise<CreateTableOutput> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/create`, {
@@ -47,8 +71,8 @@ export default class API {
 
   async GrantSession (input?: GrantSessionInput): Promise<GrantSessionOutput> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session`, {
-      headers: { 
-        Accept: 'application/json' 
+      headers: {
+        Accept: 'application/json'
       },
       method: 'GET'
     })
@@ -76,9 +100,9 @@ export default class API {
   async GetCurrentSession (input: GetCurrentSessionInput): Promise<GetCurrentSessionOutput> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/session/current`, {
       body: JSON.stringify(input),
-      headers: { 
-        Accept: 'application/json', 
-        'Content-Type': 'application/json' 
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       },
       method: 'POST'
     })
@@ -91,14 +115,44 @@ export default class API {
   async GetCurrentTable (input: GetCurrentTableInput): Promise<GetCurrentTableOutput> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/table/current`, {
       body: JSON.stringify(input),
-      headers: { 
-        Accept: 'application/json', 
-        'Content-Type': 'application/json' 
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       },
       method: 'POST'
     })
 
     const output: GetCurrentTableOutput = await response.json()
+
+    return output
+  }
+
+  async Hit (input: HitInput): Promise<HitOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/hit`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    })
+
+    const output: HitOutput = await response.json()
+
+    return output
+  }
+
+  async Stand (input: StandInput): Promise<StandOutput> {
+    const response = await fetch(`http://${DEFAULT_ADDRESS}/api/player/stand`, {
+      body: JSON.stringify(input),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    })
+
+    const output: StandOutput = await response.json()
 
     return output
   }

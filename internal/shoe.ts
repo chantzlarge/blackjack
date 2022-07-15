@@ -12,7 +12,7 @@ export default class Shoe {
     return this.Cards.pop()
   }
 
-  ShuffleAndLoad () {
+  ShuffleCards () {
     this.Cards = [
       ...new Deck().Cards,
       ...new Deck().Cards,
