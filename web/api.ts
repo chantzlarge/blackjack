@@ -33,7 +33,7 @@ export default class API {
   ws: WebSocket
 
   constructor () {
-    this.ws = new WebSocket(`ws://${DEFAULT_ADDRESS}/api/websocket`)
+    this.ws = new WebSocket(`ws://${DEFAULT_ADDRESS}/api/table/connect`)
 
     this.ws.onopen = (event) => console.log(event)
     this.ws.onmessage = (event) => console.log(event)
