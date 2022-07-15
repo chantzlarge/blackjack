@@ -1,45 +1,54 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { AppDispatch, RootState } from '../store'
+import CreateTableForm from './create-table-form'
+import JoinTableForm from './join-table-form'
 
-const ws = new WebSocket('ws://localhost:3001')
+export default function CreateOrJoinTable() {
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+  const player = useSelector((state: RootState) => state.player)
+  const session = useSelector((state: RootState) => state.session)
+  const table = useSelector((state: RootState) => state.table)
 
-ws.onopen = (ev) => {
-  console.log(ev)
-  ws.send('message')
-}
+  useEffect(() => {
+    if (session && player && table) {
+      navigate('/table')
+    }
+  })
 
-ws.onmessage = (ev) => {
-  console.log(ev)
-}
-
-export default class CreateOrJoinTable extends React.Component {
-  render() {
-    return (
-      <div className='uk-container'>
-        <div className='uk-section'>
-          <div className='uk-flex uk-flex-center uk-child-width-1-1 uk-text-center' data-uk-grid>
-            <h1 className='uk-heading'>BLACKJACK</h1>
-            <div className='uk-section'>
-              <div>
-                <a className='uk-button uk-button-primary'>CREATE TABLE</a>
-              </div>
-              <hr className="uk-divider-small" />
-              <div>
-                <form action="" className='uk-form'>
-                  <div className='uk-margin'>
-                    <input className='uk-input uk-width-small' type="text" name="" placeholder='CODE' id="" />
-                  </div>
-                  <div className='uk-margin'>
-                    <a className='uk-button uk-button-default'>JOIN TABLE</a>
-                  </div>
-                </form>
-              </div>
+  return (
+    <>
+      <div className='uk-section uk-section-xlarge'>
+        <div className='uk-container uk-container-small'>
+          <div className='uk-child-width-1-1' data-uk-grid>
+            <div className='uk-margin-large'>
+              <h1 className='uk-heading-xlarge uk-text-center'>BLACKJACK</h1>
             </div>
-            <div className='uk-section'>
-              <a className='uk-button uk-button-link'>SETTINGS</a>
+            <div className='uk-margin-large'>
+              <div className='uk-margin-medium'>
+                <CreateTableForm />
+              </div>
+              <div className='uk-margin-medium'>
+                <hr />
+              </div>
+              <div className='uk-margin-medium'>
+                <JoinTableForm />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    )
-  }
+      <div className='uk-section uk-section-large uk-section-muted'>
+        <div className='uk-container'>
+          <div className='uk-flex uk-flex-center'>
+            <ul className='uk-iconnav'>
+              <li><a href='https://github.com/chantzlarge/blackjack' target='_blank' data-uk-icon='icon:github;' rel='noreferrer' /> </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </>
+  )
 }
