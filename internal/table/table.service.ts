@@ -54,7 +54,7 @@ export default class TableService {
   }
 
   CreateTable (input: CreateTableInput): CreateTableOutput {
-    const player = new Player(input.Parameters.SessionId)
+    const player = new Player()
     const table = new Table()
 
     table.Players.push(player)

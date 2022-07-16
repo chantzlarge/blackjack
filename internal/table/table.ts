@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Dealer from '../dealer/dealer'
-import Player from '../player/player'
+import Player, { State as PlayerState } from '../player/player'
 import Shoe from '../shoe/shoe'
 
 export const enum State {
@@ -24,45 +24,58 @@ export default class Table {
   Shoe: Shoe = new Shoe()
   State: State = State.AcceptingBets
 
-  constructor () {
+  constructor() {
     this.Shoe.Shuffle()
   }
 
-  AddPlayer(player: Player): Table {
-    this.Players.push(player)
-    
-    return this
+  AddPlayer(player: Player): Promise<Table> {
+    return new Promise((resolve) => {
+      this.Players.push(player)
+
+      resolve(this)
+    })
   }
 
-  PlaceBet(playerId: string, betAmount: number): Table | Error {
-    if (betAmount < this.MinBet) {
-      return Error("bet amount less than table minimum")
-    } else if (betAmount > this.MaxBet) {
-      return Error("bet amount greater than table maximum")
-    }
+  Bet(playerId: string, betAmount: number): Promise<Table> {
+    return new Promise((resolve, reject) => {
+      if (this.State != State.AcceptingBets) {
+        reject("table is not accepting bets")
+      }
 
-    const player = this.Players.find(p => p.Id === playerId)
+      if (betAmount < this.MinBet) {
+        reject("bet amount less than table minimum")
+      } else if (betAmount > this.MaxBet) {
+        reject("bet amount greater than table maximum")
+      }
 
-    if (!player) {
-      return Error("player not found")
-    }
-    
-    if (betAmount > player.Balance) {
-      return Error("bet amount greater than player balance")
-    }
+      const player = this.Players.find(p => p.Id === playerId)
 
-    player.PreviousBet = player.CurrentBet
-    player.CurrentBet = betAmount
-    player.Balance -= betAmount
+      if (!player) {
+        reject("player not found")
+      } else {
+        if (betAmount > player.Balance) {
+          reject("bet amount greater than player balance")
+        }
 
-    this.Players = this.Players.map(p => p.Id === playerId ? player : p)
+        player.PreviousBet = player.CurrentBet
+        player.CurrentBet = betAmount
+        player.Balance -= betAmount
+        player.Play()
 
-    return this
+        this.Players = this.Players.map(p => p.Id === playerId ? player : p)
+      }
+
+      this.State = this.Players.findIndex(p => (p.State !== PlayerState.SITTING) && (p.CurrentBet !== 0)) === -1 ? State.DealingToPlayers : State.AcceptingBets 
+
+      resolve(this)
+    })
   }
 
-  RemovePlayer(player: Player): Table {
-    this.Players = this.Players.filter(p => p.Id !== player.Id)
-    
-    return this
+  RemovePlayer(playerId: string): Promise<Table> {
+    return new Promise((resolve) => {
+      this.Players = this.Players.filter(p => p.Id !== playerId)
+
+      resolve(this)
+    })
   }
 }
