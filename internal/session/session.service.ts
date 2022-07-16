@@ -1,4 +1,3 @@
-import TableRepository from 'table.repository'
 import Session from './session'
 import SessionRepository from './session.repository'
 
@@ -39,14 +38,11 @@ export interface GrantSessionOutput {
 
 export default class SessionService {
   sessionRepository: SessionRepository
-  tableRepository: TableRepository
 
   constructor (
     sessionRepository: SessionRepository,
-    tableRepository: TableRepository
   ) {
     this.sessionRepository = sessionRepository
-    this.tableRepository = tableRepository
   }
 
   AuthenticateSession (input: AuthenticateSessionInput): AuthenticateSessionOutput {

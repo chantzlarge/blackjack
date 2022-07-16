@@ -7,7 +7,7 @@ import {
   JoinTableInput
 } from '../internal/table.service'
 
-import API from './api'
+import API from '../api/client'
 
 const api = new API()
 

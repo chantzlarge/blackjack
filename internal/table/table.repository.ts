@@ -1,4 +1,4 @@
-import Player from 'player'
+import Player from '../player/player'
 import Table from './table'
 
 export default class TableRepository {

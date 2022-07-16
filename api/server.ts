@@ -3,18 +3,18 @@ import cors from 'cors'
 import path from 'path'
 
 // player imports
-import PlayerController from './internal/player.controller'
-import PlayerService from './internal/player.service'
+import PlayerController from '../internal/player/player.controller'
+import PlayerService from '../internal/player/player.service'
 
 // session imports
-import SessionController from './internal/session.controller'
-import SessionRepository from './internal/session.repository'
-import SessionService from './internal/session.service'
+import SessionController from '../internal/session/session.controller'
+import SessionRepository from '../internal/session/session.repository'
+import SessionService from '../internal/session/session.service'
 
 // table imports
-import TableController from './internal/table.controller'
-import TableRepository from './internal/table.repository'
-import TableService from './internal/table.service'
+import TableController from '../internal/table/table.controller'
+import TableRepository from '../internal/table/table.repository'
+import TableService from '../internal/table/table.service'
 
 const app = express()
 const expressWs = require('express-ws')(app)

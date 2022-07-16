@@ -12,7 +12,7 @@ import {
   StandInput,
   StandOutput
 } from '../internal/player.service'
-import API from './api'
+import API from '../api/client'
 
 const api = new API()
 

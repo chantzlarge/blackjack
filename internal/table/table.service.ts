@@ -1,8 +1,8 @@
-import Player from './player'
-import SessionRepository from 'session.repository'
+import Player from '../player/player'
+import SessionRepository from '../session/session.repository'
 import Table, { State } from './table'
 import TableRepository from './table.repository'
-import Hand, { HandState } from './hand'
+import Hand, { State as HandState } from '../hand/hand'
 
 export interface CreateTableInput {
   Parameters: {

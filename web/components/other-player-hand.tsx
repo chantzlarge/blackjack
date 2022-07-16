@@ -1,5 +1,5 @@
 import React from 'react'
-import Hand from '../../internal/hand'
+import Hand from '../../internal/hand/hand'
 import Card from './playing-card'
 
 export default function OtherPlayerHand (props: { hand: Hand }) {

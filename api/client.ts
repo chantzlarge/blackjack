@@ -29,7 +29,7 @@ import {
 
 const DEFAULT_ADDRESS = '192.168.1.2:3000'
 
-export default class API {
+export default class Client {
   ws: WebSocket
 
   constructor () {

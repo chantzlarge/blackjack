@@ -1,18 +1,26 @@
-import Deck from './deck'
-import Card from './card'
+import Deck from '../deck/deck'
+import Card from '../card/card'
 
 export default class Shoe {
   Cards: Card[] = []
 
-  CardsRemaining (): number {
-    return this.Cards.length
+  constructor() {
+    this.Shuffle()
   }
 
-  DrawCard (): Card | undefined {
+  Draw (): Card | undefined {
+    if (this.Remaining() < 208) {
+      this.Shuffle()
+    }
+
     return this.Cards.pop()
   }
 
-  ShuffleCards () {
+  Remaining (): number {
+    return this.Cards.length
+  }
+
+  Shuffle () {
     this.Cards = [
       ...new Deck().Cards,
       ...new Deck().Cards,
@@ -20,7 +28,6 @@ export default class Shoe {
       ...new Deck().Cards,
       ...new Deck().Cards,
       ...new Deck().Cards,
-      ...new Deck().Cards
     ]
 
     let currentIndex = this.Cards.length

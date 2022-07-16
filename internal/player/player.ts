@@ -1,15 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
-import Hand from './hand'
+import Hand from '../hand/hand'
 
 export default class Player {
   Id: string = uuidv4()
-  SessionId: string
   CurrentBet: number = 0
   PreviousBet: number = 0
   Balance: number = 500
   Hands: Hand[] = []
-
-  constructor (sessionId: string) {
-    this.SessionId = sessionId
-  }
 }
