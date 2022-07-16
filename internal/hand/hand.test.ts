@@ -1,70 +1,54 @@
 import {
-    ACE_OF_SPADES,
-    TEN_OF_CLUBS,
-    TWO_OF_DIAMONDS,
+  ACE_OF_SPADES,
+  TEN_OF_CLUBS,
+  TWO_OF_DIAMONDS
 } from '../card/card'
 import Hand, { State } from './hand'
 
 describe('Hand', () => {
-    describe('new', () => {
-        test('SHOULD construct new instance of Hand', () => {
-            // act
-            const hand = new Hand()
+  describe('new Hand()', () => {
+    test('SHOULD construct new instance of Hand', () => {
+      const hand = new Hand()
 
-            // assert
-            expect(hand).toBeInstanceOf(Hand)
-        })
+      expect(hand).toBeInstanceOf(Hand)
+    })
+  })
+
+  describe('#Deal()', () => {
+    test('SHOULD deal card to Hand', () => {
+      const hand = new Hand()
+
+      hand.Deal(ACE_OF_SPADES)
+
+      expect(hand.Cards).toEqual([ACE_OF_SPADES])
+      expect(hand.State).toEqual(State.HIT)
     })
 
-    describe('#Hit()', () => {
-        test('SHOULD deal card to Hand', () => {
-            // arrange
-            const hand = new Hand()
+    test('SHOULD change Hand state to BUST after hand score exceeds 21', () => {
+      const cards = [ACE_OF_SPADES, TEN_OF_CLUBS, TWO_OF_DIAMONDS]
+      const hand = cards.reduce((h, c) => h.Deal(c), new Hand())
 
-            // act
-            hand.Hit(ACE_OF_SPADES)
-
-            // assert
-            expect(hand.Cards).toEqual([ACE_OF_SPADES])
-            expect(hand.State).toEqual(State.HIT)
-        })
-
-        test('SHOULD change Hand state to BUST after hand score exceeds 21', () => {
-            // arrange
-            const cards = [ACE_OF_SPADES, TEN_OF_CLUBS, TWO_OF_DIAMONDS]
-
-            // act
-            const hand = cards.reduce((h, c) => h.Hit(c), new Hand())
-
-            // assert
-            expect(hand.State).toEqual(State.BUST)
-        })
+      expect(hand.State).toEqual(State.BUST)
     })
+  })
 
-    describe('#Score()', () => {
-        test('SHOULD return Hand score', () => {
-            // arrange
-            const cards = [ACE_OF_SPADES, TEN_OF_CLUBS]
-            const hand = cards.reduce((h, c) => h.Hit(c), new Hand())
+  describe('#Score()', () => {
+    test('SHOULD return Hand score', () => {
+      const cards = [ACE_OF_SPADES, TEN_OF_CLUBS]
+      const hand = cards.reduce((h, c) => h.Deal(c), new Hand())
+      const score = hand.Score()
 
-            // act
-            const score = hand.Score()
-
-            // assert
-            expect(score).toEqual(21)
-        })
+      expect(score).toEqual(21)
     })
+  })
 
-    describe('#Stand()', () => {
-        test('SHOULD set Hand state to STAND', () => {
-            // arrange
-            const hand = new Hand()
+  describe('#Stand()', () => {
+    test('SHOULD set Hand state to STAND', () => {
+      const hand = new Hand()
 
-            // act
-            hand.Stand()
+      hand.Stand()
 
-            // assert
-            expect(hand.State).toEqual(State.STAND)
-        })
+      expect(hand.State).toEqual(State.STAND)
     })
+  })
 })

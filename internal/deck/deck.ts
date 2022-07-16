@@ -106,6 +106,6 @@ export default class Deck {
     TWO_OF_CLUBS,
     TWO_OF_DIAMONDS,
     TWO_OF_HEARTS,
-    TWO_OF_SPADES,
+    TWO_OF_SPADES
   ]
 }

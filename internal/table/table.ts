@@ -24,11 +24,11 @@ export default class Table {
   Shoe: Shoe = new Shoe()
   State: State = State.AcceptingBets
 
-  constructor() {
+  constructor () {
     this.Shoe.Shuffle()
   }
 
-  AddPlayer(player: Player): Promise<Table> {
+  AddPlayer (player: Player): Promise<Table> {
     return new Promise((resolve) => {
       this.Players.push(player)
 
@@ -36,46 +36,46 @@ export default class Table {
     })
   }
 
-  Bet(playerId: string, betAmount: number): Promise<Table> {
-    return new Promise((resolve, reject) => {
+  Bet (playerId: string, amount: number): Promise<Table> {
+    return new Promise(async (resolve, reject) => {
       if (this.State != State.AcceptingBets) {
-        reject("table is not accepting bets")
+        reject('table is not accepting bets')
+      } else if (amount < this.MinBet) {
+        reject('bet amount less than table minimum')
+      } else if (amount > this.MaxBet) {
+        reject('bet amount greater than table maximum')
       }
 
-      if (betAmount < this.MinBet) {
-        reject("bet amount less than table minimum")
-      } else if (betAmount > this.MaxBet) {
-        reject("bet amount greater than table maximum")
-      }
-
-      const player = this.Players.find(p => p.Id === playerId)
-
-      if (!player) {
-        reject("player not found")
-      } else {
-        if (betAmount > player.Balance) {
-          reject("bet amount greater than player balance")
-        }
-
-        player.PreviousBet = player.CurrentBet
-        player.CurrentBet = betAmount
-        player.Balance -= betAmount
-        player.Play()
-
-        this.Players = this.Players.map(p => p.Id === playerId ? player : p)
-      }
-
-      this.State = this.Players.findIndex(p => (p.State !== PlayerState.SITTING) && (p.CurrentBet !== 0)) === -1 ? State.DealingToPlayers : State.AcceptingBets
+      this.Players.every(async p =>
+        (p.Id === playerId) ? await p.Bet(amount).catch(reject) : p)
 
       resolve(this)
     })
   }
 
-  GetPlayer(playerId: string): Promise<Player> {
+  BuyInsurance (playerId: string): Promise<Table> {
+    return new Promise(async (resolve, reject) => {
+      this.Players = await Promise.all(this.Players.map(async p =>
+        (p.Id === playerId) ? await p.BuyInsurance() : p))
+
+      resolve(this)
+    })
+  }
+
+  Hit (playerId: string, handId: string): Promise<Table> {
+    return new Promise(async (resolve, reject) => {
+      this.Players = await Promise.all(this.Players.map(async p =>
+        (p.Id === playerId) ? await p.Hit(handId, this.Shoe.Draw()) : p))
+
+      resolve(this)
+    })
+  }
+
+  GetPlayer (playerId: string): Promise<Player> {
     return new Promise((resolve, reject) => {
       const player = this.Players.find(p => p.Id === playerId)
 
-      if (player) {
+      if (player != null) {
         resolve(player)
       }
 
@@ -83,27 +83,28 @@ export default class Table {
     })
   }
 
-  RemovePlayer(playerId: string): Promise<Table> {
-    return new Promise((resolve) => {
-      this.Players = this.Players.filter(p => p.Id !== playerId)
+  RemovePlayer (playerId: string): Promise<Table> {
+    return new Promise(async (resolve, reject) => {
+      const player = await this.GetPlayer(playerId).catch(reject)
+
+      if (player != null) {
+        this.Players = this.Players.filter(p => p.Id !== player.Id)
+      }
 
       resolve(this)
     })
   }
 
-  Sit(playerId: string): Promise<Table> {
-    return new Promise((resolve, reject) => {
-      const player = this.Players.find(p => p.Id === playerId)
+  Sit (playerId: string): Promise<Table> {
+    return new Promise(async (resolve, reject) => {
+      const player = await this.GetPlayer(playerId).catch(reject)
 
-      if (player) {
-        player.Sit()
-
-        this.Players = this.Players.map(p => p.Id === player.Id ? player : p)
-        
-        resolve(this)
+      if (player != null) {
+        this.Players = await Promise.all(this.Players.map(async (p) =>
+          (p.Id === player.Id) ? await p.Sit() : p))
       }
 
-      reject('player not found')
+      resolve(this)
     })
   }
 }

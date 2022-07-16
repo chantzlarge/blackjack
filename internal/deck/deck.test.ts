@@ -1,13 +1,11 @@
-import Deck from "./deck"
+import Deck from './deck'
 
 describe('Deck', () => {
-    describe('new', () => {
-        test('SHOULD construct new instance of Deck', () => {
-            // act
-            const deck = new Deck()
-            
-            // assert
-            expect(deck).toBeInstanceOf(Deck)
-        })
+  describe('new Deck()', () => {
+    test('SHOULD construct new instance of Deck', () => {
+      const deck = new Deck()
+
+      expect(deck).toBeInstanceOf(Deck)
     })
+  })
 })

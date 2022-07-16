@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import Card, { Kind } from '../card/card'
+import Card from '../card/card'
 
 export const enum State {
   BUST = 'bust',
@@ -12,7 +12,7 @@ export default class Hand {
   Cards: Card[] = []
   State: State = State.HIT
 
-  Hit(card: Card): Hand {
+  Deal (card: Card): Hand {
     this.Cards.push(card)
 
     if (this.Score() > 21) {
@@ -22,15 +22,15 @@ export default class Hand {
     return this
   }
 
-  Score(): number {
+  Score (): number {
     return this.Cards
       .sort((a, b) => a.Compare(b))
       .reduce((p, c) => p += c.Value, 0)
   }
 
-  Stand(): Hand {
+  Stand (): Hand {
     this.State = State.STAND
-    
+
     return this
   }
 }

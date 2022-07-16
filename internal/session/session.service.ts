@@ -40,13 +40,13 @@ export default class SessionService {
   sessionRepository: SessionRepository
 
   constructor (
-    sessionRepository: SessionRepository,
+    sessionRepository: SessionRepository
   ) {
     this.sessionRepository = sessionRepository
   }
 
-  AuthenticateSession (input: AuthenticateSessionInput): AuthenticateSessionOutput {
-    const session = this.sessionRepository.SelectSessionById(input.Parameters.SessionId)
+  async AuthenticateSession (input: AuthenticateSessionInput): Promise<AuthenticateSessionOutput> {
+    const session = await this.sessionRepository.SelectSessionById(input.Parameters.SessionId)
 
     // if (!session || session.Secret !== input.Parameters.SessionSecret) {
     //   return {
@@ -60,8 +60,8 @@ export default class SessionService {
     }
   }
 
-  GetCurrentSession (input: GetCurrentSessionInput): GetCurrentSessionOutput {
-    const session = this.sessionRepository.SelectSessionById(input.Parameters.SessionId)
+  async GetCurrentSession (input: GetCurrentSessionInput): Promise<GetCurrentSessionOutput> {
+    const session = await this.sessionRepository.SelectSessionById(input.Parameters.SessionId)
 
     if (session == null) {
       return {
@@ -76,10 +76,10 @@ export default class SessionService {
     }
   }
 
-  GrantSession (input?: GrantSessionInput): GrantSessionOutput {
+  async GrantSession (input?: GrantSessionInput): Promise<GrantSessionOutput> {
     const session = new Session()
 
-    this.sessionRepository.InsertSession(session)
+    await this.sessionRepository.InsertSession(session)
 
     return {
       Ok: true,

@@ -11,7 +11,7 @@ import CurrentBet from './current-bet'
 import Hit from './hit'
 import Stand from './stand'
 
-export default function Table() {
+export default function Table () {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const player = useSelector((state: RootState) => state.player)

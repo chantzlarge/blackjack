@@ -2,10 +2,6 @@ import express from 'express'
 import cors from 'cors'
 import path from 'path'
 
-// player imports
-import PlayerController from '../internal/player/player.controller'
-import PlayerService from '../internal/player/player.service'
-
 // session imports
 import SessionController from '../internal/session/session.controller'
 import SessionRepository from '../internal/session/session.repository'
@@ -24,12 +20,10 @@ const sessionRepository = new SessionRepository()
 const tableRepository = new TableRepository()
 
 // services
-const playerService = new PlayerService(sessionRepository, tableRepository)
-const sessionService = new SessionService(sessionRepository, tableRepository)
+const sessionService = new SessionService(sessionRepository)
 const tableService = new TableService(sessionRepository, tableRepository)
 
 // controllers
-const playerController = new PlayerController(playerService)
 const sessionController = new SessionController(sessionService)
 const tableController = new TableController(tableService)
 
@@ -53,30 +47,6 @@ app.post('/api/table/create', (req, res) =>
 // @ts-expect-error
 app.ws('/api/table/connect', (ws, req) =>
   tableController.Connect(ws, req))
-
-app.post('/api/player/bet', (req, res) =>
-  playerController.Bet(req, res))
-
-app.get('/api/player/buyinsurance', (req, res) =>
-  playerController.BuyInsurance(req, res))
-
-app.post('/api/player/current', (req, res) =>
-  playerController.GetCurrentPlayer(req, res))
-
-app.post('/api/player/hit', (req, res) =>
-  playerController.Hit(req, res))
-
-app.post('/api/player/leavetable', (req, res) =>
-  playerController.LeaveTable(req, res))
-
-app.post('/api/player/sit', (req, res) =>
-  playerController.Sit(req, res))
-
-app.post('/api/player/split', (req, res) =>
-  playerController.Split(req, res))
-
-app.post('/api/player/stand', (req, res) =>
-  playerController.Stand(req, res))
 
 app.post('/api/table/create', (req, res) =>
   tableController.CreateTable(req, res))

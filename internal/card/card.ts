@@ -29,13 +29,13 @@ export default class Card {
   Suit: Suit
   Value: number
 
-  constructor(kind: Kind, suit: Suit, value: number) {
+  constructor (kind: Kind, suit: Suit, value: number) {
     this.Kind = kind
     this.Suit = suit
     this.Value = value
   }
 
-  Compare(card: Card) {
+  Compare (card: Card) {
     if (this.Value > card.Value) {
       return 1
     } else if (this.Value < card.Value) {
@@ -45,7 +45,7 @@ export default class Card {
     }
   }
 
-  String(): string {
+  String (): string {
     return `${this.Kind}_of_${this.Suit}`
   }
 }
