@@ -16,8 +16,9 @@ describe('Table', () => {
             const table = new Table()
 
             table.AddPlayer(player)
-                .then(value => expect(value).toBeInstanceOf(Table))
-                .catch(reason => expect(reason).toBeUndefined())
+                .then(t => t.GetPlayer(player.Id))
+                .then(p => expect(p).toBeInstanceOf(Player))
+                .catch(r => expect(r).toBeUndefined())
         })
     })
 
@@ -28,14 +29,13 @@ describe('Table', () => {
             await table.AddPlayer(player)
 
             table.Bet(player.Id, 50)
-                .then(value => {
-                    const p = value.Players.find(p => p.Id === player.Id)
-
+                .then(t => t.GetPlayer(player.Id))
+                .then(p => {
                     expect(p).toBeInstanceOf(Player)
-                    expect(p?.CurrentBet).toEqual(50)
-                    expect(p?.State).toEqual(PlayerState.PLAYING)
+                    expect(p.CurrentBet).toEqual(50)
+                    expect(p.State).toEqual(PlayerState.PLAYING)
                 })
-                .catch(reason => expect(reason).toBeUndefined())
+                .catch(r => expect(r).toBeUndefined())
         })
 
         test('SHOULD NOT place bet due to invalid table state', async () => {
@@ -46,8 +46,8 @@ describe('Table', () => {
             table.State = TableState.DealerTurn
 
             table.Bet(player.Id, 50)
-                .then(value => expect(value).toBeUndefined())
-                .catch(reason => expect(reason).toEqual('table is not accepting bets'))
+                .then(t => expect(t).toBeUndefined())
+                .catch(r => expect(r).toEqual('table is not accepting bets'))
         })
 
         test('SHOULD NOT place bet due to bet amount being less than table minimum', async () => {
@@ -56,8 +56,8 @@ describe('Table', () => {
             await table.AddPlayer(player)
 
             table.Bet(player.Id, 0)
-                .then(value => expect(value).toBeUndefined())
-                .catch(reason => expect(reason).toEqual('bet amount less than table minimum'))
+                .then(t => expect(t).toBeUndefined())
+                .catch(r => expect(r).toEqual('bet amount less than table minimum'))
         })
 
         test('SHOULD NOT place bet due to bet amount being greater than table maximum', async () => {
@@ -66,8 +66,30 @@ describe('Table', () => {
             await table.AddPlayer(player)
 
             table.Bet(player.Id, 1000)
-                .then(value => expect(value).toBeUndefined())
-                .catch(reason => expect(reason).toEqual('bet amount greater than table maximum'))
+                .then(t => expect(t).toBeUndefined())
+                .catch(r => expect(r).toEqual('bet amount greater than table maximum'))
+        })
+    })
+
+    describe('#GetPlayer()', () => {
+        test('SHOULD get player from table', async () => {
+            const player = new Player()
+            const table = new Table()
+            await table.AddPlayer(player)
+
+            table.GetPlayer(player.Id)
+                .then(t => expect(t).toEqual(player))
+                .catch(r => expect(r).toBeUndefined())
+        })
+
+        test('SHOULD NOT get player from table if player doesn\'t exist', async () => {
+            const player = new Player()
+            const table = new Table()
+            await table.AddPlayer(player)
+
+            table.GetPlayer('invalid id')
+                .then(t => expect(t).toBeUndefined())
+                .catch(r => expect(r).toEqual('player not found'))
         })
     })
 
@@ -78,8 +100,21 @@ describe('Table', () => {
             await table.AddPlayer(player)
 
             table.RemovePlayer(player.Id)
-                .then(value => expect(value).toBeInstanceOf(Table))
-                .catch(reason => expect(reason).toBeUndefined())
+                .then(t => expect(t.Players).toEqual([]))
+                .catch(r => expect(r).toBeUndefined())
+        })
+    })
+
+    describe('#Sit()', () => {
+        test('SHOULD set player state to sit', async () => {
+            const player = new Player()
+            const table = new Table()
+            await table.AddPlayer(player)
+
+            table.Sit(player.Id)
+                .then(t => t.GetPlayer(player.Id))
+                .then(p => expect(p?.State).toEqual(PlayerState.SITTING))
+                .catch(r => expect(r).toBeUndefined())
         })
     })
 })

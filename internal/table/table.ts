@@ -65,9 +65,21 @@ export default class Table {
         this.Players = this.Players.map(p => p.Id === playerId ? player : p)
       }
 
-      this.State = this.Players.findIndex(p => (p.State !== PlayerState.SITTING) && (p.CurrentBet !== 0)) === -1 ? State.DealingToPlayers : State.AcceptingBets 
+      this.State = this.Players.findIndex(p => (p.State !== PlayerState.SITTING) && (p.CurrentBet !== 0)) === -1 ? State.DealingToPlayers : State.AcceptingBets
 
       resolve(this)
+    })
+  }
+
+  GetPlayer(playerId: string): Promise<Player> {
+    return new Promise((resolve, reject) => {
+      const player = this.Players.find(p => p.Id === playerId)
+
+      if (player) {
+        resolve(player)
+      }
+
+      reject('player not found')
     })
   }
 
@@ -76,6 +88,22 @@ export default class Table {
       this.Players = this.Players.filter(p => p.Id !== playerId)
 
       resolve(this)
+    })
+  }
+
+  Sit(playerId: string): Promise<Table> {
+    return new Promise((resolve, reject) => {
+      const player = this.Players.find(p => p.Id === playerId)
+
+      if (player) {
+        player.Sit()
+
+        this.Players = this.Players.map(p => p.Id === player.Id ? player : p)
+        
+        resolve(this)
+      }
+
+      reject('player not found')
     })
   }
 }
