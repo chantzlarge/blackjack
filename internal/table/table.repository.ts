@@ -4,39 +4,26 @@ import Table from './table'
 export default class TableRepository {
   tables: Table[] = []
 
-  DeleteTable(id: string): Promise<void> {
-    return new Promise((resolve) => {
-      this.tables = this.tables.filter(t => t.Id !== id)
-
-      resolve()
-    })
+  DeleteTable(id: string): void {
+      this.tables = this.tables.filter(t => t.id !== id)
   }
 
-  InsertTable(table: Table): Promise<number> {
-    return new Promise((resolve) => {
-      const i = this.tables.push(table)
+  InsertTable(table: Table): number {
+      return this.tables.push(table)
 
-      resolve(i)
-    })
   }
 
-  SelectTableById(id: string): Promise<Table> {
-    return new Promise((resolve, reject) => {
-      const table = this.tables.find(t => t.Id === id)
+  SelectTableById(id: string): Table {
+      const table = this.tables.find(t => t.id === id)
 
-      if (table != null) {
-        resolve(table)
+      if (!table) {
+        throw new Error('table not found')
       }
-
-      reject('table not found')
-    })
+      
+      return table
   }
 
-  UpdateTable(table: Table): Promise<void> {
-    return new Promise((resolve) => {
-      this.tables = this.tables.map(t => t.Id === table.Id ? table : t)
-
-      resolve()
-    })
+  UpdateTable(table: Table): void {
+      this.tables = this.tables.map(t => t.id === table.id ? table : t)
   }
 }

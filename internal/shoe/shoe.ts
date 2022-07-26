@@ -1,43 +1,33 @@
-import Deck from '../deck/deck'
+import { Deck } from '../deck/deck'
 import Card from '../card/card'
 
 export default class Shoe {
-  Cards: Card[] = []
+  readonly cards: Card[]
 
-  constructor () {
-    this.Shuffle()
+  constructor(cards: Card[] = [...Deck, ...Deck, ...Deck, ...Deck, ...Deck, ...Deck]) {
+    this.cards = cards
   }
 
-  Draw (): Card {
-    if (this.Remaining() < 208) {
-      this.Shuffle()
+  Draw(): [Card, Shoe] {
+    const card = this.cards.slice(0,1).shift()
+    if (!card) {
+      throw new Error('')
     }
 
-    return this.Cards.pop()!
+    return [card, new Shoe(this.cards.slice(1))]
   }
 
-  Remaining (): number {
-    return this.Cards.length
-  }
+  Shuffle(): Shoe {
+    let cards: Card[] = [...this.cards]
+    let ci = cards.length, ri
 
-  Shuffle (): Shoe {
-    this.Cards = [
-      ...new Deck().Cards,
-      ...new Deck().Cards,
-      ...new Deck().Cards,
-      ...new Deck().Cards,
-      ...new Deck().Cards,
-      ...new Deck().Cards
-    ]
-
-    let ci = this.Cards.length; let ri
-
-    while (ci != 0) {
+    while(ci > 0) {
       ri = Math.floor(Math.random() * ci)
       ci--
-      [this.Cards[ci], this.Cards[ri]] = [this.Cards[ri], this.Cards[ci]]
+
+      [cards[ci], cards[ri]] = [cards[ri], cards[ci]]
     }
 
-    return this
+    return new Shoe(cards)
   }
 }

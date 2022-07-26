@@ -1,21 +1,15 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
-import { leaveTable } from '../player.slice'
+import { leaveGame } from '../slices/game.slice'
 
-export default function LeaveTable () {
+export default function LeaveTable() {
   const dispatch = useDispatch<AppDispatch>()
-  const session = useSelector((state: RootState) => state.session)
+  const game = useSelector((state: RootState) => state.game)
 
   const handleClick = () => {
-    if (session != null) {
-      dispatch(leaveTable({
-        Parameters: {
-          SessionId: session.Id
-        }
-      }))
-    }
+    dispatch(leaveGame(game.session))
   }
 
-  return (session && <button onClick={handleClick} className='uk-icon-button' data-uk-icon='sign-out' />)
+  return (game && <button onClick={handleClick} className='uk-icon-button' data-uk-icon='sign-out' />)
 }

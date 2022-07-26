@@ -1,16 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
-
-// session imports
-import SessionController from '../internal/session/session.controller'
 import SessionRepository from '../internal/session/session.repository'
-import SessionService from '../internal/session/session.service'
-
-// table imports
-import TableController from '../internal/table/table.controller'
 import TableRepository from '../internal/table/table.repository'
-import TableService from '../internal/table/table.service'
+import GameService from '../internal/game/game.service'
+import GameController from '../internal/game/game.controller'
 
 const app = express()
 const expressWs = require('express-ws')(app)
@@ -19,48 +13,37 @@ const expressWs = require('express-ws')(app)
 const sessionRepository = new SessionRepository()
 const tableRepository = new TableRepository()
 
-// services
-const sessionService = new SessionService(sessionRepository)
-const tableService = new TableService(sessionRepository, tableRepository)
+// service(s)
+const gameService = new GameService(sessionRepository, tableRepository)
 
-// controllers
-const sessionController = new SessionController(sessionService)
-const tableController = new TableController(tableService)
+// controller(s)
+const gameController = new GameController(gameService)
 
 // middleware
 app.use(express.json())
 app.use(cors())
-app.use('/', express.static(path.join(__dirname, 'web', 'dist')))
+app.use('/', express.static(path.join(__dirname, '..', 'web', 'dist')))
 app.use((req, res, next) =>
-  sessionController.AuthenticateSession(req, res, next))
+  gameController.Authenticate(req, res, next))
 
 // routes
-app.get('/api/session', (req, res) =>
-  sessionController.GrantSession(req, res))
-
-app.post('/api/session/current', (req, res) =>
-  sessionController.GetCurrentSession(req, res))
-
-app.post('/api/table/create', (req, res) =>
-  tableController.CreateTable(req, res))
-
-// @ts-expect-error
-app.ws('/api/table/connect', (ws, req) =>
-  tableController.Connect(ws, req))
-
-app.post('/api/table/create', (req, res) =>
-  tableController.CreateTable(req, res))
-
-app.post('/api/table/current', (req, res) =>
-  tableController.GetCurrentTable(req, res))
-
-app.post('/api/table/join', (req, res) =>
-  tableController.JoinTable(req, res))
+app.post('/api/create', (req, res) =>
+  gameController.Create(req, res))
+  
+  // app.post('/api/join', (req, res) =>
+  // gameController.Join(req, res))
+  
+  // @ts-expect-error
+  app.ws('/api/connect', (ws, req) =>
+  gameController.Connect(ws, req))
+  
+app.post('/api/current', (req, res) =>
+  gameController.Current(req, res))
 
 app.all('/api/*', (req, res) => console.log(req, res))
 
 app.get('*', (_, res) =>
-  res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html')))
+  res.sendFile(path.join(__dirname, '..', 'web', 'dist', 'index.html')))
 
 const server = app.listen(3000, '0.0.0.0', function () {
   // @ts-expect-error

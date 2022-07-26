@@ -5,57 +5,51 @@ import { useCookies } from 'react-cookie'
 import { AppDispatch, RootState } from './store'
 import CreateOrJoinTable from './components/create-or-join-table'
 import Table from './components/table'
-import { getCurrentPlayer } from './player.slice'
-import { getCurrentSession, grantSession } from './session.slice'
-import { getCurrentTable } from './table.slice'
+import { currentGame, updateGame } from './slices/game.slice'
+import Client from '../api/client'
+import Session from '../internal/session/session'
 
-export default function App () {
-  const [cookies, setCookie, removeCookie] = useCookies(['session-id'])
+const client = new Client()
+
+export default function App() {
+  const [cookies, setCookie, removeCookie] = useCookies(['playerId', 'sessionId', 'sessionSecret', 'tableId'])
   const dispatch = useDispatch<AppDispatch>()
-  const player = useSelector((state: RootState) => state.player)
-  const session = useSelector((state: RootState) => state.session)
-  const table = useSelector((state: RootState) => state.table)
+  const game = useSelector((state: RootState) => state.game)
 
   useEffect(() => {
-    console.log('player', player)
-    console.log('session', session)
-    console.log('table', table)
+    console.log(cookies)
+    console.log(game)
 
-    const sessionId = cookies['session-id']
+    client.ws.onmessage = (event) => {
+      const game = JSON.parse(event.data)
+      
+      dispatch(updateGame(game))
+    }
 
-    console.log('session-id', sessionId)
-
-    if ((session == null) && !sessionId) {
-      console.log('granting session...')
-      dispatch(grantSession({
-        Parameters: {
-          SessionId: sessionId
-        }
-      }))
-    } else if ((session == null) && sessionId) {
-      console.log('getting session...')
-      dispatch(getCurrentSession({
-        Parameters: { SessionId: sessionId }
-      }))
-    } else if ((session != null) && !sessionId) {
-      console.log('setting session-id cookie...')
-      setCookie('session-id', session.Id)
-    } else if ((session != null) && sessionId) {
-      if (player == null) {
-        console.log('getting current player...')
-        dispatch(getCurrentPlayer({
-          Parameters: {
-            SessionId: session.Id
-          }
-        }))
-      } else if (table == null) {
-        console.log('getting current table...')
-        dispatch(getCurrentTable({
-          Parameters: {
-            SessionId: session.Id
-          }
-        }))
-      }
+    if (
+      !game && [
+        cookies['playerId'],
+        cookies['tableId'],
+        cookies['sessionId'],
+        cookies['sessionSecret'],
+      ].every(c => c ? true : false)
+    ) {
+      dispatch(currentGame(new Session(
+        cookies['playerId'],
+        cookies['tableId'],
+        cookies['sessionId'],
+        cookies['sessionSecret'],
+      )))
+    } else if (game) {
+      setCookie('playerId', game.player.id, { path: '/' })
+      setCookie('tableId', game.table.id, { path: '/' })
+      setCookie('sessionId', game.session.id, { path: '/' })
+      setCookie('sessionSecret', game.session.secret, { path: '/' })
+    } else {
+      removeCookie('playerId', { path: '/' })
+      removeCookie('tableId', { path: '/' })
+      removeCookie('sessionId', { path: '/' })
+      removeCookie('sessionSecret', { path: '/' })
     }
   })
 

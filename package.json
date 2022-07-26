@@ -13,7 +13,7 @@
     "build": "webpack --mode development",
     "lint:fix": "ts-standard --fix",
     "lint": "ts-standard",
-    "start": "ts-node index.ts",
+    "start": "ts-node api/server.ts",
     "test:verbose": "jest --verbose",
     "test": "jest"
   },

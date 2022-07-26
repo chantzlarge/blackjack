@@ -1,110 +1,165 @@
 import { v4 as uuidv4 } from 'uuid'
 import Dealer from '../dealer/dealer'
-import Player, { State as PlayerState } from '../player/player'
+import Hand from '../hand/hand'
+import Player from '../player/player'
 import Shoe from '../shoe/shoe'
 
-export const enum State {
-  AcceptingBets = 'accepting_bets',
-  DealingToPlayers = 'dealing_to_players',
-  DealingToDealer = 'dealing_to_dealer',
-  BuyingInsurance = 'buying_insurance',
-  PayingNaturals = 'paying_naturals',
-  PlayerTurn = 'player_turn',
-  DealerTurn = 'dealer_turn',
-  SettlingBets = 'settling_bets',
-}
-
 export default class Table {
-  Id: string = uuidv4()
-  CurrentPlayer!: Player
-  Dealer: Dealer = new Dealer()
-  MaxBet: number = 250
-  MinBet: number = 5
-  Players: Player[] = []
-  Shoe: Shoe = new Shoe()
-  State: State = State.AcceptingBets
+  readonly id: string
+  readonly dealer: Dealer
+  readonly bet: {
+    max: number
+    min: number
+  }
+  readonly isAcceptingBets: boolean = false
+  readonly isDealingToPlayers: boolean = false
+  readonly isDealingToDealer: boolean = false
+  readonly isAcceptingInsurance: boolean = false
+  readonly isPayingInsurance: boolean = false
+  readonly isPayingNaturals: boolean = false
+  readonly isPlayerTurn: boolean = false
+  readonly isDealerTurn: boolean = false
+  readonly isPayingBets: boolean = false
+  readonly players: Player[]
+  readonly shoe: Shoe
 
-  constructor () {
-    this.Shoe.Shuffle()
+  constructor(
+    id: string = uuidv4(),
+    dealer: Dealer = new Dealer(),
+    bet: {
+      max: number,
+      min: number,
+    } = {
+        max: 500,
+        min: 5
+      },
+    players: Player[] = [],
+    shoe: Shoe = new Shoe().Shuffle(),
+  ) {
+    this.id = id
+    this.dealer = dealer
+    this.bet = bet
+    this.players = players
+    this.shoe = shoe
+    this.isAcceptingBets = this.players.reduce((p, c) => (p) && (!c.isSitting && c.bet === 0) && (c.hands.length === 0), true)
+    this.isDealingToPlayers = this.players.reduce((p, c) => p && c.hands.length < 1, true)
+
+    if (this.isDealingToPlayers) {
+      this.players = this.players.map(p => {
+        const [c0, s0] = this.shoe.Draw()
+        const [c1, s1] = s0.Draw()
+        const hand = new Hand([c0, c1], false, false)
+
+        return new Player(p.id, p.balance, p.bet, [hand], false, false)
+      })
+    }
   }
 
-  AddPlayer (player: Player): Promise<Table> {
-    return new Promise((resolve) => {
-      this.Players.push(player)
-
-      resolve(this)
-    })
+  AddPlayer(player: Player): Table {
+    return new Table(
+      this.id,
+      this.dealer,
+      this.bet,
+      [...this.players, player],
+      this.shoe,
+    )
   }
 
-  Bet (playerId: string, amount: number): Promise<Table> {
-    return new Promise(async (resolve, reject) => {
-      if (this.State != State.AcceptingBets) {
-        reject('table is not accepting bets')
-      } else if (amount < this.MinBet) {
-        reject('bet amount less than table minimum')
-      } else if (amount > this.MaxBet) {
-        reject('bet amount greater than table maximum')
-      }
+  Bet(playerId: string, amount: number): Table {
+    const player = this.GetPlayer(playerId)
 
-      this.Players.every(async p =>
-        (p.Id === playerId) ? await p.Bet(amount).catch(reject) : p)
+    if (amount > this.bet.max) {
+      throw new Error('bet is greater than table maximum')
+    } else if (amount < this.bet.min) {
+      throw new Error('bet is less than table minimum')
+    }
 
-      resolve(this)
-    })
+    return new Table(
+      this.id,
+      this.dealer,
+      this.bet,
+      this.players.map(p => p.id === player.id ? p.Bet(amount) : p),
+      this.shoe,
+    )
   }
 
-  BuyInsurance (playerId: string): Promise<Table> {
-    return new Promise(async (resolve, reject) => {
-      this.Players = await Promise.all(this.Players.map(async p =>
-        (p.Id === playerId) ? await p.BuyInsurance() : p))
+  GetCurrentPlayer(): Player {
+    const player = this.players.find(p => !p.isSitting && p.hands.reduce((p, c) => p && (!c.isBusted && !c.isStanding), true))
 
-      resolve(this)
-    })
+    if (!player) {
+      throw new Error('table has no current player')
+    }
+
+    return player
   }
 
-  Hit (playerId: string, handId: string): Promise<Table> {
-    return new Promise(async (resolve, reject) => {
-      this.Players = await Promise.all(this.Players.map(async p =>
-        (p.Id === playerId) ? await p.Hit(handId, this.Shoe.Draw()) : p))
+  GetPlayer(playerId: string): Player {
+    const player = this.players.find(p => p.id === playerId)
 
-      resolve(this)
-    })
+    if (!player) {
+      throw new Error('player not found')
+    }
+
+    return player
   }
 
-  GetPlayer (playerId: string): Promise<Player> {
-    return new Promise((resolve, reject) => {
-      const player = this.Players.find(p => p.Id === playerId)
+  Hit(playerId: string): Table {
+    const player = this.GetPlayer(playerId)
+    const currentPlayer = this.GetCurrentPlayer()
 
-      if (player != null) {
-        resolve(player)
-      }
+    if (currentPlayer.id !== player.id) {
+      throw new Error('current player doesn\'t match identified player')
+    }
 
-      reject('player not found')
-    })
+    const [card, shoe] = this.shoe.Draw()
+
+    return new Table(
+      this.id,
+      this.dealer,
+      this.bet,
+      this.players.map(p => p.id === playerId ? p.Hit(card) : p),
+      shoe,
+    )
   }
 
-  RemovePlayer (playerId: string): Promise<Table> {
-    return new Promise(async (resolve, reject) => {
-      const player = await this.GetPlayer(playerId).catch(reject)
-
-      if (player != null) {
-        this.Players = this.Players.filter(p => p.Id !== player.Id)
-      }
-
-      resolve(this)
-    })
+  RemovePlayer(playerId: string): Table {
+    return new Table(
+      this.id,
+      this.dealer,
+      this.bet,
+      this.players.filter(p => p.id !== playerId),
+      this.shoe,
+    )
   }
 
-  Sit (playerId: string): Promise<Table> {
-    return new Promise(async (resolve, reject) => {
-      const player = await this.GetPlayer(playerId).catch(reject)
+  Sit(playerId: string): Table {
+    const player = this.GetPlayer(playerId)
 
-      if (player != null) {
-        this.Players = await Promise.all(this.Players.map(async (p) =>
-          (p.Id === player.Id) ? await p.Sit() : p))
-      }
+    return new Table(
+      this.id,
+      this.dealer,
+      this.bet,
+      this.players.map(p => p.id === player.id ? p.Sit() : p),
+      this.shoe,
+    )
+  }
 
-      resolve(this)
-    })
+  Stand(playerId: string): Table {
+    const player = this.GetPlayer(playerId)
+    const currentPlayer = this.GetCurrentPlayer()
+
+    if (currentPlayer.id !== player.id) {
+      throw new Error('current player doesn\'t match identified player')
+    }
+
+    const [card, shoe] = this.shoe.Draw()
+
+    return new Table(
+      this.id,
+      this.dealer,
+      this.bet,
+      this.players.map(p => p.id === player.id ? p.Stand() : p),
+      this.shoe,
+    )
   }
 }

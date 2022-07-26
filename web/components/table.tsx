@@ -10,16 +10,17 @@ import DealerHand from './dealer-hand'
 import CurrentBet from './current-bet'
 import Hit from './hit'
 import Stand from './stand'
+import Bet from './bet'
+import Player from '../../internal/player/player'
+import Hand from '../../internal/hand/hand'
 
-export default function Table () {
+export default function Table() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const player = useSelector((state: RootState) => state.player)
-  const session = useSelector((state: RootState) => state.session)
-  const table = useSelector((state: RootState) => state.table)
+  const game = useSelector((state: RootState) => state.game)
 
   useEffect(() => {
-    if ((session == null) || (table == null) || (player == null)) {
+    if (!game) {
       navigate('/')
     }
   })
@@ -40,7 +41,7 @@ export default function Table () {
               </div>
             </div>
             <div>
-              {(table != null) && <DealerHand key={table.Dealer.Hand.Id} hand={table?.Dealer.Hand} />}
+              {game && <DealerHand key={game.table.dealer.hand.id} hand={game.table.dealer.hand} />}
             </div>
           </div>
         </div>
@@ -67,7 +68,7 @@ export default function Table () {
           <div className='uk-container uk-container-small'>
             <div />
             <div className='uk-margin'>
-              {(player != null) && player.Hands.map(h => <PlayerHand key={h.Id} hand={h} />)}
+              {game && game.table.players.find((p: Player) => p.id === game.session.playerId)?.hands.map((h: Hand) => <PlayerHand key={h.id} hand={h} />)}
             </div>
             <div className='uk-margin-large'>
               <div data-uk-grid>
@@ -76,9 +77,11 @@ export default function Table () {
                   <CurrentBalance />
                 </div>
                 <div className='uk-width-2-3 uk-width-1-2@s uk-width-1-3@m'>
-                  {
+                  {game && game.table.isAcceptingBets && <Bet />}
+                  {game && game.table.isDealingToPlayers && <h1>Dealing to players</h1>}
+                  {/* {
                     {
-                      placing_bets: <PlaceBet />,
+                      placing_bets: ,
                       dealing_to_players: <h1>Dealing to Players</h1>,
                       buying_insurance: <h1>Buying Insurance</h1>,
                       paying_naturals: <h1>Paying Naturals</h1>,
@@ -94,7 +97,7 @@ export default function Table () {
                       dealer_turn: <h1>Dealer Turn</h1>,
                       settling_bets: <h1>Settling Bets</h1>
                     }[table?.State!]
-                  }
+                  } */}
                 </div>
               </div>
             </div>

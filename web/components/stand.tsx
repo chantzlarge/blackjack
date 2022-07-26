@@ -1,22 +1,20 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
-import Session from '../../internal/session'
-import { stand } from '../player.slice'
 
 export default function Stand (props: { handId: string }) {
   const dispatch = useDispatch<AppDispatch>()
-  const session = useSelector<RootState, Session | null>(state => state.session)
+  const game = useSelector((state: RootState) => state.game)
 
   const handleClick = () => {
-    if (session != null) {
-      dispatch(stand({
-        Parameters: {
-          HandId: props.handId,
-          SessionId: session.Id
-        }
-      }))
-    }
+    // if (session != null) {
+    //   dispatch(stand({
+    //     Parameters: {
+    //       HandId: props.handId,
+    //       SessionId: session.Id
+    //     }
+    //   }))
+    // }
   }
 
   return (

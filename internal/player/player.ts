@@ -2,79 +2,87 @@ import { v4 as uuidv4 } from 'uuid'
 import Card from '../card/card'
 import Hand from '../hand/hand'
 
-export const enum State {
-  PLAYING = 'playing',
-  SITTING = 'sitting'
-}
-
 export default class Player {
-  Id: string = uuidv4()
-  CurrentBet: number = 0
-  PreviousBet: number = 0
-  Balance: number = 500
-  Hands: Hand[] = []
-  HasInsurance: boolean = false
-  State = State.SITTING
+  readonly id: string
+  readonly balance: number
+  readonly bet: number
+  readonly hands: Hand[]
+  readonly hasInsurance: boolean
+  readonly isSitting: boolean
 
-  Bet (amount: number): Promise<Player> {
-    return new Promise((resolve, reject) => {
-      if (amount > this.Balance) {
-        reject('bet amount exceeds available balance')
-      }
+  constructor(
+    id: string = uuidv4(),
+    balance: number = 500,
+    bet: number = 0,
+    hands: Hand[] = [],
+    hasInsurance: boolean = false,
+    isSitting: boolean = false,
 
-      this.PreviousBet = this.CurrentBet
-      this.CurrentBet = amount
-      this.Balance -= amount
-      this.State = State.PLAYING
-
-      resolve(this)
-    })
+  ) {
+    this.id = id
+    this.balance = balance
+    this.bet = bet
+    this.hands = hands
+    this.hasInsurance = hasInsurance
+    this.isSitting = isSitting
   }
 
-  BuyInsurance (): Promise<Player> {
-    return new Promise((resolve, reject) => {
-      if (0.5 * this.CurrentBet > this.Balance) {
-        reject('insurance amount exceeds available balance')
-      }
+  Bet(amount: number): Player {
+    if (amount > this.balance) {
+      throw new Error('amount exceeds player balance')
+    }
 
-      this.Balance -= 0.5 * this.CurrentBet
-      this.HasInsurance = true
-
-      resolve(this)
-    })
+    return new Player(
+      this.id,
+      this.balance - amount,
+      amount,
+      this.hands,
+      this.hasInsurance,
+      this.isSitting,
+    )
   }
 
-  Hit (handId: string, card: Card): Promise<Player> {
-    return new Promise((resolve) => {
-      this.Hands = this.Hands.map(h => h.Id === handId ? h.Deal(card) : h)
-
-      resolve(this)
-    })
+  Hit(card: Card): Player {
+    return new Player(
+      this.id,
+      this.balance,
+      this.bet,
+      this.hands.map(h => (!h.isBusted || !h.isStanding) ? h.Hit(card) : h),
+      this.hasInsurance,
+      false,
+    )
   }
 
-  Pay (amount: number): Promise<Player> {
-    return new Promise((resolve) => {
-      this.Balance += amount
-
-      resolve(this)
-    })
+  Pay(amount: number): Player {
+    return new Player(
+      this.id,
+      this.balance + amount,
+      this.bet,
+      this.hands,
+      this.hasInsurance,
+      false,
+    )
   }
 
-  Play (): Promise<Player> {
-    return new Promise((resolve) => {
-      this.State = State.PLAYING
-
-      resolve(this)
-    })
+  Sit(): Player {
+    return new Player(
+      this.id,
+      this.balance,
+      0,
+      [],
+      false,
+      true,
+    )
   }
 
-  Sit (): Promise<Player> {
-    return new Promise((resolve) => {
-      this.CurrentBet = 0
-      this.Hands = []
-      this.State = State.SITTING
-
-      resolve(this)
-    })
+  Stand(): Player {
+    return new Player(
+      this.id,
+      this.balance,
+      this.bet,
+      this.hands.map(h => (!h.isBusted || !h.isStanding) ? h.Stand() : h),
+      this.hasInsurance,
+      false,
+    )
   }
 }

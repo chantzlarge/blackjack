@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
-import { createTable } from '../table.slice'
 import { useNavigate } from 'react-router-dom'
+import { createGame } from '../slices/game.slice'
 
 export default function CreateTableForm () {
   const [inputs, setInputs] = useState({})
   const dispatch = useDispatch<AppDispatch>()
-  const session = useSelector((state: RootState) => state.session)
 
   const handleChange = (event: { target: { name: any, value: any } }) => {
     setInputs(values => ({ ...values, [event.target.name]: event.target.value }))
@@ -16,11 +15,7 @@ export default function CreateTableForm () {
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault()
 
-    dispatch(createTable({
-      Parameters: {
-        SessionId: session?.Id!
-      }
-    }))
+    dispatch(createGame())
   }
 
   return (

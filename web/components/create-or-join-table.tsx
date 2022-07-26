@@ -8,12 +8,10 @@ import JoinTableForm from './join-table-form'
 export default function CreateOrJoinTable () {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const player = useSelector((state: RootState) => state.player)
-  const session = useSelector((state: RootState) => state.session)
-  const table = useSelector((state: RootState) => state.table)
-
+  const game = useSelector((state: RootState) => state.game)
+  
   useEffect(() => {
-    if ((session != null) && (player != null) && (table != null)) {
+    if (game) {
       navigate('/table')
     }
   })
