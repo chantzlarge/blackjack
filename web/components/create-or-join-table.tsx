@@ -9,7 +9,7 @@ export default function CreateOrJoinTable () {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const game = useSelector((state: RootState) => state.game)
-  
+
   useEffect(() => {
     if (game) {
       navigate('/table')

@@ -5,10 +5,10 @@ import Client from '../../api/client'
 
 const client = new Client()
 
-export default function PlaceBet() {
+export default function PlaceBet () {
   const dispatch = useDispatch<AppDispatch>()
   const game = useSelector((state: RootState) => state.game)
-  
+
   const handleClick = (amount: number) => {
     client.Bet(game.session, amount)
   }

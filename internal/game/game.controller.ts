@@ -1,98 +1,112 @@
-import { NextFunction, Request, Response } from "express";
-import { Application } from "express-ws";
-import GameService from "./game.service";
+import { NextFunction, Request, Response } from 'express'
+import { Application } from 'express-ws'
+import Game from './game'
+import GameService from './game.service'
 
 export const enum Action {
-    BET = 'BET',
-    BUY_INSURANCE = 'BUY_INSURANCE',
-    DECLINE_INSURANCE = 'DECLINE_INSURANCE',
-    HIT = 'HIT',
-    LEAVE = 'LEAVE',
-    SIT = 'SIT',
-    STAND = 'STAND',
+  BET = 'BET',
+  BUY_INSURANCE = 'BUY_INSURANCE',
+  DECLINE_INSURANCE = 'DECLINE_INSURANCE',
+  HIT = 'HIT',
+  LEAVE = 'LEAVE',
+  SIT = 'SIT',
+  STAND = 'STAND',
 }
 
 export default class GameController {
-    applications: Application[] = []
-    gameService: GameService
+  applications: Application[] = []
+  gameService: GameService
 
-    constructor(gameService: GameService) {
-        this.gameService = gameService
+  constructor(gameService: GameService) {
+    this.gameService = gameService
+  }
+
+  Authenticate(request: Request, response: Response, next: NextFunction) {
+    // const payload = request.body
+    // const session = this.gameService.Authenticate(payload.session.id, payload.session.secret)
+
+    next()
+  }
+
+  Broadcast(event: any) {
+    for (const application of this.applications) {
+      // @ts-expect-error
+      application.send(JSON.stringify(event))
     }
+  }
 
-    Authenticate(request: Request, response: Response, next: NextFunction) {
-        // const payload = request.body
-        // const session = this.gameService.Authenticate(payload.session.id, payload.session.secret)
+  Connect(application: Application, request: Request) {
+    application.on('message', event => this.OnMessage(event))
+    application.on('open', event => this.OnOpen(event))
 
-        next()
-    }
+    this.applications.push(application)
+  }
 
-    Broadcast(event: any) {
-        for (const application of this.applications) {
-            // @ts-expect-error
-            application.send(JSON.stringify(event))
-        }
-    }
+  Create(request: Request, response: Response) {
+    response.json(this.gameService.Create())
+  }
 
-    Connect(application: Application, request: Request) {
-        application.on('message', event => this.OnMessage(event))
-        application.on('open', event => this.OnOpen(event))
+  Current(request: Request, response: Response) {
+    const data = request.body
 
-        this.applications.push(application)
-    }
+    console.log(data)
 
-    Create(request: Request, response: Response) {
-        response.json(this.gameService.Create())
-    }
+    response.json(this.gameService.Current(data))
+  }
 
-    Current(request: Request, response: Response) {
-        const data = request.body
-        
-        console.log(data)
+  Join(request: Request, response: Response) {
+    const data = request.body
 
-        response.json(this.gameService.Current(data))
-    }
+    const game = this.gameService.Join(data.code)
 
-    Join(request: Request, response: Response) {
-        const data = request.body
-        
-        console.log(data)
+    response.json(game)
+  }
 
-        response.json(this.gameService.Join(data.code))
-    }
+  OnMessage(event: any) {
+    const data: any = JSON.parse(event)
 
-    OnMessage(event: any) {
-        const data: any = JSON.parse(event)
+    console.log(data)
+    let game: Game;
 
-        console.log(data)
-
-        switch (data.action) {
-            case Action.BET:
-                this.Broadcast(this.gameService.Bet(data.payload.session, data.payload.amount))
-                break
-            case Action.BUY_INSURANCE:
-                this.Broadcast(this.gameService.BuyInsurance(data.payload.session))
-                break
-            case Action.DECLINE_INSURANCE:
-                this.Broadcast(this.gameService.DeclineInsurance(data.payload.session))
-                break
-            case Action.HIT:
-                this.Broadcast(this.gameService.Hit(data.payload.session))
-                break
-            case Action.LEAVE:
-                this.Broadcast(this.gameService.Leave(data.payload.session))
-                break
-            case Action.SIT:
-                this.Broadcast(this.gameService.Sit(data.payload.session))
-                break
-            case Action.STAND:
-                this.Broadcast(this.gameService.Stand(data.payload.session))
-            default:
-                console.log(event)
-        }
-    }
-
-    OnOpen(event: any) {
+    switch (data.action) {
+      case Action.BET:
+        game = this.gameService.Bet(data.payload.session, data.payload.amount)
+        game.player = game.table.GetPlayer(game.session.playerId)
+        this.Broadcast(game)
+        break
+      case Action.BUY_INSURANCE:
+        game = this.gameService.BuyInsurance(data.payload.session)
+        game.player = game.table.GetPlayer(game.session.playerId)
+        this.Broadcast(game)
+        break
+      case Action.DECLINE_INSURANCE:
+        game = this.gameService.DeclineInsurance(data.payload.session)
+        game.player = game.table.GetPlayer(game.session.playerId)
+        this.Broadcast(game)
+        break
+      case Action.HIT:
+        game = this.gameService.Hit(data.payload.session)
+        game.player = game.table.GetPlayer(game.session.playerId)
+        this.Broadcast(game)
+        break
+        case Action.LEAVE:
+        this.gameService.Leave(data.payload.session)
+        break
+      case Action.SIT:
+        game = this.gameService.Sit(data.payload.session)
+        game.player = game.table.GetPlayer(game.session.playerId)
+        this.Broadcast(game)
+        break
+      case Action.STAND:
+        game = this.gameService.Stand(data.payload.session)
+        game.player = game.table.GetPlayer(data.payload.session.playerId)
+        this.Broadcast(game)
+      default:
         console.log(event)
     }
+  }
+
+  OnOpen(event: any) {
+    console.log(event)
+  }
 }

@@ -1,44 +1,44 @@
 import { Action } from '../internal/game/game.controller'
-import Session from "session/session"
+import Session from 'session/session'
 
 const DEFAULT_ADDRESS = '192.168.1.3:3000'
 
 export default class Client {
   ws: WebSocket
 
-  constructor() {
+  constructor () {
     this.ws = this.Connect()
   }
 
-  Bet(session: Session, amount: number) {
+  Bet (session: Session, amount: number) {
     this.ws.send(JSON.stringify({
       action: Action.BET,
       payload: {
         session: session,
-        amount: amount,
+        amount: amount
       }
     }))
   }
 
-  BuyInsurance(session: Session) {
+  BuyInsurance (session: Session) {
     this.ws.send(JSON.stringify({
       action: Action.BUY_INSURANCE,
       payload: {
-        session: session,
-      }
-    }))
-  }
-  
-  DeclineInsurance(session: Session) {
-    this.ws.send(JSON.stringify({
-      action: Action.DECLINE_INSURANCE,
-      payload: {
-        session: session,
+        session: session
       }
     }))
   }
 
-  Connect(): WebSocket {
+  DeclineInsurance (session: Session) {
+    this.ws.send(JSON.stringify({
+      action: Action.DECLINE_INSURANCE,
+      payload: {
+        session: session
+      }
+    }))
+  }
+
+  Connect (): WebSocket {
     const ws = new WebSocket(`ws://${DEFAULT_ADDRESS}/api/connect`)
 
     ws.onopen = (event) => console.log(event)
@@ -47,7 +47,7 @@ export default class Client {
     return ws
   }
 
-  async Create(): Promise<any> {
+  async Create (): Promise<any> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/create`, {
       headers: {
         Accept: 'application/json',
@@ -59,10 +59,10 @@ export default class Client {
     return await response.json()
   }
 
-  async Current(session: Session): Promise<any> {
+  async Current (session: Session): Promise<any> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/current`, {
-    body: JSON.stringify(session),
-    headers: {
+      body: JSON.stringify(session),
+      headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
@@ -72,25 +72,25 @@ export default class Client {
     return await response.json()
   }
 
-  Hit(session: Session) {
+  Hit (session: Session) {
     this.ws.send(JSON.stringify({
       action: Action.HIT,
       payload: {
-        session: session,
+        session: session
       }
     }))
   }
 
-  Stand(session: Session) {
+  Stand (session: Session) {
     this.ws.send(JSON.stringify({
       action: Action.STAND,
       payload: {
-        session: session,
+        session: session
       }
     }))
   }
 
-  async Join(code: string): Promise<any> {
+  async Join (code: string): Promise<any> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/join`, {
       body: JSON.stringify({ code: code }),
       headers: {
@@ -103,11 +103,11 @@ export default class Client {
     return await response.json()
   }
 
-  Leave(session: Session) {
+  Leave (session: Session) {
     this.ws.send(JSON.stringify({
       action: Action.LEAVE,
       payload: {
-        session: session,
+        session: session
       }
     }))
   }

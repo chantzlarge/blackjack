@@ -17,7 +17,7 @@ export default function JoinTableForm () {
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault()
     dispatch(joinGame({
-      code: inputs.code,
+      code: inputs.code
     }))
   }
 

@@ -7,7 +7,7 @@ export default function PlaceBet () {
   const game = useSelector((state: RootState) => state.game)
 
   const handleClick = (amount: number) => {
-    
+
   }
 
   return (

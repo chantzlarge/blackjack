@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
 import { leaveGame } from '../slices/game.slice'
 
-export default function LeaveTable() {
+export default function LeaveTable () {
   const dispatch = useDispatch<AppDispatch>()
   const game = useSelector((state: RootState) => state.game)
 

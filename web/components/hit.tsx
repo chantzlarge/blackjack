@@ -5,7 +5,7 @@ import Client from '../../api/client'
 
 const client = new Client()
 
-export default function Hit(props: {}) {
+export default function Hit (props: {}) {
   const dispatch = useDispatch<AppDispatch>()
   const game = useSelector((state: RootState) => state.game)
 
