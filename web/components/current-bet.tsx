@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../store'
 
 export default function CurrentBet () {
-  const player = useSelector((state: RootState) => state.player)
+  const game = useSelector((state: RootState) => state.game)
 
   return (
     <div className='uk-margin'>
-      <h1>${player?.CurrentBet}</h1>
+      <h1>${game?.player?.bet}</h1>
     </div>
   )
 }

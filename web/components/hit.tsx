@@ -1,21 +1,16 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
-import { hit } from '../player.slice'
+import Client from '../../api/client'
 
-export default function Hit (props: { handId: string }) {
+const client = new Client()
+
+export default function Hit(props: {}) {
   const dispatch = useDispatch<AppDispatch>()
-  const session = useSelector((state: RootState) => state.session)
+  const game = useSelector((state: RootState) => state.game)
 
   const handleClick = () => {
-    if (session != null) {
-      dispatch(hit({
-        Parameters: {
-          HandId: props.handId,
-          SessionId: session?.Id
-        }
-      }))
-    }
+    client.Hit(game.session)
   }
 
   return (

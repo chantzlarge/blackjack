@@ -10,16 +10,49 @@ import DealerHand from './dealer-hand'
 import CurrentBet from './current-bet'
 import Hit from './hit'
 import Stand from './stand'
+import Bet from './bet'
+import Player from '../../internal/player/player'
+import Hand from '../../internal/hand/hand'
+import { State } from '../../internal/table/table'
+import BuyOrSkipInsurance from './buy-or-skip-insurance'
+
+function renderSwitch(state: State) {
+  switch (state) {
+    case State.ACCEPTING_BETS:
+      return <Bet />
+    case State.DEALING_TO_PLAYERS:
+      return <h1>DEALING_TO_PLAYERS</h1>
+    case State.DEALING_TO_DEALER:
+      return <h1>DEALING_TO_DEALER</h1>
+    case State.ACCEPTING_INSURANCE:
+      return <BuyOrSkipInsurance />
+    case State.PAYING_INSURANCE:
+      return <h1>PAYING_INSURANCE</h1>
+    case State.PAYING_NATURALS:
+      return <h1>PAYING_NATUALS</h1>
+    case State.PLAYER_TURNS:
+      return <div>
+        <div className='uk-margin'>
+          <Hit />
+        </div>
+        <div className='uk-margin'>
+          <Stand />
+        </div>
+      </div>
+    case State.DEALER_TURN:
+      return <h1>DEALER_TURN</h1>
+    case State.PAYING_BETS:
+      return <h1>PAYING_BETS</h1>
+  }
+}
 
 export default function Table() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const player = useSelector((state: RootState) => state.player)
-  const session = useSelector((state: RootState) => state.session)
-  const table = useSelector((state: RootState) => state.table)
+  const game = useSelector((state: RootState) => state.game)
 
   useEffect(() => {
-    if ((session == null) || (table == null) || (player == null)) {
+    if (!game) {
       navigate('/')
     }
   })
@@ -40,7 +73,7 @@ export default function Table() {
               </div>
             </div>
             <div>
-              {(table != null) && <DealerHand key={table.Dealer.Hand.Id} hand={table?.Dealer.Hand} />}
+              {game && <DealerHand key={game.table.dealer.hand.id} hand={game.table.dealer.hand} />}
             </div>
           </div>
         </div>
@@ -53,7 +86,7 @@ export default function Table() {
 
       {/* center */}
       <div className='uk-position-center'>
-        <h3 className='uk-heading-small uk-text-muted uk-text-center'>BLACKJACK</h3>
+              <h3 className='uk-text-muted uk-text-center'>BLACKJACK</h3>
       </div>
 
       {/* right */}
@@ -65,9 +98,8 @@ export default function Table() {
       <div className='uk-position-bottom'>
         <div className='uk-section uk-section-medium'>
           <div className='uk-container uk-container-small'>
-            <div />
             <div className='uk-margin'>
-              {(player != null) && player.Hands.map(h => <PlayerHand key={h.Id} hand={h} />)}
+              {game && game.table.players.find((p: Player) => p.id === game.session.playerId)?.hands.map((h: Hand) => <PlayerHand key={h.id} hand={h} />)}
             </div>
             <div className='uk-margin-large'>
               <div data-uk-grid>
@@ -76,25 +108,7 @@ export default function Table() {
                   <CurrentBalance />
                 </div>
                 <div className='uk-width-2-3 uk-width-1-2@s uk-width-1-3@m'>
-                  {
-                    {
-                      placing_bets: <PlaceBet />,
-                      dealing_to_players: <h1>Dealing to Players</h1>,
-                      buying_insurance: <h1>Buying Insurance</h1>,
-                      paying_naturals: <h1>Paying Naturals</h1>,
-                      dealing_to_dealer: <h1>Dealing to Dealer</h1>,
-                      player_turn: <div>
-                        <div className='uk-margin'>
-                          {(player != null) && player.Hands[0] && <Hit handId={player.Hands[0].Id} />}
-                        </div>
-                        <div className='uk-margin'>
-                          {(player != null) && player.Hands[0] && <Stand handId={player.Hands[0].Id} />}
-                        </div>
-                      </div>,
-                      dealer_turn: <h1>Dealer Turn</h1>,
-                      settling_bets: <h1>Settling Bets</h1>
-                    }[table?.State!]
-                  }
+                  {game && renderSwitch(game.table.state)}
                 </div>
               </div>
             </div>

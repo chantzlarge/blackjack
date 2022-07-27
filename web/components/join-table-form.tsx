@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-// import { joinTable } from '../table.slice'
+import { AppDispatch } from '../store'
+import { joinGame } from '../slices/game.slice'
 
 export default function JoinTableForm () {
   const [inputs, setInputs] = useState({
     code: ''
   })
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleChange = (event: { target: { name: any, value: any } }) => {
     setInputs(values => ({ ...values, [event.target.name]: event.target.value }))
@@ -15,7 +16,9 @@ export default function JoinTableForm () {
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault()
-    // dispatch(joinTable(inputs.code))
+    dispatch(joinGame({
+      code: inputs.code,
+    }))
   }
 
   return (

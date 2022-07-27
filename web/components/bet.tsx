@@ -1,13 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../store'
+import Client from '../../api/client'
 
-export default function PlaceBet () {
+const client = new Client()
+
+export default function PlaceBet() {
   const dispatch = useDispatch<AppDispatch>()
   const game = useSelector((state: RootState) => state.game)
-
+  
   const handleClick = (amount: number) => {
-    
+    client.Bet(game.session, amount)
   }
 
   return (

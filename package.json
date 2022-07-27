@@ -11,7 +11,10 @@
   "scripts": {
     "build:production": "webpack --mode production",
     "build": "webpack --mode development",
-    "start": "ts-node index.ts",
+    "lint:fix": "ts-standard --fix",
+    "lint": "ts-standard",
+    "start": "ts-node api/server.ts",
+    "test:verbose": "jest --verbose",
     "test": "jest"
   },
   "license": "MIT",

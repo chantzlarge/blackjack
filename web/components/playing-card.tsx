@@ -2,113 +2,121 @@ import React from 'react'
 import Card, {
   Kind,
   Suit
-} from '../../internal/card'
+} from '../../internal/card/card'
 
 function renderSwitch (card: Card): string {
-  switch (`${card.Kind}${card.Suit}`) {
-    case `${Kind.Ace}${Suit.Diamond}`:
-      return '🂡'
-    case `${Kind.King}${Suit.Diamond}`:
-      return '🃎'
-    case `${Kind.Queen}${Suit.Diamond}`:
-      return '🃍'
-    case `${Kind.Jack}${Suit.Diamond}`:
-      return '🃋'
-    case `${Kind.Ten}${Suit.Diamond}`:
-      return '🃊'
-    case `${Kind.Nine}${Suit.Diamond}`:
-      return '🃉'
-    case `${Kind.Eight}${Suit.Diamond}`:
-      return '🃈'
-    case `${Kind.Seven}${Suit.Diamond}`:
-      return '🃇'
-    case `${Kind.Six}${Suit.Diamond}`:
-      return '🃆'
-    case `${Kind.Five}${Suit.Diamond}`:
-      return '🃅'
-    case `${Kind.Four}${Suit.Diamond}`:
-      return '🃄'
-    case `${Kind.Three}${Suit.Diamond}`:
-      return '🃃'
-    case `${Kind.Two}${Suit.Diamond}`:
-      return '🃂'
-    case `${Kind.Ace}${Suit.Clubs}`:
+  switch (`${card.kind}${card.suit}`) {
+    case `${Kind.ACE}${Suit.CLUBS}`:
       return '🃑'
-    case `${Kind.King}${Suit.Clubs}`:
+    case `${Kind.KING}${Suit.CLUBS}`:
       return '🃞'
-    case `${Kind.Queen}${Suit.Clubs}`:
+    case `${Kind.QUEEN}${Suit.CLUBS}`:
       return '🃝'
-    case `${Kind.Jack}${Suit.Clubs}`:
+    case `${Kind.JACK}${Suit.CLUBS}`:
       return '🃛'
-    case `${Kind.Ten}${Suit.Clubs}`:
+    case `${Kind.QUEEN}${Suit.CLUBS}`:
       return '🃚'
-    case `${Kind.Nine}${Suit.Clubs}`:
+    case `${Kind.TEN}${Suit.CLUBS}`:
+      return '🃚'
+    case `${Kind.NINE}${Suit.CLUBS}`:
       return '🃙'
-    case `${Kind.Eight}${Suit.Clubs}`:
+    case `${Kind.EIGHT}${Suit.CLUBS}`:
       return '🃘'
-    case `${Kind.Seven}${Suit.Clubs}`:
+    case `${Kind.SEVEN}${Suit.CLUBS}`:
       return '🃗'
-    case `${Kind.Six}${Suit.Clubs}`:
+    case `${Kind.SIX}${Suit.CLUBS}`:
       return '🃖'
-    case `${Kind.Five}${Suit.Clubs}`:
+    case `${Kind.FIVE}${Suit.CLUBS}`:
       return '🃕'
-    case `${Kind.Four}${Suit.Clubs}`:
+    case `${Kind.FOUR}${Suit.CLUBS}`:
       return '🃔'
-    case `${Kind.Three}${Suit.Clubs}`:
+    case `${Kind.THREE}${Suit.CLUBS}`:
       return '🃓'
-    case `${Kind.Two}${Suit.Clubs}`:
+    case `${Kind.TWO}${Suit.CLUBS}`:
       return '🃒'
-    case `${Kind.Ace}${Suit.Heart}`:
-      return '🂱'
-    case `${Kind.King}${Suit.Heart}`:
-      return '🂾'
-    case `${Kind.Queen}${Suit.Heart}`:
-      return '🂽'
-    case `${Kind.Jack}${Suit.Heart}`:
-      return '🂻'
-    case `${Kind.Ten}${Suit.Heart}`:
-      return '🂺'
-    case `${Kind.Nine}${Suit.Heart}`:
-      return '🂹'
-    case `${Kind.Eight}${Suit.Heart}`:
-      return '🂸'
-    case `${Kind.Seven}${Suit.Heart}`:
-      return '🂷'
-    case `${Kind.Six}${Suit.Heart}`:
-      return '🂶'
-    case `${Kind.Five}${Suit.Heart}`:
-      return '🂵'
-    case `${Kind.Four}${Suit.Heart}`:
-      return '🂴'
-    case `${Kind.Three}${Suit.Heart}`:
-      return '🂳'
-    case `${Kind.Two}${Suit.Heart}`:
-      return '🂲'
-    case `${Kind.Ace}${Suit.Spade}`:
+    case `${Kind.ACE}${Suit.DIAMONDS}`:
       return '🂡'
-    case `${Kind.King}${Suit.Spade}`:
+    case `${Kind.KING}${Suit.DIAMONDS}`:
+      return '🃎'
+    case `${Kind.QUEEN}${Suit.DIAMONDS}`:
+      return '🃍'
+    case `${Kind.JACK}${Suit.DIAMONDS}`:
+      return '🃋'
+    case `${Kind.QUEEN}${Suit.DIAMONDS}`:
+      return '🃊'
+    case `${Kind.TEN}${Suit.DIAMONDS}`:
+      return '🃊'
+    case `${Kind.NINE}${Suit.DIAMONDS}`:
+      return '🃉'
+    case `${Kind.EIGHT}${Suit.DIAMONDS}`:
+      return '🃈'
+    case `${Kind.SEVEN}${Suit.DIAMONDS}`:
+      return '🃇'
+    case `${Kind.SIX}${Suit.DIAMONDS}`:
+      return '🃆'
+    case `${Kind.FIVE}${Suit.DIAMONDS}`:
+      return '🃅'
+    case `${Kind.FOUR}${Suit.DIAMONDS}`:
+      return '🃄'
+    case `${Kind.THREE}${Suit.DIAMONDS}`:
+      return '🃃'
+    case `${Kind.TWO}${Suit.DIAMONDS}`:
+      return '🃂'
+    case `${Kind.ACE}${Suit.HEARTS}`:
+      return '🂱'
+    case `${Kind.KING}${Suit.HEARTS}`:
+      return '🂾'
+    case `${Kind.QUEEN}${Suit.HEARTS}`:
+      return '🂽'
+    case `${Kind.JACK}${Suit.HEARTS}`:
+      return '🂻'
+    case `${Kind.QUEEN}${Suit.HEARTS}`:
+      return '🂺'
+    case `${Kind.TEN}${Suit.HEARTS}`:
+      return '🂺'
+    case `${Kind.NINE}${Suit.HEARTS}`:
+      return '🂹'
+    case `${Kind.EIGHT}${Suit.HEARTS}`:
+      return '🂸'
+    case `${Kind.SEVEN}${Suit.HEARTS}`:
+      return '🂷'
+    case `${Kind.SIX}${Suit.HEARTS}`:
+      return '🂶'
+    case `${Kind.FIVE}${Suit.HEARTS}`:
+      return '🂵'
+    case `${Kind.FOUR}${Suit.HEARTS}`:
+      return '🂴'
+    case `${Kind.THREE}${Suit.HEARTS}`:
+      return '🂳'
+    case `${Kind.TWO}${Suit.HEARTS}`:
+      return '🂲'
+    case `${Kind.ACE}${Suit.SPADES}`:
+      return '🂡'
+    case `${Kind.KING}${Suit.SPADES}`:
       return '🂮'
-    case `${Kind.Queen}${Suit.Spade}`:
+    case `${Kind.QUEEN}${Suit.SPADES}`:
       return '🂭'
-    case `${Kind.Jack}${Suit.Spade}`:
+    case `${Kind.JACK}${Suit.SPADES}`:
       return '🂫'
-    case `${Kind.Ten}${Suit.Spade}`:
+    case `${Kind.QUEEN}${Suit.SPADES}`:
       return '🂪'
-    case `${Kind.Nine}${Suit.Spade}`:
+    case `${Kind.TEN}${Suit.SPADES}`:
+      return '🂪'
+    case `${Kind.NINE}${Suit.SPADES}`:
       return '🂩'
-    case `${Kind.Eight}${Suit.Spade}`:
+    case `${Kind.EIGHT}${Suit.SPADES}`:
       return '🂨'
-    case `${Kind.Seven}${Suit.Spade}`:
+    case `${Kind.SEVEN}${Suit.SPADES}`:
       return '🂧'
-    case `${Kind.Six}${Suit.Spade}`:
+    case `${Kind.SIX}${Suit.SPADES}`:
       return '🂦'
-    case `${Kind.Five}${Suit.Spade}`:
+    case `${Kind.FIVE}${Suit.SPADES}`:
       return '🂥'
-    case `${Kind.Four}${Suit.Spade}`:
+    case `${Kind.FOUR}${Suit.SPADES}`:
       return '🂤'
-    case `${Kind.Three}${Suit.Spade}`:
+    case `${Kind.THREE}${Suit.SPADES}`:
       return '🂣'
-    case `${Kind.Two}${Suit.Spade}`:
+    case `${Kind.TWO}${Suit.SPADES}`:
       return '🂢'
     default:
       return '🂠'
