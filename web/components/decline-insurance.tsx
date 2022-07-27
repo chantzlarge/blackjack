@@ -11,7 +11,7 @@ export default function DeclineInsurance () {
   const game = useSelector((state: RootState) => state.game)
 
   const handleClick = () => {
-    client.DeclineInsurance(game.session)
+    if (game) client.DeclineInsurance(game.session)
   }
 
   return (

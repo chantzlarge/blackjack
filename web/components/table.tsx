@@ -11,9 +11,9 @@ import CurrentBet from './current-bet'
 import Hit from './hit'
 import Stand from './stand'
 import Bet from './bet'
-import Player from '../../internal/player/player'
-import Hand from '../../internal/hand/hand'
-import { State } from '../../internal/table/table'
+import Player from '../../lib/player/player'
+import Hand from '../../lib/hand/hand'
+import { State } from '../../lib/table/table'
 import BuyOrSkipInsurance from './buy-or-skip-insurance'
 
 function renderSwitch (state: State) {

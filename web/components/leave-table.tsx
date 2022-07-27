@@ -8,7 +8,7 @@ export default function LeaveTable () {
   const game = useSelector((state: RootState) => state.game)
 
   const handleClick = () => {
-    dispatch(leaveGame(game.session))
+    if (game) dispatch(leaveGame(game.session))
   }
 
   return (game && <button onClick={handleClick} className='uk-icon-button' data-uk-icon='sign-out' />)

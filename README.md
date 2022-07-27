@@ -32,8 +32,12 @@ This is a free and open-source implementation of the game of blackjack. For a st
 
 > Usage should include sections related to running and testing the application.
 
-- `build` builds the web application using Webpack
+- `build:production` builds the web application using Webpack in 'production' mode
+- `build` builds the web application using Webpack in 'development' mode
+- `lint:fix` fixes linting problems automatically using ts-standard
+- `lint` reports linting problems automatically using ts-standard
 - `start` starts the api and web server using ts-node
+- `test:verbose` tests the application using jest with verbose flag
 - `test` tests the application using jest
 
 ## Contributing

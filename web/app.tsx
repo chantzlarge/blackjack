@@ -6,8 +6,8 @@ import { AppDispatch, RootState } from './store'
 import CreateOrJoinTable from './components/create-or-join-table'
 import Table from './components/table'
 import { currentGame, updateGame } from './slices/game.slice'
-import Client from '../api/client'
-import Session from '../internal/session/session'
+import Client, { GameChangeEvent } from '../api/client'
+import Session from '../lib/session/session'
 
 const client = new Client()
 
@@ -17,14 +17,10 @@ export default function App () {
   const game = useSelector((state: RootState) => state.game)
 
   useEffect(() => {
-    console.log(cookies)
     console.log(game)
 
-    client.ws.onmessage = (event) => {
-      const game = JSON.parse(event.data)
-
-      dispatch(updateGame(game))
-    }
+    client.addEventListener('gameChange', (ev: any) => 
+      dispatch(updateGame(ev.game)))
 
     if (
       !game && [

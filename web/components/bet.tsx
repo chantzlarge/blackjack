@@ -10,7 +10,7 @@ export default function PlaceBet () {
   const game = useSelector((state: RootState) => state.game)
 
   const handleClick = (amount: number) => {
-    client.Bet(game.session, amount)
+    if (game) client.Bet(game.session, amount)
   }
 
   return (

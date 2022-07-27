@@ -10,7 +10,7 @@ export default function Stand (props: { }) {
   const game = useSelector((state: RootState) => state.game)
 
   const handleClick = () => {
-    client.Stand(game.session)
+    if (game) client.Stand(game.session)
   }
 
   return (

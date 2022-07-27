@@ -1,6 +1,6 @@
 // import Card from 'card/card'
 import React from 'react'
-import Hand from '../../internal/hand/hand'
+import Hand from '../../lib/hand/hand'
 import PlayingCard from './playing-card'
 
 export default function PlayerHand (props: { hand: Hand }) {

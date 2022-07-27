@@ -11,7 +11,7 @@ export default function BuyInsurance () {
   const game = useSelector((state: RootState) => state.game)
 
   const handleClick = () => {
-    client.BuyInsurance(game.session)
+    if (game) client.BuyInsurance(game.session)
   }
 
   return (

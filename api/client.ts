@@ -1,17 +1,34 @@
-import { Action } from '../internal/game/game.controller'
-import Session from 'session/session'
+import { Action } from '../lib/game/game.controller'
+import Game from '../lib/game/game'
+import Session from '../lib/session/session'
 
 const DEFAULT_ADDRESS = '192.168.1.3:3000'
 
-export default class Client {
-  ws: WebSocket
+export interface GameChangeEventInit extends EventInit {
+  game: Game
+}
+
+export class GameChangeEvent extends Event {
+  readonly game: Game
+  
+  constructor(gameChangeEventInit: GameChangeEventInit) {
+    super('gameChange', gameChangeEventInit)
+
+    this.game = gameChangeEventInit.game
+  }
+}
+
+export default class Client extends EventTarget {
+  webSocket: WebSocket
 
   constructor () {
-    this.ws = this.Connect()
+    super()
+
+    this.webSocket = this.connect()
   }
 
   Bet (session: Session, amount: number) {
-    this.ws.send(JSON.stringify({
+    this.webSocket.send(JSON.stringify({
       action: Action.BET,
       payload: {
         session: session,
@@ -21,7 +38,7 @@ export default class Client {
   }
 
   BuyInsurance (session: Session) {
-    this.ws.send(JSON.stringify({
+    this.webSocket.send(JSON.stringify({
       action: Action.BUY_INSURANCE,
       payload: {
         session: session
@@ -30,7 +47,7 @@ export default class Client {
   }
 
   DeclineInsurance (session: Session) {
-    this.ws.send(JSON.stringify({
+    this.webSocket.send(JSON.stringify({
       action: Action.DECLINE_INSURANCE,
       payload: {
         session: session
@@ -38,12 +55,11 @@ export default class Client {
     }))
   }
 
-  Connect (): WebSocket {
+  connect (): WebSocket {
     const ws = new WebSocket(`ws://${DEFAULT_ADDRESS}/api/connect`)
-
-    ws.onopen = (event) => console.log(event)
-    ws.onmessage = (event) => console.log(event)
-
+    ws.onmessage = (ev) => this.onMessage(ev)
+    ws.onopen = (ev) => this.onOpen(ev)
+    
     return ws
   }
 
@@ -73,7 +89,7 @@ export default class Client {
   }
 
   Hit (session: Session) {
-    this.ws.send(JSON.stringify({
+    this.webSocket.send(JSON.stringify({
       action: Action.HIT,
       payload: {
         session: session
@@ -82,7 +98,7 @@ export default class Client {
   }
 
   Stand (session: Session) {
-    this.ws.send(JSON.stringify({
+    this.webSocket.send(JSON.stringify({
       action: Action.STAND,
       payload: {
         session: session
@@ -104,11 +120,23 @@ export default class Client {
   }
 
   Leave (session: Session) {
-    this.ws.send(JSON.stringify({
+    this.webSocket.send(JSON.stringify({
       action: Action.LEAVE,
       payload: {
         session: session
       }
     }))
+  }
+
+  onMessage(ev: any): void {
+    const game = JSON.parse(ev.data)
+
+    console.log(game)
+
+    this.dispatchEvent(new GameChangeEvent({ game: game }))
+  }
+
+  onOpen(ev: any): void {
+    console.log(ev)
   }
 }

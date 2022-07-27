@@ -10,7 +10,7 @@ export default function Hit (props: {}) {
   const game = useSelector((state: RootState) => state.game)
 
   const handleClick = () => {
-    client.Hit(game.session)
+    if (game) client.Hit(game.session)
   }
 
   return (

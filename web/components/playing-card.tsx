@@ -2,7 +2,7 @@ import React from 'react'
 import Card, {
   Kind,
   Suit
-} from '../../internal/card/card'
+} from '../../lib/card/card'
 
 function renderSwitch (card: Card): string {
   switch (`${card.kind}${card.suit}`) {

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import Game from '../../internal/game/game'
+import Game from '../../lib/game/game'
 import Client from '../../api/client'
-import Session from '../../internal/session/session'
+import Session from '../../lib/session/session'
 
 const client = new Client()
 
