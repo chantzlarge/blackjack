@@ -39,6 +39,9 @@ app.post('/api/create', (req, res) =>
   
 app.post('/api/current', (req, res) =>
   gameController.Current(req, res))
+  
+app.post('/api/join', (req, res) =>
+  gameController.Join(req, res))
 
 app.all('/api/*', (req, res) => console.log(req, res))
 

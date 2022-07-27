@@ -13,8 +13,8 @@ export const currentGame = createAsyncThunk('game/currentGame', async (session: 
   return client.Current(session)
 })
 
-export const joinGame = createAsyncThunk('game/joinGame', async () => {
-  return client.Join()
+export const joinGame = createAsyncThunk('game/joinGame', async (args: { code: string }) => {
+  return client.Join(args.code)
 })
 
 export const leaveGame = createAsyncThunk('game/leaveGame', async (session: Session) => {

@@ -1,7 +1,7 @@
 import { Action } from '../internal/game/game.controller'
 import Session from "session/session"
 
-const DEFAULT_ADDRESS = '0.0.0.0:3000'
+const DEFAULT_ADDRESS = '192.168.1.3:3000'
 
 export default class Client {
   ws: WebSocket
@@ -16,6 +16,24 @@ export default class Client {
       payload: {
         session: session,
         amount: amount,
+      }
+    }))
+  }
+
+  BuyInsurance(session: Session) {
+    this.ws.send(JSON.stringify({
+      action: Action.BUY_INSURANCE,
+      payload: {
+        session: session,
+      }
+    }))
+  }
+  
+  DeclineInsurance(session: Session) {
+    this.ws.send(JSON.stringify({
+      action: Action.DECLINE_INSURANCE,
+      payload: {
+        session: session,
       }
     }))
   }
@@ -72,8 +90,9 @@ export default class Client {
     }))
   }
 
-  async Join(): Promise<any> {
+  async Join(code: string): Promise<any> {
     const response = await fetch(`http://${DEFAULT_ADDRESS}/api/join`, {
+      body: JSON.stringify({ code: code }),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'

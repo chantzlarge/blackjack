@@ -36,6 +36,24 @@ export default class GameService {
         return new Game(player, session, table)
     }
 
+    BuyInsurance(session: Session): Game {
+        const table = this.tableRepository.SelectTableById(session.tableId).BuyInsurance(session.playerId)
+        const player = table.GetPlayer(session.playerId)
+
+        this.tableRepository.UpdateTable(table)
+
+        return new Game(player, session, table)
+    }
+
+    DeclineInsurance(session: Session): Game {
+        const table = this.tableRepository.SelectTableById(session.tableId).DeclineInsurance(session.playerId)
+        const player = table.GetPlayer(session.playerId)
+
+        this.tableRepository.UpdateTable(table)
+
+        return new Game(player, session, table)
+    }
+
     Create(): Game {
         const player = new Player()
         const table = new Table().AddPlayer(player)
@@ -63,8 +81,12 @@ export default class GameService {
         return new Game(player, session, table)
     }
 
-    Join(): void {
-        throw new Error('not implemented')
+    Join(code: string): Game {
+        const player = new Player()
+        const table = this.tableRepository.SelectTableByCode(code).AddPlayer(player)
+        const session = new Session(player.id, table.id)
+
+        return new Game(player, session, table)
     }
 
     Leave(session: Session): void {

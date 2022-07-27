@@ -7,7 +7,7 @@ export default function PlayerHand (props: { hand: Hand }) {
   console.log(props.hand)
   return (
     <div>
-      <div className='uk-flex uk-flex-center' style={{ fontSize: '128px' }}>
+      <div className='uk-flex uk-flex-center' style={{ fontSize: '118px' }}>
         {props.hand.cards.map((c) => <PlayingCard key={c.id} card={c} />)}
       </div>
       <div>

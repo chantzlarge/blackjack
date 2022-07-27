@@ -13,6 +13,16 @@ export default class TableRepository {
 
   }
 
+  SelectTableByCode(code: string): Table {
+      const table = this.tables.find(t => t.code === code)
+
+      if (!table) {
+        throw new Error('table not found')
+      }
+      
+      return table
+  }
+
   SelectTableById(id: string): Table {
       const table = this.tables.find(t => t.id === id)
 

@@ -3,11 +3,13 @@ import { Application } from "express-ws";
 import GameService from "./game.service";
 
 export const enum Action {
-    BET = 'bet',
-    HIT = 'hit',
-    LEAVE = 'leave',
-    SIT = 'sit',
-    STAND = 'stand',
+    BET = 'BET',
+    BUY_INSURANCE = 'BUY_INSURANCE',
+    DECLINE_INSURANCE = 'DECLINE_INSURANCE',
+    HIT = 'HIT',
+    LEAVE = 'LEAVE',
+    SIT = 'SIT',
+    STAND = 'STAND',
 }
 
 export default class GameController {
@@ -51,6 +53,14 @@ export default class GameController {
         response.json(this.gameService.Current(data))
     }
 
+    Join(request: Request, response: Response) {
+        const data = request.body
+        
+        console.log(data)
+
+        response.json(this.gameService.Join(data.code))
+    }
+
     OnMessage(event: any) {
         const data: any = JSON.parse(event)
 
@@ -59,6 +69,12 @@ export default class GameController {
         switch (data.action) {
             case Action.BET:
                 this.Broadcast(this.gameService.Bet(data.payload.session, data.payload.amount))
+                break
+            case Action.BUY_INSURANCE:
+                this.Broadcast(this.gameService.BuyInsurance(data.payload.session))
+                break
+            case Action.DECLINE_INSURANCE:
+                this.Broadcast(this.gameService.DeclineInsurance(data.payload.session))
                 break
             case Action.HIT:
                 this.Broadcast(this.gameService.Hit(data.payload.session))

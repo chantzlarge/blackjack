@@ -23,12 +23,14 @@ export default class Hand {
       throw new Error('hand is busted')
     }
 
-    const isBusted = (card.value !== 11) && (card.value + this.Score() > 21)
+    const isStanding = card.value + this.Score() === 21
+    const isBusted = card.value + this.Score() > 21 && card.value !== 11
+    const cards = isBusted ? [] : [...this.cards, card]
 
     return new Hand(
-      [...this.cards, card],
+      cards,
       isBusted,
-      false,
+      isStanding,
     )
   }
 

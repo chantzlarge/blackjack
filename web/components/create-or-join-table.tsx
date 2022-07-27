@@ -22,7 +22,7 @@ export default function CreateOrJoinTable () {
         <div className='uk-container uk-container-small'>
           <div className='uk-child-width-1-1' data-uk-grid>
             <div className='uk-margin-large'>
-              <h1 className='uk-heading-xlarge uk-text-center'>BLACKJACK</h1>
+              <h1 className='uk-heading-large uk-text-center'>BLACKJACK</h1>
             </div>
             <div className='uk-margin-large'>
               <div className='uk-margin-medium'>
