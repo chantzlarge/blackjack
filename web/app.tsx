@@ -11,7 +11,7 @@ import Session from '../internal/session/session'
 
 const client = new Client()
 
-export default function App() {
+export default function App () {
   const [cookies, setCookie, removeCookie] = useCookies(['playerId', 'sessionId', 'sessionSecret', 'tableId'])
   const dispatch = useDispatch<AppDispatch>()
   const game = useSelector((state: RootState) => state.game)
@@ -22,23 +22,23 @@ export default function App() {
 
     client.ws.onmessage = (event) => {
       const game = JSON.parse(event.data)
-      
+
       dispatch(updateGame(game))
     }
 
     if (
       !game && [
-        cookies['playerId'],
-        cookies['tableId'],
-        cookies['sessionId'],
-        cookies['sessionSecret'],
-      ].every(c => c ? true : false)
+        cookies.playerId,
+        cookies.tableId,
+        cookies.sessionId,
+        cookies.sessionSecret
+      ].every(c => !!c)
     ) {
       dispatch(currentGame(new Session(
-        cookies['playerId'],
-        cookies['tableId'],
-        cookies['sessionId'],
-        cookies['sessionSecret'],
+        cookies.playerId,
+        cookies.tableId,
+        cookies.sessionId,
+        cookies.sessionSecret
       )))
     } else if (game) {
       setCookie('playerId', game.player.id, { path: '/' })

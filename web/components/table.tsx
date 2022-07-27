@@ -16,7 +16,7 @@ import Hand from '../../internal/hand/hand'
 import { State } from '../../internal/table/table'
 import BuyOrSkipInsurance from './buy-or-skip-insurance'
 
-function renderSwitch(state: State) {
+function renderSwitch (state: State) {
   switch (state) {
     case State.ACCEPTING_BETS:
       return <Bet />
@@ -31,14 +31,16 @@ function renderSwitch(state: State) {
     case State.PAYING_NATURALS:
       return <h1>PAYING_NATUALS</h1>
     case State.PLAYER_TURNS:
-      return <div>
-        <div className='uk-margin'>
-          <Hit />
+      return (
+        <div>
+          <div className='uk-margin'>
+            <Hit />
+          </div>
+          <div className='uk-margin'>
+            <Stand />
+          </div>
         </div>
-        <div className='uk-margin'>
-          <Stand />
-        </div>
-      </div>
+      )
     case State.DEALER_TURN:
       return <h1>DEALER_TURN</h1>
     case State.PAYING_BETS:
@@ -46,7 +48,7 @@ function renderSwitch(state: State) {
   }
 }
 
-export default function Table() {
+export default function Table () {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const game = useSelector((state: RootState) => state.game)
@@ -58,7 +60,7 @@ export default function Table() {
   })
 
   return (
-    <div className='uk-width-expand uk-inline' data-uk-height-viewport>
+    <div className='uk-width-expand uk-inline' data-uk-height-viewport='offset-bottom: 5'>
 
       {/* top */}
       <div className='uk-position-top'>
@@ -86,7 +88,7 @@ export default function Table() {
 
       {/* center */}
       <div className='uk-position-center'>
-              <h3 className='uk-text-muted uk-text-center'>BLACKJACK</h3>
+        <h3 className='uk-text-muted uk-text-center'>BLACKJACK</h3>
       </div>
 
       {/* right */}

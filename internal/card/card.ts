@@ -42,10 +42,10 @@ export default class Card {
   readonly suit: Suit
   readonly value: number
 
-  constructor(
+  constructor (
     kind: Kind,
     suit: Suit,
-    value: number,
+    value: number
 
   ) {
     this.kind = kind

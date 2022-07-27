@@ -8,17 +8,17 @@ export default class Hand {
   readonly isBusted: boolean
   readonly isStanding: boolean
 
-  constructor(
+  constructor (
     cards: Card[] = [],
     isBusted: boolean = false,
-    isStanding: boolean = false,
+    isStanding: boolean = false
   ) {
     this.cards = cards
     this.isBusted = isBusted
     this.isStanding = isStanding
   }
 
-  Hit(card: Card): Hand {
+  Hit (card: Card): Hand {
     if (this.isBusted) {
       throw new Error('hand is busted')
     }
@@ -30,18 +30,18 @@ export default class Hand {
     return new Hand(
       cards,
       isBusted,
-      isStanding,
+      isStanding
     )
   }
 
-  Score(): number {
+  Score (): number {
     return this.cards
       .map(c => c.value)
       .sort()
       .reduce((p, c) => (c === 11 && p + c > 21) ? p + 1 : p + c, 0)
   }
 
-  Stand(): Hand {
+  Stand (): Hand {
     if (this.isBusted) {
       throw new Error('hand is busted')
     }
@@ -49,7 +49,7 @@ export default class Hand {
     return new Hand(
       this.cards,
       false,
-      true,
+      true
     )
   }
 }

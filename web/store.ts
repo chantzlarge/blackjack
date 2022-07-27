@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { gameSlice } from './slices/game.slice'
 
 const reducers = {
-  game: gameSlice.reducer,
+  game: gameSlice.reducer
 }
 
 const reducer = combineReducers(reducers)

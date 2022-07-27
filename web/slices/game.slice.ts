@@ -6,15 +6,15 @@ import Session from '../../internal/session/session'
 const client = new Client()
 
 export const createGame = createAsyncThunk('game/createGame', async () => {
-  return client.Create()
+  return await client.Create()
 })
 
 export const currentGame = createAsyncThunk('game/currentGame', async (session: Session) => {
-  return client.Current(session)
+  return await client.Current(session)
 })
 
 export const joinGame = createAsyncThunk('game/joinGame', async (args: { code: string }) => {
-  return client.Join(args.code)
+  return await client.Join(args.code)
 })
 
 export const leaveGame = createAsyncThunk('game/leaveGame', async (session: Session) => {
@@ -27,8 +27,16 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState: null as Game | null,
   reducers: {
-    updateGame(_, action) {
-      return action.payload
+    updateGame (state, action) {
+      if (state && state.session.playerId === action.payload.session.playerId) {
+        console.log(state.session.playerId === action.payload.session.playerId)
+        
+        state = action.payload
+      } else if (state) {
+        console.log(state)
+        state.table = action.payload.table
+      }
+      return state
     }
   },
   extraReducers: (builder) => {

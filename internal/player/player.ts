@@ -11,14 +11,14 @@ export default class Player {
   readonly hasInsurance: boolean
   readonly isSitting: boolean
 
-  constructor(
+  constructor (
     id: string = uuidv4(),
     balance: number = 500,
     bet: number = 0,
     hands: Hand[] = [],
     hasDeclinedInsurance: boolean = false,
     hasInsurance: boolean = false,
-    isSitting: boolean = false,
+    isSitting: boolean = false
   ) {
     this.id = id
     this.balance = balance
@@ -29,7 +29,7 @@ export default class Player {
     this.isSitting = isSitting
   }
 
-  Bet(amount: number): Player {
+  Bet (amount: number): Player {
     if (amount > this.balance) {
       throw new Error('amount exceeds player balance')
     }
@@ -41,11 +41,11 @@ export default class Player {
       this.hands,
       this.hasDeclinedInsurance,
       this.hasInsurance,
-      this.isSitting,
+      this.isSitting
     )
   }
 
-  BuyInsurance(): Player {
+  BuyInsurance (): Player {
     const amount = 0.5 * this.bet
 
     if (amount > this.balance) {
@@ -59,11 +59,11 @@ export default class Player {
       this.hands,
       false,
       true,
-      false,
+      false
     )
   }
 
-  DeclineInsurance(): Player {
+  DeclineInsurance (): Player {
     return new Player(
       this.id,
       this.balance,
@@ -71,11 +71,11 @@ export default class Player {
       this.hands,
       true,
       false,
-      false,
+      false
     )
   }
 
-  Hit(card: Card): Player {
+  Hit (card: Card): Player {
     return new Player(
       this.id,
       this.balance,
@@ -83,11 +83,11 @@ export default class Player {
       this.hands.filter(h => !h.isBusted || !h.isStanding).map(h => h.Hit(card)),
       this.hasDeclinedInsurance,
       this.hasInsurance,
-      false,
+      false
     )
   }
 
-  Pay(amount: number): Player {
+  Pay (amount: number): Player {
     return new Player(
       this.id,
       this.balance + amount,
@@ -95,22 +95,22 @@ export default class Player {
       this.hands,
       this.hasDeclinedInsurance,
       this.hasInsurance,
-      false,
+      false
     )
   }
 
-  Sit(): Player {
+  Sit (): Player {
     return new Player(
       this.id,
       this.balance,
       0,
       [],
       false,
-      true,
+      true
     )
   }
 
-  Stand(): Player {
+  Stand (): Player {
     return new Player(
       this.id,
       this.balance,
@@ -118,7 +118,7 @@ export default class Player {
       this.hands.map(h => (!h.isBusted || !h.isStanding) ? h.Stand() : h),
       this.hasDeclinedInsurance,
       this.hasInsurance,
-      false,
+      false
     )
   }
 }

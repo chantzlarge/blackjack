@@ -6,7 +6,6 @@ import Client from '../../api/client'
 
 const client = new Client()
 
-
 export default function DeclineInsurance () {
   const dispatch = useDispatch<AppDispatch>()
   const game = useSelector((state: RootState) => state.game)

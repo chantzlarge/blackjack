@@ -4,24 +4,24 @@ import Card from '../card/card'
 export default class Shoe {
   readonly cards: Card[]
 
-  constructor(cards: Card[] = [...Deck, ...Deck, ...Deck, ...Deck, ...Deck, ...Deck]) {
+  constructor (cards: Card[] = [...Deck, ...Deck, ...Deck, ...Deck, ...Deck, ...Deck]) {
     this.cards = cards
   }
 
-  Draw(): [Card, Shoe] {
-    const card = this.cards.slice(0,1).shift()
-    if (!card) {
+  Draw (): [Card, Shoe] {
+    const card = this.cards.slice(0, 1).shift()
+    if (card == null) {
       throw new Error('')
     }
 
     return [card, new Shoe(this.cards.slice(1))]
   }
 
-  Shuffle(): Shoe {
-    let cards: Card[] = [...this.cards]
-    let ci = cards.length, ri
+  Shuffle (): Shoe {
+    const cards: Card[] = [...this.cards]
+    let ci = cards.length; let ri
 
-    while(ci > 0) {
+    while (ci > 0) {
       ri = Math.floor(Math.random() * ci)
       ci--
 

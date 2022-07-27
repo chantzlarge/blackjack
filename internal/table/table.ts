@@ -24,25 +24,26 @@ export default class Table {
     max: number
     min: number
   }
+
   readonly code: string
   readonly players: Player[]
   shoe: Shoe
   readonly state: State = State.ACCEPTING_BETS
 
-  constructor(
+  constructor (
     id: string = uuidv4(),
     dealer: Dealer = new Dealer(),
     bet: {
-      max: number,
-      min: number,
+      max: number
+      min: number
     } = {
-        max: 500,
-        min: 5
-      },
+      max: 500,
+      min: 5
+    },
     code: string = (Math.floor(Math.random() * 1000)).toString(16),
     players: Player[] = [],
     shoe: Shoe = new Shoe().Shuffle(),
-    state: State = State.ACCEPTING_BETS,
+    state: State = State.ACCEPTING_BETS
   ) {
     this.id = id
     this.dealer = dealer
@@ -54,7 +55,6 @@ export default class Table {
     switch (state) {
       case State.ACCEPTING_BETS:
         this.state = State.ACCEPTING_BETS
-
 
         const hasAllPlayersBetOrSit = this.players.every(p => !p.isSitting && p.bet === 0)
 
@@ -77,8 +77,8 @@ export default class Table {
       case State.DEALING_TO_DEALER:
         this.state = State.DEALING_TO_DEALER
 
-        let [c0, s0] = this.shoe.Draw()
-        let [c1, s1] = s0.Draw()
+        const [c0, s0] = this.shoe.Draw()
+        const [c1, s1] = s0.Draw()
 
         const hand = new Hand().Hit(c0).Hit(c1)
 
@@ -130,7 +130,15 @@ export default class Table {
       case State.PAYING_BETS:
         this.state = State.ACCEPTING_BETS
         this.players = this.players.map(p => {
-          const amount = p.hands.reduce((amount, hand) => this.dealer.hand.isBusted || (this.dealer.hand.Score() < hand.Score()) ? ((2 * p.bet) + amount) : amount, 0)
+          const amount = p.hands.reduce((amount, hand) => {
+            if (this.dealer.hand.isBusted || (this.dealer.hand.Score() < hand.Score())) {
+              return 2 * p.bet + amount
+            } else if (this.dealer.hand.Score() === hand.Score()) {
+              return p.bet + amount
+            } else {
+              return amount
+            }
+          }, 0)
 
           return p.Pay(amount)
         }).map(p => new Player(p.id, p.balance, 0, [], false, false, false))
@@ -139,7 +147,7 @@ export default class Table {
     }
   }
 
-  AddPlayer(player: Player): Table {
+  AddPlayer (player: Player): Table {
     return new Table(
       this.id,
       this.dealer,
@@ -147,11 +155,11 @@ export default class Table {
       this.code,
       [...this.players, player],
       this.shoe,
-      this.state,
+      this.state
     )
   }
 
-  Bet(playerId: string, amount: number): Table {
+  Bet (playerId: string, amount: number): Table {
     if (this.state != State.ACCEPTING_BETS) {
       throw new Error('invalid operation')
     }
@@ -173,11 +181,11 @@ export default class Table {
       this.code,
       players,
       this.shoe,
-      this.state,
+      this.state
     )
   }
 
-  BuyInsurance(playerId: string): Table {
+  BuyInsurance (playerId: string): Table {
     if (this.state != State.ACCEPTING_INSURANCE) {
       throw new Error('invalid operation')
     }
@@ -193,11 +201,11 @@ export default class Table {
       this.code,
       players,
       this.shoe,
-      this.state,
+      this.state
     )
   }
 
-  DeclineInsurance(playerId: string): Table {
+  DeclineInsurance (playerId: string): Table {
     if (this.state != State.ACCEPTING_INSURANCE) {
       throw new Error('invalid operation')
     }
@@ -213,32 +221,31 @@ export default class Table {
       this.code,
       players,
       this.shoe,
-      this.state,
+      this.state
     )
   }
 
-  GetCurrentPlayer(): Player {
+  GetCurrentPlayer (): Player {
     const player = this.players.find(p => !p.isSitting && p.hands.every(h => !h.isBusted && !h.isStanding))
 
-    if (!player) {
+    if (player == null) {
       throw new Error('table has no current player')
     }
 
     return player
   }
 
-  GetPlayer(playerId: string): Player {
+  GetPlayer (playerId: string): Player {
     const player = this.players.find(p => p.id === playerId)
 
-    if (!player) {
+    if (player == null) {
       throw new Error('player not found')
     }
-
 
     return player
   }
 
-  Hit(playerId: string): Table {
+  Hit (playerId: string): Table {
     if (this.state != State.PLAYER_TURNS) {
       throw new Error('invalid operation')
     }
@@ -261,11 +268,11 @@ export default class Table {
       this.code,
       players,
       shoe,
-      this.state,
+      this.state
     )
   }
 
-  RemovePlayer(playerId: string): Table {
+  RemovePlayer (playerId: string): Table {
     return new Table(
       this.id,
       this.dealer,
@@ -273,11 +280,11 @@ export default class Table {
       this.code,
       this.players.filter(p => p.id !== playerId),
       this.shoe,
-      this.state,
+      this.state
     )
   }
 
-  Sit(playerId: string): Table {
+  Sit (playerId: string): Table {
     if (this.state != State.ACCEPTING_BETS) {
       throw new Error('invalid operation')
     }
@@ -291,11 +298,11 @@ export default class Table {
       this.code,
       this.players.map(p => p.id === player.id ? p.Sit() : p),
       this.shoe,
-      this.state,
+      this.state
     )
   }
 
-  Stand(playerId: string): Table {
+  Stand (playerId: string): Table {
     if (this.state != State.PLAYER_TURNS) {
       throw new Error('invalid operation')
     }
@@ -316,7 +323,7 @@ export default class Table {
       this.code,
       this.players.map(p => p.id === player.id ? p.Stand() : p),
       this.shoe,
-      this.state,
+      this.state
     )
   }
 }

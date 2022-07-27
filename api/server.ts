@@ -29,17 +29,17 @@ app.use((req, res, next) =>
 // routes
 app.post('/api/create', (req, res) =>
   gameController.Create(req, res))
-  
-  // app.post('/api/join', (req, res) =>
-  // gameController.Join(req, res))
-  
-  // @ts-expect-error
-  app.ws('/api/connect', (ws, req) =>
+
+// app.post('/api/join', (req, res) =>
+// gameController.Join(req, res))
+
+// @ts-expect-error
+app.ws('/api/connect', (ws, req) =>
   gameController.Connect(ws, req))
-  
+
 app.post('/api/current', (req, res) =>
   gameController.Current(req, res))
-  
+
 app.post('/api/join', (req, res) =>
   gameController.Join(req, res))
 
